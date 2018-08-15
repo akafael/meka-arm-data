@@ -1,0 +1,63 @@
+\chapter{Fundamentos Teóricos}
+
+% Quote: Sobre o ombros de gigantes
+
+\label{CapIntroTeory}
+
+% Resumo opcional. Comentar se não usar.
+\resumodocapitulo{Resumo opcional}
+
+A primeira etapa de qualquer processo na engenharia é modelagem. A partir dela relacionamos todos conhecimentos relacionados a um sistema, em busca de avaliar o comportamento através de uma descrição mais simplificada. Uma das principais formas é a modelagem matemática, em que é descrito as relações lógicas entre cada parte do sistema,. E assim podemos através de operações matemáticas analisar em profundidade bem como extrapolar o estudo para sistema com modelos parecidos.
+
+O manipulador é modelado como uma série de barras ligadas entre si, cada qual aproximada como um corpo rígido. Assim o movimento completo do manipulador é descrito a partir do conjunto dos movimentos de cada uma das  um corpo rígido pode ser descrito de forma cinemática ou dinâmica. 
+
+% o que é efetuador, junta ?
+
+\section{Modelagem Cinemático}
+
+Na abordagem cinemática estamos interessado apenas no movimento em si, independente das forças que o causaram. Desta forma são observados a posição, velocidade e aceleração de cada parte. Em um manipulador robótico, de forma geral, os movimentos são escolhidos em busca da resolução de uma tarefa pela localização de alguma ferramenta acoplada ao braço. Estas por sua vez são posicionadas no última junta por ser o ponto de maior alcance.
+
+% O que é uma cadeia cinemática ?
+
+Cada junta é controlada de maneira separada, assim para o controle da ponta é preciso converter o configuração das juntas somadas ao modelo geométrico das partes do braço para uma orientação e posição do efetuador no espaço em relação a base do manipulador.
+
+% Cinemática
+
+
+\subsection{Descrição DH}
+
+Cada barra do braço, pode ser descrita a partir dos dois pontos em cada uma das extremidades. Por sua vez cada um dos pontos é definido por 6 parâmetros, 3 para a posição em relação aos eixos x,y e z e 3 para orientação a partir da rotação em relação a cada um dos eixos. Somando 12 parâmetros para cada barra. 
+
+Como forma de reduzir a quantidade de parâmetros necessários para cada link é adotado uma convenção baseada em apenas 4 valores denominada parâmetros de Denavit-Hatemberg. Cada barra é descrita a partir de 2 valores de distância e dois ângulos. Esta redução leva em conta que as partes do braço estão sempre conectadas e por tanto a descrição a partir dos pontos nas extremidade traria sempre redundância nos valores. Assim é descrito a relação entre cada um dos pontos através das medidas da distância e orientação dos encaixes nas extremidades de cada barra.
+
+% Ilustração DH
+
+% Configuração de junta?
+Estes parâmetros são definidos de tal forma que apenas um possui variação com o acionamento. Em juntas prismáticas este representa variação da distância enquanto em enquanto em juntas cilíndricas um do ângulos que variam. Quando ocorre mais 
+O registro de posição atual de cada junta representa a configuração da junta. 
+
+A partir da descrição é feito várias operações de mudança de base para relacionar a posição e orientação do efetuador em relação ao ponto da base. Para cada uma das juntas do braço é avaliado a variação da orientação e da posição em relação a extremidade da junta anterior. A partir da combinação destas operações em cadeia é possível determinar uma expressão relacionando a configuração de cada junta com a posição final
+
+\subsection{Descrição Vetorial}
+
+\subsection{Matrizes Homogenias}
+
+\subsection{Quatérnions Duais}
+\subsubsection{Números Complexos}
+\subsubsection{Quatérnions}
+\subsubsection{Números Duais}
+\subsubsection{Representação por Quatérnions Duais}
+
+A representação em quatérnions duais traz como vantagens: eliminar a singularidades, inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12. % Citar paper IROS Bruno Adorno
+
+São utilizados dois quatérnions, sendo um para a representação da posição e um quatérnion unitário para representação da orientação. 
+
+\section{Controle}
+
+
+
+% Definição de Controle
+
+\subsection{Controle PID}
+
+\subsection{Controle em Cascata}

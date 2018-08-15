@@ -12,6 +12,7 @@
 \usepackage{textcomp}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{graphviz}
 
 \makeatletter
 
@@ -134,88 +135,36 @@ Comandos para criar a capa e a página de assinaturas
 
 
 \capaprincipal
-\capaassinaturas
+%\capaassinaturas
 
-\begin{comment}
-Ficha Catalográfica
-\end{comment}
+% Ficha Catalográfica 
+%\include{ficha_catalografica}
 
+% Dedicatória -------------------------------------------------------
+%\frontmatter
 
-\include{ficha_catalografica}
-
-\begin{comment}
-Dedicatória
-\end{comment}
-
-
-\frontmatter
-
-\begin{comment}
-Texto de dedicatória do primeiro autor.
-\end{comment}
-
-
+% Dedicatória primeiro autor
 \dedicatoriaautori{um beijo pra minha mãe, pro meu pai, e pra você}
 
-\begin{comment}
-Texto de dedicatória do segundo autor. Caso não tenha um segundo autor,
-este texto não será mostrado
-\end{comment}
-
-
+% Texto de dedicatória do segundo autor. Caso não tenha um segundo autor, este texto não será mostrado
 \dedicatoriaautorii{Dedicatória do autor 2}
 
-\begin{comment}
-Texto de dedicatória do terceiro autor. Caso não tenha um terceiro
-autor, este texto não será mostrado
-\end{comment}
-
-
+% Texto de dedicatória do terceiro autor. Caso não tenha um segundo autor, este texto não será mostrado
 \dedicatoriaautoriii{Dedicatória do autor 3}
-
-\begin{comment}
-Comando para criar a página de dedicatória
-\end{comment}
-
 
 \dedicatoria
 
-\begin{comment}
-Agradecimentos
-\end{comment}
-
-
-\begin{comment}
-Texto de agradecimentos do primeiro autor.
-\end{comment}
-
+% Agradecimentos --------------------------------------------------------
 
 \agradecimentosautori{Agradecimentos!}
-
-\begin{comment}
-Texto de agradecimentos do segundo autor. Caso não tenha um segundo
-autor, este texto não será mostrado.
-\end{comment}
-
 
 \agradecimentosautorii{A inclusão desta seção de agradecimentos é
 opcional e fica à critério do(s) autor(es), que caso deseje(em) inclui-la
 deverá(ão) utilizar este espaço, seguindo esta formatação.}
 
-\begin{comment}
-Texto de agradecimentos do terceiro autor. Caso não tenha um terceiro
-autor, este texto não será mostrado.
-\end{comment}
-
-
 \agradecimentosautoriii{A inclusão desta seção de agradecimentos
 é opcional e fica à critério do(s) autor(es), que caso deseje(em)
 inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
-
-\begin{comment}
-Comando para criar a página de agradecimentos
-\end{comment}
-
 
 \agradecimentos
 
@@ -238,51 +187,43 @@ Keywords: bla, ble, bli
 
 }
 
-\begin{comment}
-Listas de conteúdo, figuras e tabelas
-\end{comment}
-
+% Sumário, Listas de figuras e listas de tabelas ---------------------
 
 \sumario
 \listadefiguras
 \listadetabelas
-
-\begin{comment}
-Lista de Símbolos
-\end{comment}
-
-
+% Listas de símbolos
 \include{simbolos}
 
-\begin{comment}
-Corpo Principal
-\end{comment}
-
+% Corpo Principal ----------------------------------------------------
 
 \mainmatter
 \setcounter{page}{1}
 \pagenumbering{arabic}
 \pagestyle{plain}
 
-\begin{comment}
-Introdução
-\end{comment}
+% Introdução
+% - Descrição e contextualização do problema
+% - Método de investigação utilizada
 \include{cap_Introducao}
 
-\begin{comment}
-Fundamentos
-\end{comment}
-\include{cap_Fundamentos}
+% Fundamentos Teóricos
+% - Teoria por trás do problema
+\include{cap_FundamentosTeoria}
 
-\begin{comment}
-Conclusões
-\end{comment}
+% Fundamentos Técnicos
+% - Tecnologias envolvidas no problema
+\include{cap_FundamentosTecnica}
+
+% Metodologia
+
+% Resultados
+\include{cap_Resultados}
+
+% Conclusão
 \include{cap_Conclusoes}
 
-\begin{comment}
-Bibliografia
-\end{comment}
-
+% Bibliografia ------------------------------------------------------
 
 \renewcommand{\bibname}{REFERÊNCIAS BIBLIOGRÁFICAS}
 \addcontentsline{toc}{chapter}{REFERÊNCIAS BIBLIOGRÁFICAS}
@@ -290,44 +231,24 @@ Bibliografia
 \bibliographystyle{abnt-num}
 \bibliography{bibliography}
 
-
-\begin{comment}
-Anexos
-\end{comment}
-
-
-\anexos
-\makeatletter
+% Anexos -------------------------------------------------------------
+%\anexos
+%\makeatletter
 % não retirar estes comandos
-\renewcommand{\@makechapterhead}[1]{%
-  {\parindent \z@ \raggedleft \setfontarial\bfseries
-\LARGE \thechapter. \space\space
-\uppercase{#1}\par
-\vskip 40\p@
-}
-}
-\makeatother
+% \renewcommand{\@makechapterhead}[1]{%
+%   {\parindent \z@ \raggedleft \setfontarial\bfseries
+%     \LARGE \thechapter. \space\space
+%     \uppercase{#1}\par
+%     \vskip 40\p@ }}
+%\makeatother
 
-\begin{comment}
-Anexo I: Descrição do CD
-\end{comment}
+% Anexo I: Descrição do CD
+%\include{anexo_CD}
 
+%\refstepcounter{noAnexo}
 
-\include{anexo_CD}
-
-\refstepcounter{noAnexo}
-
-\begin{comment}
-Anexo II: Programas Utilizados
-\end{comment}
-
-
-\include{anexo_Codigos}
-
-\refstepcounter{noAnexo}
-
-\begin{comment}
-Acrescente mais anexos conforme julgar necessário.
-\end{comment}
+% Anexo II: Programas Utilizados
+%\include{anexo_Codigos}
+%\refstepcounter{noAnexo}
 
 \end{document}

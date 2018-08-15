@@ -1,0 +1,84 @@
+\chapter{Fundamentos Técnicos}
+
+\section{Hardware}
+
+%% Descrição Meka
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 8 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas. 
+Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por pelo motor brushless () em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. Este são controlados individualmente por placas DSP desenvolvidas pelo fabricante que são controladas por um computador embarcado. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
+
+\subsection{Motores Brushless}
+
+Motores de corrente continua sem escovas ( comumente motores brusheless) são motores síncronos controlados via corrente contínua.
+
+Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. \cite{nobody}
+
+% Comparativo com Motores DC
+Em razão dos componentes eletrônicos usados para controle interno, motores brushless são mais caros que motores magnéticos permanentes. No entanto apresentam um custo de manutenção inferior ao
+
+% Comparativo com Servo Motor
+%% -> Servo Motor: controle de posição, torque e velocidade baseado em encoder
+%% -> Motor Brushless: controle de velocidade baseado em sensor hall ( mais barato ), mais suave
+% https://www.orientalmotor.com/brushless-dc-motors-gear-motors/technology/brushless-dc-motors-servo-motors-inverter.html
+
+\subsection{Harmonic Drive}
+
+Engrenamento por ondas de deformação, também chamado de harmonic drive ... 
+
+%% Porque é necessário colocar uma redução ?
+%% Gráfico Torque vs Velocidade
+
+% Características do Motor
+
+% https://en.wikipedia.org/wiki/Harmonic_drive
+% https://en.wikipedia.org/wiki/Strain_wave_gearing
+% https://en.wikipedia.org/wiki/Backlash_(engineering)
+
+\subsection{Atuadores Elásticos}
+
+Para garantir uma maior segurança no uso em um ambiente com pessoas são utilizados atuadores série elásticos em cada junta. Este tipo de atuador é composto pelos elementos tradicionais, motor e redução, em conjunto com algum elemento elástico entre o motor e a carga aplicada conforme ilustrado no diagrama ()
+
+%% Diagrama Atuadores Elásticos
+
+O uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos.
+
+Do ponto de vista de controle, o elemento elástico atua como um filtro passa-baixa, isto é, as variações bruscas, como a colisão com algum obstáculo, são amortecidas enquanto variações baixas sofrem pouca alteração. No entanto tal acrescenta maior lentidão na resposta do sistema bem como introduz oscilações, uma vez que a energia acumulada nas molas será retransmitida gradualmente.
+
+% Como é implementado no meka?
+
+\subsection{Sensores}
+
+Para cada junta são medidas as grandezas a posição e velocidade angular e o torque. Para tal é utilizado dois sensores: um encoder associado diretamente a junta e um sensor de corrente associado ao motor brushless. A posição de cada junta é avaliada a partir do enconder ()
+
+O torque é avaliado de maneira indireta através dos sensores de corrente do motor brushless.
+
+\subsection{DSP Control Boards}
+
+O controle de cada junta a partir do acionamento dos motores e da leitura dos sensores é feito pela placa DSP () desenvolvida pela Meka Robotics. Nela estão implementados o controle de posição, torque e rigidez de cada atuador. Cada uma das placas possui uma interface de comunicação EtherCat ligada a um concentrador dentro do robô. Sendo este ligado através da porta Ethernet a um computador embarcado externo responsável pelo comando de cada uma das partes do robô.
+
+\section{Software}
+
+% Diagrama Meka
+
+\subsection{Meka PC}
+
+Para o controle do robô é utilizado um computador embarcado com o sistema operacional Ubuntu 12.04 e o kernel Real Time Xenomai. Nele são implementado o driver para o protocolo EtherCat e a biblioteca M3 responsável pela interação com cada um dos dispositivos, entre sensores e motores de cada junta.
+
+% m3rt_server
+% -> Interface via socket
+% -> Memórica compartilhada
+% -> API Python
+% -> ROS
+
+\subsection{DQ Robotics}
+
+A representação do robô usando quatérnions duais
+
+\subsection{ROS}
+
+Robotics Operating System, ROS é um framework voltado para a robótica. 
+
+\subsubsection{ROS Bags}
+
+\subsection{Python API}
+
+\subsubsection{Plotly}
