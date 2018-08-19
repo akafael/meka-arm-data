@@ -5,46 +5,47 @@
 
 \section{Contextualização}
 
+O uso de robôs vêm crescendo ao longo dos anos para a execução de diversas tarefas.
+
+Muito embora ainda exista dentro do imaginário popular a visão da robótica como grande vilão no roubo de empregos, o maior esforço recente é em trabalhar na cooperação entre máquinas e pessoas como forma de aliar a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas complexos.
+
+Como forma de minimizar o risco de lesão em caso de eventual impacto, algumas modificações têm sido propostas como introdução de atuadores série elásticos e braços robóticos mais leves. Desta forma a inércia do robô é reduzida e permite a complacência no impacto sem impor riscos de dano ao robô ou a pessoa. No entanto o controle do robô acaba sendo menos preciso e acaba limitando a aplicação das tarefas.
+
 % Robótica Cooperativa
 % https://medium.com/@abhasvc/ais-threat-to-society-is-scarier-than-trump-ff7e9d42ea74
 % https://www.hhs.se/contentassets/c8f677a0c9974bde950e2cec2edc51a1/substitution-of-labor-final.pdf
 
 \section{Definição do problema}
 
+No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Para simplificar será referênciado apenas por Meka ao longo deste trabalho. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Cada uma das juntas possui um atuador série elástico composto de um motor brushless e um redução mecânica por onda de deformação.
 
-
-\section{Objetivos do projeto}
-
-Este trabalho têm como objetivo investi
+Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender suas implicações no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando as características próprias do sistema.
 
 \section{Metodologia}
 
-\subsection{Revisão Bibliográfica}
-
 \subsection{Trabalhos Anteriores}
+
+Inicialmente foi feito um estudo sobre os trabalho anteriores desenvolvidos na plataforma no Laboratório de Automação e Robótica ( LARA - UnB ). Alguns destes trabalhos puderam ser acompanhados ao longo da execução como o caso do trabalho desenvolvido por Marcos Pereira e pelo Rafael Koji de modo a facilitar a transmissão do conhecimento relacionado as contribuições de cada um ao projeto bem como presenciar as dificuldades relacionadas ao controle do braço robótico.
 
 \subsection{Metodologia de Investigação}
 
-A partir das premissas originais do projeto em conjunto com os princípios de desenvolvimento ágil foi adotado como metodologia de investigação baseada em ciclos compostos por 3 etapas:
+Após o estudo preliminar foi adotado uma metodologia de investigação baseada em ciclos compostos por 3 etapas, descritas a seguir. Estas etapas são baseadas nos princípios de desenvolvimento ágil e têm como objetivo acelerar e otimizar os esforços.
 
 % Diagrama das etapas
-
 \begin{enumerate}
     \item Análise e Formulação de Hipóteses
     \item Formulação de Testes para as Hipóteses
     \item Avaliação de Hipóteses ( Testes Experimentais e Estudo teórico )
 \end{enumerate}
 
-Este ciclos tiveram duração variável de acordo com o nível de aprofundamento necessário para satisfazer os objetivos levantados para cada momento do projeto. O objetivo central é ao final de cada ciclo trazer algum aprimoramento quanto ao entendimento do sistema ou ainda quanto ao comportamento final quanto a realização da tarefa.
+Cada ciclo possui duração variável de acordo com o nível de aprofundamento necessário para satisfazer os objetivos levantados para cada momento do projeto. O objetivo central é ao final de cada ciclo trazer algum aprimoramento quanto ao entendimento do sistema ou ainda quanto ao comportamento final na realização da tarefa.
 
-No inicio de cada ciclo foi feito um estudo do sistema através da modelagem do sistema e da definição de uma métrica para avaliar o comportamento. Então o comportamento do sistema real é comparado com o modelo adotado e as expectativas de comportamento.
+No inicio de cada ciclo é feito um estudo do sistema através da modelagem do sistema e da definição de uma métrica para avaliar o comportamento. Então o comportamento do sistema real é comparado com o modelo adotado e as expectativas de comportamento. Os objetivos são traduzidos em uma métrica, compondo um conjunto de indicadores que permita avaliar se tarefa foi executada e como foi o processo de execução. A cada novo aspecto avaliado podem ser introduzidos novos indicadores em conjunto aos antigos ou modificados. 
 
-Os objetivos são traduzidos em uma métrica, compondo um conjunto de indicadores que permita avaliar se tarefa foi executada e como foi o processo de execução. A cada novo aspecto avaliado podem ser introduzidos novos indicadores em conjunto aos antigos ou modificados. 
+Com base nisto são levantadas hipóteses quanto ao comportamento quanto ao fato de satisfazer ou não o modelo adotado e possíveis condutas para aprimorar os resultados dentro da métrica proposta. Para cada uma destas condutas é levantado um teste de verificação que pode incluir consulta bibliográfica, simulações a partir do modelo e experimentos com o sistema. Os resultados desta etapa são então levados para a etapa de observação e confrontados novamente e assim o ciclo se repete.
 
-Com base nisto foram levantadas hipóteses quanto ao comportamento quanto ao fato de satisfazer ou não o modelo adotado e possíveis condutas para aprimorar os resultados dentro da métrica proposta. Para cada uma destas condutas é levantado um teste de verificação que pode incluir consulta bibliográfica, simulações a partir do modelo e experimentos com o sistema. Os resultados desta etapa são então levados para a etapa de observação e confrontados novamente e assim o ciclo se repete.
+Resultados positivos são incorporados e resultados negativos avaliados quanto a possíveis correções. Tudo é registrado para permitir futuras avaliações. O resultado de cada dia foi feito um registro das atividades e todo material produzido foi colocado no GitHub de forma a permitir o uso futuro na validação do comportamento após modificações futuras.
 
-Resultados positivos são incorporados e resultados negativos são registrados para avaliações. O resultado de cada dia foi registrado em um log de atividades e todo material produzido foi colocado no github de forma a permitir o uso futuro na validação do comportamento após modificações futuras.
+Desta forma, os resultados da investigação ao longo do período deste trabalho compõe os capítulos () e () aonde são apresentados os aspectos técnicos de cada componente analisado e resultados dos testes efetuados. 
 
 % Estudo em malha fechada
-
-\subsection{E}
