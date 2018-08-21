@@ -5,11 +5,17 @@
 
 \section{Contextualização}
 
-O uso de robôs vêm crescendo ao longo dos anos para a execução de diversas tarefas.
+Ao longo de toda a história humanidade, máquinas foram desenvolvidas para reduzir os esforços necessários para execução qualquer tarefa. Inicialmente foram voltadas a produção bens de consumo, passando a todo tipo de produção inclusive de máquinas que produzem outras máquinas já totalmente integradas ao cotidiano como exemplo máquinas para fabricar desde coisas mais simples como martelo e pregos até mais complexas como computadores e celulares.
 
-Muito embora ainda exista dentro do imaginário popular a visão da robótica como grande vilão no roubo de empregos, o maior esforço recente é em trabalhar na cooperação entre máquinas e pessoas como forma de aliar a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas complexos.
+E particular os robôs industriais dentro os vários tipos de máquinas existentes vêm ganhando cada vez mais espaço na área de produção e pouco a pouco integrando outros espaços como escolas, ateliês e hospitais. São definidos oficialmente pela ISO como "manipuladores multipropósito controlados automaticamente, reprogramáveis, programáveis em três ou mais eixos". Desta forma são máquinas extremamente flexíveis permitindo o emprego em uma diversidade de tarefas e cenários e garantido extrema consistência e precisão de forma automática.
 
-Como forma de minimizar o risco de lesão em caso de eventual impacto, algumas modificações têm sido propostas como introdução de atuadores série elásticos e braços robóticos mais leves. Desta forma a inércia do robô é reduzida e permite a complacência no impacto sem impor riscos de dano ao robô ou a pessoa. No entanto o controle do robô acaba sendo menos preciso e acaba limitando a aplicação das tarefas.
+No entanto, as mesmas características que conferem a robustez apreciada no ambiente industrial tornam robôs perigosos. A força, peso e velocidade de operação compõe elementos de muito risco na execução de atividades na presença de pessoas. Para resolver este problema novos tipos de robôs industriais têm sido desenvolvidos incorporando característica de segurança em cada aspecto do design, entre elas peso menor, capacidade de operação em velocidades reduzidas, protocolos para interrupção em caso de acidentes e complacência.
+
+Muito embora ainda exista dentro do imaginário popular a visão da robótica como grande vilão no roubo de empregos, o maior esforço recente é em trabalhar na cooperação entre máquinas e pessoas para facilitar cada vez mais a vida de todos. Desta forma a introdução de elementos para segurança trazer os benefícios da robótica também a outros ambientes fora da industria sem a necessidade de isolamento. Conferindo uma combinação entre a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas ainda mais complexos.
+
+Uma nova arquitetura do robô completamente pensada em segurança traz também uma maior dificuldade no controle. A ciência em torno do controle de sistemas rígidos está bem consolidada. Porém ainda são necessários estudos para garantir que robôs possam ser precisos e complacentes ao mesmo tempo. Isto é que possuam certa maleabilidade em caso de colisão para não causar danos sem deixar de permitir a execução da tarefa.
+
+% Garantir flexibilidade e precisão: Tenho que ensinar kung fu ao robô...
 
 % Robótica Cooperativa
 % https://medium.com/@abhasvc/ais-threat-to-society-is-scarier-than-trump-ff7e9d42ea74
@@ -17,7 +23,7 @@ Como forma de minimizar o risco de lesão em caso de eventual impacto, algumas m
 
 \section{Definição do problema}
 
-No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Para simplificar será referênciado apenas por Meka ao longo deste trabalho. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Cada uma das juntas possui um atuador série elástico composto de um motor brushless e um redução mecânica por onda de deformação.
+No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Daqui em diante será denominado apenas Meka para simplificar. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Cada uma das juntas possui um atuador série elástico composto de um motor brushless e um redução mecânica por onda de deformação.
 
 Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender suas implicações no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando as características próprias do sistema.
 
@@ -25,7 +31,7 @@ Em trabalhos anteriores foi observado um desempenho ineficiente nos controles ci
 
 \subsection{Trabalhos Anteriores}
 
-Inicialmente foi feito um estudo sobre os trabalho anteriores desenvolvidos na plataforma no Laboratório de Automação e Robótica ( LARA - UnB ). Alguns destes trabalhos puderam ser acompanhados ao longo da execução como o caso do trabalho desenvolvido por Marcos Pereira e pelo Rafael Koji de modo a facilitar a transmissão do conhecimento relacionado as contribuições de cada um ao projeto bem como presenciar as dificuldades relacionadas ao controle do braço robótico.
+Inicialmente foi feito um estudo sobre os trabalho anteriores desenvolvidos na plataforma no Laboratório de Automação e Robótica ( LARA - UnB ) bem como estratégias clássicas no controle de robôs industriais. Alguns destes trabalhos puderam ser acompanhados ao longo da execução como o caso dos trabalhos desenvolvidos por Marcos Pereira e pelo Rafael Koji de modo a facilitar a transmissão do conhecimento relacionado as contribuições de cada um ao projeto bem como presenciar as dificuldades relacionadas ao controle do braço robótico.
 
 \subsection{Metodologia de Investigação}
 
@@ -46,6 +52,6 @@ Com base nisto são levantadas hipóteses quanto ao comportamento quanto ao fato
 
 Resultados positivos são incorporados e resultados negativos avaliados quanto a possíveis correções. Tudo é registrado para permitir futuras avaliações. O resultado de cada dia foi feito um registro das atividades e todo material produzido foi colocado no GitHub de forma a permitir o uso futuro na validação do comportamento após modificações futuras.
 
-Desta forma, os resultados da investigação ao longo do período deste trabalho compõe os capítulos () e () aonde são apresentados os aspectos técnicos de cada componente analisado e resultados dos testes efetuados. 
+Desta forma, os resultados da investigação ao longo do período deste trabalho compõe os capítulos  \ref{ch:tech-reference} e \ref{ch:results} aonde são apresentados os aspectos técnicos de cada componente analisado e resultados dos testes efetuados. 
 
 % Estudo em malha fechada

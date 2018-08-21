@@ -1,4 +1,4 @@
-\chapter{Resultados\label{chap:FundamentacaoMatematica}}
+\chapter{Resultados\label{ch:results}}
 
 % Resumo opcional. Comentar se não usar.
 %\resumodocapitulo{Resumo opcional.}
@@ -6,7 +6,7 @@
 % Resumo informações da arquitetura relevantes do ponto de vista de controle
 \section{Estudo Arquitetura}
 
-Todo o código relacionado ao controle do robô é disponibilizado pelo fabricante e compôe a biblioteca M3, implementada em Python e com interface em C++. A partir da análise do código foi possível observar alguns pontos importantes que contribuem para ineficiência dos controladores implementado anteriormente:
+Todo o código relacionado ao controle do robô é disponibilizado pelo fabricante e compõe a biblioteca M3, implementada em Python e com interface em C++. A partir da análise do código foi possível observar alguns pontos importantes que contribuem para ineficiência dos controladores implementado anteriormente:
 
 \begin{itemize}
     \item Apenas controle por posição de juntas está implementado
@@ -18,15 +18,6 @@ Dentro do programa de interface com o ROS estão apenas definidos os controlador
 Este valor é bem próximo das taxas de amostragem de 8s (125 hz) e 20s (50 Hz) dos controladores implementados em C++ obtidas para os melhores resultados no trabalho feito pelo Marco Pereira. Sendo estes valores definidos pelo tempo mínimo necessário para efetuar todos os cálculos relacionados ao controladores cinemáticos implementados usando quatérnions duais.
 
 \section{Estudo Controladores}
-
-Foi observado que o controle do robô é feito a partir de uma série de controladores em cascata, conforme ilustrado no diagrama apresentado na figura \ref{fig:m3arch}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
-    \caption{Diagrama ilustrativo da arquitetura do robô}
-    \label{fig:m3arch}
-\end{figure}
 
 \subsection{Controladores Cinemáticos usando Quatérnions Duais}
 
