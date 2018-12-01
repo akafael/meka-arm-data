@@ -1,0 +1,121 @@
+
+% Estrutura Controle Marcos
+Para executar uma trajetória, são empregados 3 níveis de controladores: controle de trajetória, controle de posição e controle de juntas. A trajetória é fornecida como uma série de pontos no espaço com distância fixa separados por um intervalo de tempo constante. Cada um destes pontos é por sua vez passado ao controle de posição que opera em malha fechada com amostragem aproximadamente constante. Que então fornece a referência ao controle dos ângulos de junta.
+
+A velocidade de operação do efetuador é regulada a partir do intervalo entre os pontos e o tempo de amostragem entre cada ponto.
+
+A partir da formulação proposta utilizando quatérnions duais podemos relacionar uma posição e orientação do efetuador no espaço a uma configuração das juntas do robô. E assim indicar o valor de ângulo para cada junta. Estas então atuarão em conjunto para atingir a posição desejada.
+
+% Modelagem por espaço de estados
+Pelos gráficos dá para notar que mesmo quando não há deslocamento e por consequência não há velocidade, existe um esforço sendo feito. O motor está sendo acionado e parte da energia está sendo utilizada para compensar o efeito das pertubações geradas pela ação dos outros atuadores.
+
+Outro ponto importante é que todas as juntas possuem velocidade e torque limite. Ao se solicitar um deslocamento maior que o permitido decorrente algum ganho muito alto o controlador do motor satura e passar fornecer o maior torque possível. Nesta situação o controle deixa de se comportar como PID para atuar apenas como um controle "tudo ou nada".
+
+No nível mais baixo é controlado o torque fornecido pelos motores. Se considerarmos o torque constante na junta durante um intervalo de tempo $\Delta t$, podemos estimar o ângulo de deslocamento para uma situação sem perturbações como $\Delta\theta = \ddot{\theta}\Delta t $.
+
+Notadamente quanto menor o intervalo de tempo $\Delta t$ menor o deslocamento que podemos obter para uma mesma aceleração. Por outro lado se o intervalo de comunicação for muito grande, o deslocamento da junta poderá ser maior que o desejado gerando de um maior esforço de controle para compensar o erro.
+
+% Análise Resultados
+Pude perceber algumas variações bruscas nas juntas no uso dos controladores do Marcos, principalmente nas juntas do pulso. Periodicamente é solicitado uma velocidade brusca. Notadamente, quando avaliado no conjunto da trajetória o esforço extra é mascarado na métrica adotada. Recomendo a instituição de novas métricas e também de uma nova metodologia.
+
+Atualmente estão sendo avaliadas as velocidade apenas do ponto de vista do controlador, as variáveis internas (torque e velocidade de junta) são ignoradas. Desta forma o esforço extra gerado pelas malhas de baixo nível passa despercebido.
+
+% Banda Proporcional controle de baixo nível
+Com base no experimento de identificação e a referência da documentação obtemos a velocidade limite de cada junta. Desta forma podemos identificar a região aonde o controle de ângulo das juntas atua. Fora desta cada junta atuará apenas como um controle on/off.
+
+Notadamente, quando é solicitado uma variação da posição maior que a junta permite ocorre um erro acumulado pois o robô passa operar fora da faixa linear.
+
+Pelo gráfico do experimento de identificação podemos perceber que o erro não é zero em regime permanente, denotando que para este sistema não existe ação integral no controle da posição das juntas. Fato este também comprovado pelos valores verificados no arquivo de configuração do robô.
+
+% Não Linearidades
+Dado medido é discretizado no tempo com amostragem com tempo variável. Desta forma o calculo da derivada pode ser influenciado. Verificar a qualidade da estimativa da velocidade feita pelo Marcos.
+
+% Erro Quadrático
+O uso do erro contabilizado pela soma dos erros de cada junta gera uma distribuição dos esforços. Quando uma junta atinge uma velocidade limite, o esforço é distribuído para as demais juntas com o acúmulo do erro.
+
+% Avaliação controladores DQ
+Observa-se que o erro constante do controle de cada junta também reflete na hora de seguir uma trajetória. Notadamente, tanto no experimento de identificação como no experimento com os controladores cinemáticos as juntas do pulso foram as que apresentaram o maior erro em relação a referência. Observa-se que os controladores estão solicitando velocidade muito acima do que o robô suporta e com isto gerando um carga maior de esforço. As juntas que suportam maior velocidade.
+
+% Avaliação Qualitativa Stifness
+Nota-se que quanto maior o Stifness maior o tremor do braço quando solicitado maiores velocidades. Por outro lado quanto menor stifness maior o erro em alcançar determinadas posições. Houve alteração para valores entre 0 e 1. Para valores maiores que 1 o stifiness é percebido como inalterado ou equivalente a 1.
+
+% Atraso
+Pelo experimento de identificação dá para perceber um atraso entre o envio do comando e o início da execução. Observa-se que para o deslocamento de 1 radiano o controle de posição estabilizou com 1s apresentando um leve overshot e erro constante, enquanto a velocidade só estabiliza a partir de 2s.
+
+% API vs C++
+Foram observados desempenhos parecidos na utilização do controle via API em Python e via ROS no controle de juntas com compensação da gravidade. Isto se dá pois a etapa final de processamento é a mesma em ambos casos. Em ambas interfaces, na API em Python e no ROS, a mensagem é enviada para um programa que serializa o comando e aciona os mesmos controladores. A maior diferença está no tempo de amostragem.
+
+% Torque das juntas
+Para cada motor é estimado o torque das juntas pelo nível de corrente no motor. Esta medida é passada como "effort" dentro do tópico \textit{/hummanoid_state}. Embora não seja exatamente o torque sofrido por cada junta, esta medida permite avaliar o quanto o motor está sendo solicitado pelo controle.
+
+% SEA
+Atuadores Série Elásticos foram apresentados como forma de permitir um controle de torque a partir de componentes de baixo custo. 
+
+% Harmonic Drive
+O Harmonic Drive funciona funciona como uma mola de torção introduzindo um componente elástico na transmissão do movimento. Isto faz que a resposta do atuador seja mais lenta uma vez que parte da energia será absorvida pelo porção elástica do atuador e redistribuída gradualmente. No entanto, permite que o torque seja controlado a partir da posição, uma vez que uma rápida variação da posição produz um torque proporcional. Logo com base na resposta da posição das juntas e da entrada do motor é possível estimar o torque utilizando conjuntamente o esforço do motor e variação da posição.
+
+% Compensação da Gravidade
+No Meka a compensação da gravidade é toda feita por software no PC embarcado. A partir da leitura da posição das juntas e do momento de inércia de cada parte é calculado o torque devido a força da gravidade e este é passado diretamente ao controle de torque das juntas como um elemento de feedforward. Notadamente é considerado somente o torque para uma posição estática do braço, a aceleração e a velocidade não são levadas em consideração. As perturbações são compensadas através de um controle PID de torque dentro da placa DSP.
+
+% Arquivos de Configuração
+Cada parte do robô é identificada e configurada através de arquivos de configuração em yaml localizados na pasta *** . Nele estão as referências de calibração e parâmetros de cada um dos controladores e filtros implementados. Estes arquivos são consultados toda vez que o robô 
+
+% Segurança de Operação
+Está conectado no robô um botão de emergência. Quando acionado ou quando o cabo é desconectado o robô entra em modo SafeOP e os motores são desligados. Todos os sensores continuam operacionais e o robô continua recebendo comandos, porém estes apenas não são repassados aos motores. O que faz com que o robô vá para a última configuração solicitada assim que o botão de emergência for liberado.
+
+% Amostragem
+O ROS atua como um buffer e introduz não linearidades no sistema. Pois os valores mostrados são amostrados me com intervalo de tempo variável introduzindo componentes de alta frequência. Esta alta variação pode passar ao controle e gerar a percepção de uma velocidade acima do que realmente foi feito pelo robô e por conseguente gerar um esforço grande de controle em resposta.
+
+% Memória Compartilhada
+O uso de um buffer com memória compartilhada faz com que o comando fique como referência para os controladores de baixo nível até que seja substituído por outro valor. Da mesma forma o dado do estado dos sensores ficará em memória até ser substituído. De modo que somente escrever em memória não garante que o valor realmente será passado adiante. O programa do ROS é atualizado com frequência de 1Khz
+
+% Avaliar início da trajetória
+O controle ocorre com uma frequência menor que a resposta dos sensores, no entanto esta informação é descartada de modo que o controle sempre está atrasado em relação ao estado real.
+
+% Rigidez via software
+O controle de torque junto ao controle de posição permite criar o efeito de uma mola virtual. Para uma variação da posição em relação a referência é gerado um torque proporcional tal ocorreria como um componente elástico real com a diferença que a escala do torque pode ser regulada de acordo com a necessidade. Este mecanismo permite uma maior maleabilidade ao robô conferindo maior segurança e um design mais compacto uma vez que dispensa componentes mecânicos adicionais no controle da impedância do robô.
+
+% Bio inspirado
+O uso de componentes elásticos em série com o atuador é inspirado nas fibras musculares de animais que possuem um pouco de elasticidade, permitindo assim a absorção de impactos sem que estes seja transmitidos diretamente aos ossos e articulações ao mesmo tempo que permite um melhor aproveitamento de energia. 
+
+Em um sistema muscular real existe um conjunto de fibras de ação agonista e outro de ação antagonista. Desta forma a rigidez do sistema é garantida pela soma da ação de ambos tipo de fibra, permitindo que o esforço da reação a uma pertubação externa seja distribuído entre várias fibras. No Meka temos apenas um motor para cumprir os dois papeis. Assim a rigidez pode ser entendida como uma vibração de alta frequência e pequena amplitude em torno da referência. Quando ocorre uma pertubação, o motor reage produzindo um torque na direção contrária gerando um deslocamento. O braço move seguindo a inércia entre o tempo de uma ação de controle e outra podendo passar do ponto de referência e gerar a necessidade do esforço contrário e assim a pertubação vai sendo gradualmente corrigida através de uma oscilação amortecida.
+
+Para uma perturbação pontual este mecanismo resolve bem, garantindo uma rápida reposta do sistema. No entanto em interação com o campo da gravidade este mesmo mecanismo produz uma oscilação.
+
+% Estrutura TG
+Atuadores Série Elásticos
+ -> Controle de Força com Precisão
+ -> Torque
+ -> Rigidez
+ 
+% Percepção de Rigidez -> Força em resposta
+A rigidez é percebida como a força em resposta a uma ação externa. Assim para todos os corpos rígidos é válido a relação da 2 lei de newton: que para toda força é exercido uma força contrária de igual magnitude e direção oposta. Desta forma ocorre o equilíbrio das forças e nenhum movimento. No entanto, quando temos algum componente não rígido, parte desta força é absorvida e retransmitida dentro do sistema. 
+
+Em um sistema com articulações para emular o comportamento de um sistema completamente rígido é necessário que dado uma força externa exista uma força exercida correspondente equivalente. Em uma estrutura rígida esta força de oposição é exercida passivamente pela distribuição dos esforços internos do próprio material. No entanto em sistema articulado e para se manter parado é necessário que cada junta exerça força ativamente através dos motores.
+
+% Desempenho
+O desempenho de um sistema é relacionado com o desempenho de cada uma das partes de forma hierárquica. 
+
+1. Sistema Mecânico
+2. Acionamentos
+3. Sistema de controle
+
+Uma sistema em um nível acima possuirá desempenho tão bom quanto permitir as soma das ações dos sistemas subsequentes. O que implica que uma limitação nas camadas inferiores dificilmente será sempre mais difícil de ser totalmente compensada.
+
+No Meka temos
+
+1. Atuador série elástico ( Motor Brushless com Encoder, Encoder, Harmonic Drive )
+2. Placa DSP ( Controle PID Torque )
+3. Barramento de Comunicação (EtherCAT)
+4. PC -> M3 Controle de Posição com Compensação da Gravidade
+5. ROS shmhumanoid
+6. Controlador Cinemático DQ
+7. Drawer
+
+
+% Complexidade de sistemas mecatrônico
+Sistemas mecatrônicos por definição são sistemas complexo
+
+% Referência de Templates
+% http://gustavopsandri.wixsite.com/templates
+% http://www.robertdkirkby.com/academic/graph-tips/viii-multiple-graphs/

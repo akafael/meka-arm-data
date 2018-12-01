@@ -3,7 +3,9 @@
 \documentclass[a4paper,oneside,brazil,11pt,a4paper,openright,titlepage,usenames,dvipsnames]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
 \usepackage{lmodern}
+%\usepackage{times}
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 \usepackage{array}
@@ -11,8 +13,7 @@
 \usepackage{calc}
 \usepackage{textcomp}
 \usepackage{amssymb}
-\usepackage{graphicx}
-\usepackage{graphviz}
+\usepackage[pdf]{graphviz}
 
 \makeatletter
 
@@ -52,6 +53,7 @@
 \usepackage{float}
 % Pacotes para adição de figuras do inkscape
 \usepackage{graphicx}
+\usepackage{lastpage}
 \usepackage{import}
 
 % Escolher um dos seguintes formatos:
@@ -73,7 +75,7 @@
 
 \begin{comment}
 Título
-Caracterização e implementação de melhorias em arquitetura de controle de braço robótico complacente
+Estudo e caracterização de arquitetura de controle de braço robótico complacente
 \end{comment}
 
 \titulolinhai{\MakeUppercase{Caracterização e implementação de melhorias}}
@@ -102,98 +104,81 @@ determinado membro da banca.
 \end{comment}
 
 
-\membrodabancai{Prof. Fulano de Sousa, ENE/UnB}
+\membrodabancai{Prof. Geovany Araujo Borges, ENE/UnB}
 
 \membrodabancaifuncao{Orientador}
 
-\membrodabancaii{Prof. Ciclano dos Santos, ENE/UnB}
-
-\membrodabancaiifuncao{Examinador interno}
-
-\membrodabancaiii{Prof. Beltrano da Silva, ENE/UnB}
-
+\membrodabancaii{Prof. Mariana Bernardes, FGA/UnB}
+\membrodabancaiifuncao{Co-orientador}
+\membrodabancaiii{Prof. João Yoshiyuki Ishihara, ENE/UnB}
 \membrodabancaiiifuncao{Examinador interno}
-
-\membrodabancaiv{}
-
-\membrodabancaivfuncao{}
+\membrodabancaiv{Prof. Hugo Tadashi Muniz Kussaba, ENE/UnB}
+\membrodabancaivfuncao{Examinador interno}
 
 \membrodabancav{}
-
 \membrodabancavfuncao{}
 
-\begin{comment}
-Data de defesa: mês e ano
-\end{comment}
-
-
-\mes{Julho}
+% Data da Defesa
+\mes{Dezembro}
 \ano{\the\year}
 
-\begin{comment}
-Comandos para criar a capa e a página de assinaturas
-\end{comment}
-
-
+% Capas
 \capaprincipal
-%\capaassinaturas
+\capaassinaturas
 
 % Ficha Catalográfica 
-%\include{ficha_catalografica}
+\include{ficha_catalografica}
 
 % Dedicatória -------------------------------------------------------
-%\frontmatter
+\frontmatter
 
 % Dedicatória primeiro autor
-\dedicatoriaautori{um beijo pra minha mãe, pro meu pai, e pra você}
+\dedicatoriaautori{}
 
 % Texto de dedicatória do segundo autor. Caso não tenha um segundo autor, este texto não será mostrado
-\dedicatoriaautorii{Dedicatória do autor 2}
+%\dedicatoriaautorii{Dedicatória do autor 2}
 
 % Texto de dedicatória do terceiro autor. Caso não tenha um segundo autor, este texto não será mostrado
-\dedicatoriaautoriii{Dedicatória do autor 3}
+%\dedicatoriaautoriii{Dedicatória do autor 3}
 
 %\dedicatoria
 
 % Agradecimentos --------------------------------------------------------
 
 \agradecimentosautori{Agradecimentos!}
+% Colegas, Professores Graduação, Professores Intercâmbio, Professores Anteriores, Pais
 
-\agradecimentosautorii{A inclusão desta seção de agradecimentos é
-opcional e fica à critério do(s) autor(es), que caso deseje(em) inclui-la
-deverá(ão) utilizar este espaço, seguindo esta formatação.}
+%\agradecimentosautorii{A inclusão desta seção de agradecimentos é opcional e fica à critério do(s) autor(es), que caso deseje(em) inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
 
-\agradecimentosautoriii{A inclusão desta seção de agradecimentos
-é opcional e fica à critério do(s) autor(es), que caso deseje(em)
-inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
+%\agradecimentosautoriii{A inclusão desta seção de agradecimentos é opcional e fica à critério do(s) autor(es), que caso deseje(em) inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
 
-%\agradecimentos
+\agradecimentos
 
 % Resumo ------------------------------------------------------------
 
-%\resumo{resumo}{Resumo!
+\resumo{resumo}{Resumo!
 
-%\medskip{}
+\medskip{}
 
 %Palavras Chave: bla, ble, bli
 
-%}\vspace*{2cm}
+}\vspace*{2cm}
 
-%\resumo{Abstract}{Abstract, in English ofc!
+\resumo{Abstract}{Abstract, in English ofc!
 
-%\medskip{}
+\medskip{}
 
 %Keywords: bla, ble, bli
 
-%}
+}
 
 % Sumário, Listas de figuras e listas de tabelas ---------------------
 
 \sumario
 \listadefiguras
-%\listadetabelas
-% Listas de símbolos
-%\include{simbolos}
+\listadetabelas
+ Listas de símbolos
+\include{simbolos}
 
 % Corpo Principal ----------------------------------------------------
 
@@ -207,15 +192,13 @@ inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
 % - Método de investigação utilizada
 \include{cap_Introducao}
 
-% Fundamentos Teóricos
+% Fundamentos
 % - Teoria por trás do problema
-%\include{cap_FundamentosTeoria}
+% - Tecnologias por trás do problema
+\include{cap_FundamentosTeoria}
 
-% Fundamentos Técnicos
-% - Tecnologias envolvidas no problema
-\include{cap_FundamentosTecnica}
-
-% Metodologia
+% Desenvolvimento
+\include{cap_Desenvolvimento}
 
 % Resultados
 \include{cap_Resultados}
@@ -236,18 +219,20 @@ inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
 \nocite{figueredo:2013}
 \nocite{book:spong:}
 \nocite{edsinger2004domo}
-\nocite{pratt1995series}
+%\nocite{pratt1995series} % Cited!
+% Citar Livro
+% https://new.abb.com/process-automation/process-automation-service/reference-pages/single-loop-control-methods
 
 % Anexos -------------------------------------------------------------
-%\anexos
-%\makeatletter
+\anexos
+\makeatletter
 % não retirar estes comandos
-% \renewcommand{\@makechapterhead}[1]{%
-%   {\parindent \z@ \raggedleft \setfontarial\bfseries
-%     \LARGE \thechapter. \space\space
-%     \uppercase{#1}\par
-%     \vskip 40\p@ }}
-%\makeatother
+ \renewcommand{\@makechapterhead}[1]{%
+   {\parindent \z@ \raggedleft \setfontarial\bfseries
+     \LARGE \thechapter. \space\space
+     \uppercase{#1}\par
+     \vskip 40\p@ }}
+\makeatother
 
 % Anexo I: Descrição do CD
 %\include{anexo_CD}
