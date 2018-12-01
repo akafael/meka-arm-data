@@ -1,0 +1,33 @@
+digraph arch {
+
+  // Nodes
+  node [shape=box,style=filled,color=white]
+  rosnodeMekaInt [label="vrep_meka_interface_node"]
+  rosnodeShm [label="shm_hummanoid_node"]
+  sharedmem [label="Shared Memory"]
+
+  // Config
+  rankdir=LR;
+  rank=same rosnodeShm rosnodeMekaInt;
+
+  subgraph clusterROS {
+      node [style=filled,color=white];
+      style=filled;
+      color=lightgrey;
+      rosnodeMekaInt -> rosnodeShm [style=dashed, color=black, label="/hummanoid_command"]
+      rosnodeShm -> rosnodeMekaInt [style=dashed, color=black, label="/hummanoid_state"]
+      label = "ROS";
+  }
+
+  subgraph clusterM3 {
+      node [style=filled,color=white];
+      style=filled;
+      color=lightgrey;
+      sharedmem;
+      label = "M3";
+  }
+
+  // Outter Conections
+  sharedmem -> rosnodeShm [style=dashed, color=grey]
+  rosnodeShm -> sharedmem [style=dashed, color=grey]
+}
