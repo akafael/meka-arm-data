@@ -74,7 +74,7 @@ Para estudo da velocidade de resposta do controlador, o valor incrementado entre
 
 % Repete testes ?
 
-\subsubsection{Identificação da Planta}
+\subsubsection{Resposta ao Degrau}
 
 Feito uma avaliação preliminar para o experimento de identificação da planta foi aplicado um degrau para cada uma das juntas individualmente com registro dos dados. Este teste foi definido a partir dos seguintes passos:
 
@@ -108,6 +108,81 @@ O controle de torque está disponível em dois modos: com e sem compensação da
 % Por que não foi avaliado o controle de torque?
 
 \section{Estudo Controladores Cinemáticos}
+
+\subsection{Resposta ao Degrau C++}
+
+A velocidade máxima de cada junta pode ser ajusta para um valor entre $0$ e $1$, de igual forma a rigidez do braço gerada pelo controlador também pode ser ajustada entre $0$ e $1$. Valores maiores que 1 foram testados porém não houve mudança significativa em relação a comportamento com valor $1$.
+
+Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade bem parecida de atuação nesta configuração.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp1v100v100.png}
+    \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 1}
+    \label{fig:jointIdentification_exp1v100v100}
+\end{figure}
+
+Pela figura \ref{fig:jointIdentification_exp2v100v50} observa-se que a variação da rigidez do controlador implica em um erro maior em regime permanente nas juntas. O controlador converge em um tempo próximo mas notadamente aumenta o erro das juntas do pulso. Este fato também é percebido no código de demonstração no ajuste da rigidez. Pois ao mudar o valor, mantida a mesma referência de posição o pulso desloca significativamente de posição.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp2v100v50.png}
+    \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 0.5}
+    \label{fig:jointIdentification_exp2v100v50}
+\end{figure}
+
+Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o tempo necessário para cada uma das juntas atingir a posição aumentou, tendo em vista a fase em que o controlador utiliza a velocidade máxima permitida, o erro em regime permanente para cada um permanece com pouca alteração. No entanto é percebido que a inclinação da curva durante as fase de controle entre o tempo $t=1s$ e $2s$ com a velocidade máxima muda de forma diferente para cada uma duas juntas. Estes dados encontram-se na figura \ref{fig:jointIdentification_exp3v70v100}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp3v70v100.png}
+    \caption{Resposta a um degrau de entrada com Velocidade = 0.7 e Rigidez = 1}
+    \label{fig:jointIdentification_exp3v70v100}
+\end{figure}
+
+No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite}. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada.
+
+
+Tomando-se o diferença entre o valor passado de referência e o valor alcançado tempo foram obtidos os erro em regime permanente, registrados na tabela \ref{tab:jointIdentification_errortable}.
+
+\begin{table}[H]
+    \centering
+    $$\begin{array}{cc|ccccccc}
+         \hline
+         V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
+         \hline
+         \input{tex/tables/jointIdentification_errortable.tex}
+         \hline
+    \end{array}$$
+    \caption{Error Percentual para diferentes valores de velocidade ($V$) e rigidez ($S$)}
+    \label{tab:jointIdentification_errortable}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    $$\begin{array}{cc|ccccccc}
+         \hline
+         V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
+         \hline
+         \input{tex/tables/jointIdentification_overshottable.tex}
+         \hline
+    \end{array}$$
+    \caption{Percentual Overshot para diferentes valores de velocidade ($V$) e rigidez ($S$)}
+    \label{tab:jointIdentification_overshottable}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    $$\begin{array}{cc|ccccccc}
+         \hline
+         V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
+         \hline
+         \input{tex/tables/jointIdentification_steadstatetable.tex}
+         \hline
+    \end{array}$$
+    \caption{Valor em regime permanente para diferentes valores de velocidade ($V$) e rigidez ($S$)}
+    \label{tab:jointIdentification_steadstatetable}
+\end{table}
 
 \subsection{Controladores Cinemáticos usando Quatérnions Duais}
 
