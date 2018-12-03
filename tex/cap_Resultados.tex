@@ -186,6 +186,8 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
 
 \subsection{Controladores Cinemáticos usando Quatérnions Duais}
 
+% Experimento MoveUP
+
 Os controladores de posição do efetuador foram avaliado a partir da estratégia de discretização dos pontos e frequência de amostragem. Para tal foi reduzido o número de ponto e trajetória foi simplificada para apenas um deslocamento em linha reta de 10cm na vertical. Para primeira análise foi utilizado os controladores implementados anteriormente e foram feitos os seguintes testes:
 
 \begin{enumerate}
@@ -200,8 +202,11 @@ Foi observado que o robô leva um tempo até começar a mexer e um tempo até o 
 
 % Saltos a cada 300 ms
 
-
 \section{Estudo sobre não linearidades}
+
+% Acrescentar simulação no simulink pControlSaturation
+% - Comparativo da resposta para o mesmo ganho em um sistema de primeira ordem ( com delay e saturação )
+% - Verificar necessidade de mudar a ordem e puxar a seção para antes
 
 Uma vez que os modelos usados para o controle são lineares, a existência de comportamentos não lineares representam perturbações e podem gerar erros ou até instabilidade no controle caso não consideradas. Em razão disto uma atenção especial foi dada a este aspecto visando identificar a contribuição da perca de desempenho. A grande dificuldade é podem ocorrem em qualquer uma das partes do sistema de controle gerando um acumulo do efeito com o aumento da quantidade de camadas em cascata.
 
