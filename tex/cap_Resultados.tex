@@ -16,19 +16,43 @@ Para algum conhecimento se tornar cientifico é preciso a sistematização. Nest
 
 \section{Estudo Arquitetura}
 
-A primeira etapa foi de estudo do código e documentação em busca de identificar tecnologias e algoritmos envolvidos no controle do Meka. O intuito era identificar possíveis referências que ajudasse a guiar os experimentos a serem realizados e eventuais pontos críticos para o desempenho. Como a documentação oficial do Meka foi tirada fora do ar e apenas estão disponíveis as documentações geradas pela comunidade, foi feito um estudo para retirar possíveis pistas através do conhecimento deixado no código dentro do robô. Tal foi somente possível, pois por se tratar de uma plataforma voltada para pesquisa todo o código fonte estava disponível dentro do PC auxiliar.
+A primeira etapa foi de estudo do código e documentação em busca de identificar tecnologias e algoritmos envolvidos no controle do Meka. O intuito era identificar possíveis referências que ajudasse a guiar os experimentos a serem realizados e eventuais pontos críticos para o desempenho. Como a documentação oficial do Meka foi tirada fora do ar e apenas estão disponíveis as documentações geradas pela comunidade, foi feito um estudo para retirar possíveis pistas através do conhecimento deixado no código dentro do robô. Tal foi somente possível, pois por se tratar de uma plataforma voltada para pesquisa todo o código fonte e documentação estava disponível dentro do PC auxiliar.
+
+\subsection{Sistema Mecânico}
+
+\subsubsection{Atuadores}
+
+A partir da antiga documentação disponibilizada no site original da Meka Robotics\footnote{\url{http://mekabot.com/wiki/doku.php?id=user_guides:arm_a2r4}} temos os seguintes parâmetros da especificação do robô, registrados na tabela \ref{tab:a2armActuationDoc}. Nesta tabela são indicando os limites permitidos pela plataforma segundo especificação de projeto, obviamente com o desgaste e o tempo estes valores podem sofrer alterações.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|ccccccc}
+         \hline
+         A2.R4 Spec & $\theta_0$ & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\theta_5$ & $\theta_6$\\
+         \hline
+         \input{tex/tables/a2armActuationDoc.tex}
+         \hline
+    \end{tabular}
+    \caption{Especificação Preliminar dos Atuadores \cite{nocite}}
+    \label{tab:a2armActuationDoc}
+\end{table}
+
+Já da tabela \ref{tab:a2armActuationDoc}, podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso esta não atuam. E para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade velocidades grandes para garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+
+\subsubsection{Sensores}
+
+\subsection{Sistema Embarcado}
 
 % Arquitetura comunicação
 
-No que foi 
+A partir do estudo do código foi constatado que o código opera a partir de uma estrutura em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca m3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{figs/shm_arch}
-    \caption{Caption}
-    \label{fig:my_label}
+    \caption{Arquitetura Controle C++}
+    \label{fig:shm_arch}
 \end{figure}
-
 
 Todo o código relacionado ao controle do robô é disponibilizado pelo fabricante e compõe a biblioteca M3, implementada em Python e com interface em C++. A partir da análise do código foi possível observar alguns pontos importantes que contribuem para ineficiência dos controladores implementado anteriormente:
 
@@ -54,7 +78,7 @@ Para avaliar os controladores de junta de baixo nível foi utilizado a API em Py
     \item PWM
 \end{itemize}
 
-Todos estes estão disponíveis nos modos com e sem compensação da gravidade. 
+Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade.
 
 \subsubsection{Avaliação do Atraso de Comunicação}
 
@@ -86,14 +110,16 @@ Feito uma avaliação preliminar para o experimento de identificação da planta
     \item Mantém a referência da posição em $0$ graus por $2s$
 \end{enumerate}
 
-Para a API em Python Estes passos foram executados 3 vezes para cada uma das juntas. O mesmo experimento foi efetuado a partir de um programa em C++ baseado no código elaborado em trabalhos anteriores. Para ambos casos a saída dos sensores foi registrada a partir do ROS a partir do programa rosbag e somente para os testes feitos em C++ foram também registradas os mensagens de controle. Uma vez que os comandos passados via API são enviados diretamente para o serializador de mensagens sem passar pelo ROS e portanto foram utilizados apenas para uma avaliação preliminar do comportamento dos controladores de junta.
+Para a API em Python estes passos foram executados 3 vezes para cada uma das juntas. Um experimento semelhante foi efetuado a partir de um programa em C++ baseado no código elaborado em trabalhos anteriores. Para ambos casos a saída dos sensores foi registrada a partir do ROS a partir do programa rosbag e somente para os testes feitos em C++ foram também registradas os mensagens de controle. Uma vez que os comandos passados via API são enviados diretamente para o serializador de mensagens sem passar pelo ROS e portanto foram utilizados apenas para uma avaliação preliminar do comportamento dos controladores de junta. Mais detalhes do experimento em C++ na seção \ref{subsec:stepcpp}. 
 
 % Qual foi a diferença dos dois para os mesmo parâmetros?
 % Por que não foram avaliados outros ângulos?
 
 \subsubsection{Controle de Posição sem Compensação da Gravidade}
 
-O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita que toda a estratégia de compensação da gravidade é feita por software, diferente de outras plataformas como o Baxter em que esta é feita de forma mecânica.
+O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita o fato do impacto de toda a estratégia de compensação da gravidade ser feita por software, diferente de outras plataformas como o Baxter em que esta é feita de forma mecânica \cite{nobody}.
+
+Para tal é tomado a posição de referência passada
 
 \subsubsection{Controle de Velocidade}
 
@@ -109,9 +135,21 @@ O controle de torque está disponível em dois modos: com e sem compensação da
 
 \section{Estudo Controladores Cinemáticos}
 
-\subsection{Resposta ao Degrau C++}
+Em C++ não estão disponíveis todos os modos de operação para o uso a partir do ROS, embora ao final a mensagem seja serializada e passada para os mesmos programas. No nó $shm\_hummanoid$ está implementado somente o controle por posição com e sem compensação da gravidade. Em decorrência disto, foi analisado somente o controlador de posição com compensação da gravidade por ter sido o utilizado em trabalhos anteriores. Os tempos foram obtidos a partir do $ros::time$ e registrado nas mensagens como \textit{timestamp}. Foi necessário alterar o código do $vrep\_meka\_interface$ para incluir o \textit{timestamp} na mensagem para permitir a análise dos dados registrados via \textit{rosbag}. Em razão disto, alguns dos experimentos anteriores não foram incluídos no estudo do tempo de resposta por conta de inexistir um referencial de tempo comum para as mensagens do tópico $/hummanoid\_state$ e $/hummanoid\_command$.
 
-A velocidade máxima de cada junta pode ser ajusta para um valor entre $0$ e $1$, de igual forma a rigidez do braço gerada pelo controlador também pode ser ajustada entre $0$ e $1$. Valores maiores que 1 foram testados porém não houve mudança significativa em relação a comportamento com valor $1$.
+\subsection{Controle de Posição de Juntas}\label{subsec:stepcpp}
+
+Feito uma avaliar a resposta do controlador em C++ foi aplicado um degrau para cada uma das juntas individualmente com registro dos dados. Este teste foi definido a partir dos seguintes passos:
+
+\begin{enumerate}
+    \item Começa com a junta na posição $0$ rad
+    \item Envia o comando para ir para posição $1$ rad
+    \item Mantém a referência da posição em $1$ rad por $4s$
+    \item Envia o comando para ir para posição $0$ rad
+    \item Mantém a referência da posição em $1$ rad por $4s$
+\end{enumerate}
+
+Estes passos foram repetidos, ajustando-se os os parâmetros de rigidez e velocidade máxima do controlador. A velocidade máxima de cada junta pode ser ajusta para um valor entre $0$ e $1$, de igual forma a rigidez do braço gerada pelo controlador também pode ser ajustada entre $0$ e $1$. Valores maiores que 1 foram testados porém não houve mudança significativa em relação a comportamento com valor $1$. Muito embora em trabalhos anteriores na plataforma fosse usado $rigidez = 5$. Vale reforçar que estes são parâmetros usados pelos controladores no PC ( posição e compensação da gravidade ) de forma que não é possível obter diretamente os parâmetros de rigidez e velocidade máxima pela resposta do estado atual fornecida por \textit{/hummanoid\_state}.
 
 Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade bem parecida de atuação nesta configuração.
 
@@ -142,6 +180,7 @@ Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o 
 
 No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite}. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada.
 
+% Comentar sobre o varição do intervalo de tempo medido da entre os comandos enviados para a \hummanoid_command
 
 Tomando-se o diferença entre o valor passado de referência e o valor alcançado tempo foram obtidos os erro em regime permanente, registrados na tabela \ref{tab:jointIdentification_errortable}.
 
@@ -184,8 +223,11 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
     \label{tab:jointIdentification_steadstatetable}
 \end{table}
 
+% Acrescentar Tempo de Resposta 
+
 \subsection{Controladores Cinemáticos usando Quatérnions Duais}
 
+% Obter dt em /hummanoid_state e /hummanoid_command para cada um dos casos
 % Experimento MoveUP
 
 Os controladores de posição do efetuador foram avaliado a partir da estratégia de discretização dos pontos e frequência de amostragem. Para tal foi reduzido o número de ponto e trajetória foi simplificada para apenas um deslocamento em linha reta de 10cm na vertical. Para primeira análise foi utilizado os controladores implementados anteriormente e foram feitos os seguintes testes:
@@ -214,17 +256,21 @@ Uma vez que os modelos usados para o controle são lineares, a existência de co
 
 O efeito de saturação do atuador ocorre quando é solicitado uma ação de torque ou velocidade acima do que o atuador permite. Em diversos sistemas isto é limitado através de algum dispositivo de proteção evitando danificar o atuador. Do lado do controle, este é percebido como uma resposta mais lenta que o esperado para aquele determinado ganho em simulação podendo levar a instabilidade no controle do sistema real.
 
-Como o controle da posição é feito em colaboração pela ação de cada uma das juntas, este problema é mascarado na métrica do erro de posição. Como a contribuição de cada junta em manipulador não cartesiano muda de acordo com a posição, o atraso devido a saturação pode fazer com que o robô tenha um erro maior para determinadas posições no decorrer da trajetória que outras. Outro efeito é a saturação de um motor levar a um uso maior dos outro motores na tentativa de compensar o erro acumulado.
+Como o controle da posição é feito em colaboração pela ação de cada uma das juntas, este problema é mascarado na métrica do erro de posição. Como a contribuição de cada junta em manipulador não cartesiano muda de acordo com a posição, o atraso devido a saturação pode fazer com que o robô tenha um erro maior para determinadas posições no decorrer da trajetória que outras. Outro efeito é a saturação de um motor levar a um uso maior dos outro motores na tentativa de compensar o erro acumulado. Como são utilizados diferentes motores para cada uma das juntas, conferindo limitações especificas na atuação, em particular na velocidades máximas que cada junta pode atingir. Por conta disto, é percebido um maior uso das juntas com velocidade máxima maior para compensar o erro acumulado pela juntas com velocidade máxima menor, quando o controle começa solicitar uma velocidade maior que a permitida pelos outros motores. Em particular no Meka, este fenômeno leva a um uso maior das juntas do ombro para corrigir orientação ao acumulado pela saturação das juntas do pulso.
 
-São utilizados diferentes motores para cada uma das juntas, conferindo limitações especificas na atuação, em particular na velocidades máximas que cada junta pode atingir. Por conta disto, é percebido um maior uso das juntas com velocidade máxima maior para compensar o erro acumulado pela juntas com velocidade máxima menor, quando o controle começa solicitar uma velocidade maior que a permitida pelos outros motores.
+Em um manipulador robótico composto por juntas rotacionais, a tarefa de deslocamento no espaço é distribuída entre todas as juntas ao longo de praticamente toda a região do espaço de trabalho. O deslocamento de cada junta produz um arco que inevitavelmente gera movimentação em pelo menos duas direções no espaço e uma rotação. Desta forma o tarefa de atingir uma posição e orientação no espaço é distribuída por várias juntas, permitindo um esforço menor em um determinado atuador. No entanto, em particular para um braço antropomórfico a orientação é resolvida de forma conjunta pelo pulso e pelo ombro gerando um amplo espaço nulo a permitindo para uma mesma posição do pulso, diversas posições para o cotovelo.
 
-Em particular no Meka, este fenômeno leva a um uso maior das juntas do ombro para corrigir orientação ao invés das juntas do pulso. Sendo um braço antropomórfico, o comportamento intuitivo esperado é a preferência das juntas mais próximas ao tronco para atuarem mais na posição enquanto as juntas próximos ao efetuador corrigirem a orientação. Isto é refletido na Jacobiana, para uma mesma variação de ângulo o mudança na posição e orientação é maior para as juntas do ombro que para as juntas do pulso.
+Tais relações geométricas indicam que a tarefa de manter uma orientação possui uma relação com o movimento necessário pelas juntas notadamente diferente da tarefa de manter uma posição. De forma a permitir separar a complacência da posição ou da orientação conforme necessário para a tarefa. Ao se utilizar a representação cinemática por Quatérnions Duais tanto a referência da posição como a da orientação estão acopladas. Um bom controlador por outro lado necessita de uma rápida resposta a uma perturbação, gerando uma rigidez maior ao invés de uma complacência. Como para os experimentos em questão a orientação de referência era mantida como a orientação inicial do robô, parte do esforço de controle era direcionado em manter a orientação. O que gerava uma pertubação na posição. Este problema em composição com diferença de velocidade dos atuadores do pulso e da ombro fazia com que uma perturbação na orientação percebida no pulso provoca-se uma movimentação juntas do ombro e por consequência uma movimentação da posição do cotovelo. O que gerava uma aproximação do cotovelo para a base provocando em cascata uma maior chance colisão do braço com o tronco e uma dificuldade em manter a estabilidade as referências do controle através da cinemática diferencial. Pois o robô se aproximava do limite da junta e de regiões com bloqueio de movimento.
+
+As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{nobody} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{nobody}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em experimento disponível no YouTube \footnote{https://www.youtube.com/watch?v=bU7Ocphhifg} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
+
+% aqui entra o kung-fu 
+
+% Citar o trabalho da UT com campo de potenciais
 
 % Fenômeno Harakiri: O cotovelo do meka vai se aproximando do tronco com o passar do tempo, o robô move bruscamente com pertubações na orientação a partir da posição de referência usada nos trabalhos do Koji e do Marcos
 
-% Montar experimento Harakiri 2DOF
-% Montar experimento Harakiri Meka em simulação no Matlab
-% Montar experimento Harakiri Meka real
+% Montar experimentos Harakiri 2DOF, Harakiri Meka em simulação no Matlab, Harakiri Meka real
 % Estudo do erro por junta ao invés de por posição -> Pontuar necessidade introduzir novas métricas
 
 \subsection{Atraso da Comunicação}
