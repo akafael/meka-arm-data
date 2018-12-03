@@ -9,7 +9,7 @@ FIGDIR = ../tex/figs/
 GVFILES = $(wildcard dot/*.gv)
 PICFILES = $(addprefix $(FIGDIR),$(notdir $(GVFILES:%.gv=%.png)))
 
-# Rule them all
+# One rule to rule them all
 all: $(PICFILES)
 
 # Dot figures
