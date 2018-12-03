@@ -33,19 +33,38 @@ A partir da antiga documentação disponibilizada no site original da Meka Robot
          \input{tex/tables/a2armActuationDoc.tex}
          \hline
     \end{tabular}
-    \caption{Especificação Preliminar dos Atuadores \cite{nocite}}
+    \caption{Especificação Preliminar dos Atuadores, adaptado de \cite{nobody}}
     \label{tab:a2armActuationDoc}
 \end{table}
 
-Já da tabela \ref{tab:a2armActuationDoc}, podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso esta não atuam. E para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade velocidades grandes para garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso esta não atuam. E para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade velocidades grandes para garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+
+% Pulso Diferencial
 
 \subsubsection{Sensores}
+
+% encoder, temperatura, corrente, força
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll}
+         \hline
+         Sensor & Descrição\\
+         \hline
+         \input{tex/tables/a2armSensorDoc.tex}
+         \hline
+    \end{tabular}
+    \caption{Especificação dos Sensores, adaptado de \cite{nobody}}
+    \label{tab:a2armSensorDoc}
+\end{table}
+
+Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de encoder. De forma que percebe que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e por tanto mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial\cite{nobody} de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
 
 \subsection{Sistema Embarcado}
 
 % Arquitetura comunicação
 
-A partir do estudo do código foi constatado que o código opera a partir de uma estrutura em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca m3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
+O código opera a partir de uma estrutura em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca m3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
 
 \begin{figure}
     \centering
@@ -65,11 +84,28 @@ Dentro do programa de interface com o ROS foi possível observar alguns pontos i
 
 Este valor é bem próximo das taxas de amostragem de $8 ms$ ($125 hz$) e $20 ms$ ($50 Hz$) dos controladores implementados em C++ obtidas para os melhores resultados em \cite{nobody} obtidos por Marco Pereira. Sendo estes valores definidos pelo tempo mínimo necessário para efetuar todos os cálculos relacionados ao controladores cinemáticos implementados usando quatérnions duais.
 
-\section{Estudo Controladores Meka}
+\section{Estudo Controladores M3}
+
+\subsection{Código de Demonstração}
+
+São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{tex/figs/m3demo.png}
+    \caption{Interface Código de Demonstração}
+    \label{fig:m3demo}
+\end{figure}
+
+Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo do código de demonstração e a documentação disponibilizada no ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{nobody}.
+
+A partir da execução do código de demonstração foi possível perceber que a posição das juntas varia conforme o valor de rigidez é ajustado. O valor da velocidade máxima e da rigidez variam de 0 a 1 internamente do código representando uma porcentagem do valor máximo possível. Ao que foi notado que mesmo com a rigidez no máximo o braço continua demonstrando um comportamento complacente. Com a rigidez em zero o controle é instável e o robô não consegue manter a posição e para valores abaixo de 0.2 o desempenho na execução de uma trajetória é visivelmente ruim.
+
+% - A trajetória em circulo foi melhor ou pior que o trabalho do Marcos?
 
 \subsection{API Python}
 
-Para avaliar os controladores de junta de baixo nível foi utilizado a API em Python e a partir dai foram feitos vários teste a partir de comandos de posição para as juntas. A estrutura para envio dos comandos para o robô é diferente, de modo que alguns testes relacionados a comunicação também foram necessários. Estão estão disponíveis os seguintes controladores, ordenados do de mais alto nível para o de mais baixo nível:
+Como a maior parte do código da M3 está implementada em Python, para avaliar os controladores de junta de baixo nível foi utilizado a API e a partir dai foram feitos vários testes. Os valores do sensor foram registrados via \textit{rosbag} a partir das leitura do tópico $/hummanoid\_state$. Através desta interface para a M3 estão estão disponíveis os seguintes controladores, ordenados do de mais alto nível para o de mais baixo nível:
 
 \begin{itemize}
     \item Posição
@@ -78,7 +114,7 @@ Para avaliar os controladores de junta de baixo nível foi utilizado a API em Py
     \item PWM
 \end{itemize}
 
-Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade.
+Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da m3 e obtido de forma recursiva pela biblioteca KDL\cite{nobody}.
 
 \subsubsection{Avaliação do Atraso de Comunicação}
 
@@ -110,14 +146,14 @@ Feito uma avaliação preliminar para o experimento de identificação da planta
     \item Mantém a referência da posição em $0$ graus por $2s$
 \end{enumerate}
 
-Para a API em Python estes passos foram executados 3 vezes para cada uma das juntas. Um experimento semelhante foi efetuado a partir de um programa em C++ baseado no código elaborado em trabalhos anteriores. Para ambos casos a saída dos sensores foi registrada a partir do ROS a partir do programa rosbag e somente para os testes feitos em C++ foram também registradas os mensagens de controle. Uma vez que os comandos passados via API são enviados diretamente para o serializador de mensagens sem passar pelo ROS e portanto foram utilizados apenas para uma avaliação preliminar do comportamento dos controladores de junta. Mais detalhes do experimento em C++ na seção \ref{subsec:stepcpp}. 
+Para a API em Python estes passos foram executados 3 vezes para cada uma das juntas. Um experimento semelhante foi efetuado a partir de um programa em C++ baseado no código elaborado em trabalhos anteriores. Para ambos casos a saída dos sensores foi registrada a partir do ROS a partir do programa \textit{rosbag} e somente para os testes feitos em C++ foram também registradas os mensagens de controle. Uma vez que os comandos passados via API são enviados diretamente para o serializador de mensagens sem passar pelo ROS e portanto foram utilizados apenas para uma avaliação preliminar do comportamento dos controladores de junta. Mais detalhes do experimento em C++ na seção \ref{subsec:stepcpp}. 
 
 % Qual foi a diferença dos dois para os mesmo parâmetros?
 % Por que não foram avaliados outros ângulos?
 
 \subsubsection{Controle de Posição sem Compensação da Gravidade}
 
-O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita o fato do impacto de toda a estratégia de compensação da gravidade ser feita por software, diferente de outras plataformas como o Baxter em que esta é feita de forma mecânica \cite{nobody}.
+O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita o fato do impacto de toda a estratégia de compensação da gravidade ser feita por software. A precisão do controle, depende da qualidade do modelo dinâmico e da estratégia utilizada. Esta solução que o sistema de controle possa ser sempre atualizado, uma vez que não está embutido no projeto de hardware.
 
 Para tal é tomado a posição de referência passada
 
@@ -151,7 +187,7 @@ Feito uma avaliar a resposta do controlador em C++ foi aplicado um degrau para c
 
 Estes passos foram repetidos, ajustando-se os os parâmetros de rigidez e velocidade máxima do controlador. A velocidade máxima de cada junta pode ser ajusta para um valor entre $0$ e $1$, de igual forma a rigidez do braço gerada pelo controlador também pode ser ajustada entre $0$ e $1$. Valores maiores que 1 foram testados porém não houve mudança significativa em relação a comportamento com valor $1$. Muito embora em trabalhos anteriores na plataforma fosse usado $rigidez = 5$. Vale reforçar que estes são parâmetros usados pelos controladores no PC ( posição e compensação da gravidade ) de forma que não é possível obter diretamente os parâmetros de rigidez e velocidade máxima pela resposta do estado atual fornecida por \textit{/hummanoid\_state}.
 
-Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade bem parecida de atuação nesta configuração.
+Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade próxima de $V = 1.5 rad/s$. O que mostra que os controladores de posição estão ajustados para operarem na faixa linear comum a todos os motores, que é abaixo da velocidade máxima do junta mais lenta $j4$ de $V_4 = 2.0 rad/s$, conforme registrado na tabela \ref{tab:a2armActuationDoc}.
 
 \begin{figure}[H]
     \centering
@@ -225,7 +261,7 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
 
 % Acrescentar Tempo de Resposta 
 
-\subsection{Controladores Cinemáticos usando Quatérnions Duais}
+\subsection{Avaliação na execução de Trajetória}
 
 % Obter dt em /hummanoid_state e /hummanoid_command para cada um dos casos
 % Experimento MoveUP
@@ -279,10 +315,10 @@ Dado a existência de várias camadas entre o controle cinemático e o atuador d
 
 % Resultados
 
-\subsection{Controle Virtual de Rigidez}
+%\subsection{Controle Virtual de Rigidez}
 
 % Comparar com primeiras implementações de SEA
 
-Com base no controle do torque e o uso de sensores de posição pode se emular o comportamento de uma mola com rigidez variável através de um controlador. Esta estratégia é denominada mola virtual e permite conferir o controle de força com precisão sem a necessidade de ajustar fisicamente algum elemento elástico.
+%Com base no controle do torque e o uso de sensores de posição pode se emular o comportamento de uma mola com rigidez variável através de um controlador. Esta estratégia é denominada mola virtual e permite conferir o controle de força com precisão sem a necessidade de ajustar fisicamente algum elemento elástico.
 
 % Diagrama SEA Virtual

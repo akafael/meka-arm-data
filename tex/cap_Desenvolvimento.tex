@@ -1,8 +1,8 @@
 \chapter{Desenvolvimento\label{ch:develop}}
 
-%\begin{flushright}
-%\textit{Simple, clear purpose and principles give rise to complex, intelligent behavior. Complex rules and regulations give rise to simple and stupid behavior.}\\(Hock Dee)
-%\end{flushright}
+\begin{flushright}
+\textit{Simple, clear purpose and principles give rise to complex, intelligent behavior. Complex rules and regulations give rise to simple and stupid behavior.}\\(Hock Dee)
+\end{flushright}
 
 Em trabalhos anteriores foram propostos e implementados vários controladores cinemáticos como forma de corrigir o efeito das pertubações devido a interação com uma agente externo e da ação da gravidade. No entanto o desempenho foi abaixo do apresentado pela código de demonstração do fabricante para o robô e pelos mesmos controladores no uso em outra plataforma explicitando a necessidade de um maior estudo da arquitetura do manipulador robótico Meka A2. Com base nisto foi feito uma análise do componentes do braço e a implementação dos sistemas de controle das juntas em software e hardware. Neste capítulo será descrito os métodos de investigação utilizados bem como experimentos efetuados.
 
@@ -86,7 +86,7 @@ Para avaliar os tempos de atuação foi repetido o mesmo experimento para o desl
 
 \subsection{Estudo Interação do controle de rigidez}
 
-\section{Identificação}
+\section{Layout Experimentos}
 
 Para avaliar a resposta do sistema para controle dos ângulos de junta foi proposto um teste com estímulo pelo degrau. Esta avaliação foi efetuada para interação pela API em Python e pelo ROS. Para ambos casos os dados obtidos foram registrados em arquivo utilizando a ferramenta rosbag. 
 
@@ -96,22 +96,21 @@ Para avaliar a resposta do sistema para controle dos ângulos de junta foi propo
 
 % Investigação de possíveis causas
 
-\section{Meka PC}
 
-Para o controle do robô é utilizado um computador embarcado com o sistema operacional Ubuntu 12.04 e o Kernel Real Time Xenomai. Nele são implementado o driver para o protocolo EtherCAT e a biblioteca M3 responsável pela interação com cada um dos dispositivos, entre sensores e motores de cada junta.
+\subsection{shm\_humanoid\_interface}
 
-Dentro do pc é executado um script que para disparar os processos relacionados a comunicação com a robô via socket pelo protocolo Ethercat e as interface para Python. Um vez que o script está em execução o robô pode ser controlado via API ou por meio de um programa para ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:m3arch}.
+Este é um nó do ROS disponibilizado pela Meka Robotics para a comunicação via ROS com o Meka. Representa uma das possíveis interfaces com a M3 através do acesso direto a memória compartilhada. Através deste nó são gerados dois tópicos no ros: $/humanoid\_state$ e $/humanoid\_command$. A cada interação a informação atual do tópico $/hummanoid_command$ é passada para a memória compartilhada e a leitura dos sensores é então escrita no tópico $/hummanoid_state$. Na versão atual são somente interpretados os comando de posição das juntas através dos modos de controle com e sem compensação da gravidade.
 
-% m3rt_server
-% -> Interface via socket
-% -> Memórica compartilhada
-% -> API Python
-% -> ROS
+\subsection{ROS Bags}
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
-    \caption{Diagrama da arquitetura do robô\cite{nobody}}
-    \label{fig:m3arch}
-\end{figure}
+ROS Bags é um utilitário do ROS para o registro dos eventos em cada tópico. A informação publicada nos tópicos é registrada em formato yaml e permite que que posteriormente possa ser reproduzida em tópicos tal uma simulação. Desta forma dispensa a necessidade de manter o hardware conectado para analisar o comportamento do robô ao longo do tempo bem como permitir a análise de diferentes experimentos diretamente pelas ferramentas do ROS como o \textit{ros\_plot}. Ou ainda conectar os resultados de um hardware real com uma simulação como forma de efetuar uma validação cruzada do comportamento real em comparação do comportamento simulado. Para tal basta executar o programa e indicar quais tópicos serão monitorados. Ao final da execução é registrado um arquivo com as informações com a extensão $.bag$. Internamente os dados são registrados em formato $.yaml$ o que permite a leitura direta.
 
+No entanto a representação da informação é um pouco verbosa gerando um arquivo grande. Assim foi utilizado o programa $bag2csv$ para converter para o formato $.csv$ para facilitar o processamento. Em seguida o programa $sed$ para pequenos ajustes e a separação da leitura dos tópicos  $/humanoid\_state$ e $/humanoid\_command$ em diferentes arquivos. Este processo foi incorporado a Makefile para permitir o processamento rápido de todos os arquivos $.bag$ utilizando o recurso de processamento paralelo da ferramenta GNU make. O log de todos os experimentos feitos é disponibilizado no CD em conjunto de
+
+\subsection{Python API}
+
+Além do controle via ROS, a M3 possui uma interface através de uma API em Python que permite uma liberdade maior de controle uma vez que possui mais recursos já implementados. Além do modos de controle por posição estão também disponíveis o controle direto por torque e por velocidade das juntas. Estão implementados um controlador para compensação do efeito da gravidade a partir da biblioteca KDL com base no momento de inércia de cada junta.
+
+% Explicação sobre funcionamento da biblioteca
+% Diagrama: Comando/Estado -> Memória "bot" -> "proxy.step()"
+% -> Problema Detectado no uso do ângulo em radianos por isto foi adotado o uso em graus
