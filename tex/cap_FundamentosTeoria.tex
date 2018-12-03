@@ -5,12 +5,14 @@
 \end{flushright}
 
 % Resumo opcional. Comentar se não usar.
-%\resumodocapitulo{Resumo opcional}
+\resumodocapitulo{ Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. }
 
 %A primeira etapa de qualquer processo na engenharia é modelagem. A partir dela relacionamos todos conhecimentos relacionados a um sistema em busca de avaliar o comportamento através de uma descrição mais simplificada. Uma das principais formas é a modelagem matemática, em que é descrito as relações lógicas entre cada parte do sistema,. E assim, através de operações matemáticas podemos analisar em profundidade bem como extrapolar o estudo para sistema com modelos parecidos.
 
 % Definição manipulador, resumo capítulo
-Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro. Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado. Neste capítulo será apresentado os aspectos matemáticos e físicos de cada uma das tecnologias envolvidas no controle implementado no Meka. 
+Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro. Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+
+\section{Manipuladores Robóticos} 
 
 % Modelagem Matemática
 Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
@@ -88,15 +90,15 @@ Podemos entender o problema da cinemática inversa como um problema de mapeament
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
 
-Atuadores Série Elásticos é uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos. Introduzir alguma forma de complacência é por norma \cite{nobody} um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
+Cada uma juntas do Meka é um Atuador Série Elaśtico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos. Introduzir alguma forma de complacência é por norma \cite{nobody} um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
 
 Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obitido pela lei de Hooke ($\Tau = k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
 % Ilustração SEA
 
-E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo como proposto \cite{nobody}. Em particular no meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela redução e modulado pelo controlador de torque implementado pela placa. Desta forma a rigidez do atuador poder ser controlada via software através do uso de uma mola virtual feita a partir da referência do controle de posição e do controle de torque. Quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software. \cite{nobody}
+E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo como proposto \cite{nobody}. Em particular no meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por uma placa de controle embarcada dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software. \cite{nobody}
 
-Da mesma forma que o acrescimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas.
+Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas.
 
 %% Diagrama Atuadores Elásticos
 
@@ -111,7 +113,7 @@ Da mesma forma que o acrescimo de uma mola introduz uma maior segurança e permi
 % Posição discreta e estimativa da Velocidade
 % Torque obtido a partir da posição
 
-Para cada junta são medidas as grandezas a posição e o torque aplicado. A posição é medida diretamente através do encoder. Enquanto o torque é avaliado associando esta medida com a leitura do encoder do motor a partir da resposta dinâmica da mola. O torque aplicado nos motores é ainda avaliado de forma indireta através de um sensor hall de corrente, permitindo um controle bastante preciso do torque.
+Para cada junta são utilizados encoders para a medidas das grandezas a posição e o torque aplicado. Um enconder é tradicionalmente um sensor de posição. No entanto por conta da estrutura do atuador série elástico é possível avaliar também a torque aplicado na junta levando a em conta a dinâmica da mola, ou componente elástico do atuador. Desta forma o torque avaliado será a diferença da medida de posição da saída do motor e da junta vezes a rigidez da junta. 
 
 \begin{figure}[H]
     \centering
@@ -124,7 +126,7 @@ Para cada junta são medidas as grandezas a posição e o torque aplicado. A pos
 % Descrição
 % Modelo 
 
-Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. É bastante popular na área de robótica por ter baixo deslizamento junto a uma alta capacidade de redução em um tamanho compacto. No entanto acrescenta atrito e flexibilidade às juntas. De forma a somar com flexibilidade introduzida pela mola. 
+Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. É bastante popular na área de robótica por ter baixo deslizamento junto a uma alta capacidade de redução em um tamanho compacto. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, uma vez que rigidez possa ser modelada. 
 
 %% Porque é necessário coloca r uma redução ?
 %% Gráfico Torque vs Velocidade
@@ -162,10 +164,10 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 %% -> Motor Brushless: controle de velocidade baseado em sensor hall ( mais barato ), mais suave
 % https://www.orientalmotor.com/brushless-dc-motors-gear-motors/technology/brushless-dc-motors-servo-motors-inverter.html
 
-\section{Controle de Manipuladores}
+\section{Braço Robótico Meka A2}
 
 % Descrição Meka
-Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um motor brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle. 
+Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle. 
 
 \begin{figure}[H]
     \centering
@@ -183,10 +185,21 @@ Manipuladores robóticos são concebidos por meio de estrutura de controle em ca
     \item Controladores de Trajetória
 \end{enumerate}
 
-\subsection{Servo Controladores}
+%\subsection{Servo Controladores}
 % Entrada como torque ou velocidade e saída posição
 
-Servo Controladores são controladores de posição a partir de uma referência de torque ou velocidade. São geralmente associados a servo-motores, que são basicamente motores com esta estrutura de controle já implementada a partir de algum circuito eletrônico. No Meka, o controle de posição é feito pelo computador e não está incluído no atuadores. Este por sua vez traduz a referência do controle de posição em comandos serializados e enviados via EtherCAT para a placa de controle de torque.
+%Servo Controladores são controladores de posição a partir de uma referência  de torque ou velocidade. São geralmente associados a servo-motores, que são basicamente motores com esta estrutura de controle já implementada a partir de algum circuito eletrônico. No Meka, o controle de posição é feito pelo computador e não está incluído no atuadores. Este por sua vez traduz a referência do controle de posição em comandos serializados e enviados via EtherCAT para a placa de controle de torque.
+
+%\subsection{Compensação da Gravidade}
+
+
+% Matemática por trás
+% Biblioteca Dinâmica
+% Controle Feedforward
+
+%\subsection{Controladores Cinemáticos}
+
+\section{Sistema Embarcado}
 
 \subsection{DSP Control Boards}
 % Controle de torque
@@ -197,33 +210,6 @@ O controle de cada junta a partir do acionamento dos motores e da leitura dos se
     \includegraphics[width = 0.7\linewidth]{figs/dsp-control-wrist}
     \caption{Destaque Placas de controle DSP}
     \label{fig:maxon-flat-servo}
-\end{figure}
-
-\subsection{Compensação da Gravidade}
-
-% Matemática por trás
-% Biblioteca Dinâmica
-% Controle Feedforward
-
-\subsection{Controladores Cinemáticos}
-
-\section{Meka PC}
-
-Para o controle do robô é utilizado um computador embarcado com o sistema operacional Ubuntu 12.04 e o Kernel Real Time Xenomai. Nele são implementado o driver para o protocolo EtherCAT e a biblioteca M3 responsável pela interação com cada um dos dispositivos, entre sensores e motores de cada junta.
-
-Dentro do pc é executado um script que para disparar os processos relacionados a comunicação com a robô via socket pelo protocolo Ethercat e as interface para Python. Um vez que o script está em execução o robô pode ser controlado via API ou por meio de um programa para ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:m3arch}.
-
-% m3rt_server
-% -> Interface via socket
-% -> Memórica compartilhada
-% -> API Python
-% -> ROS
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
-    \caption{Diagrama da arquitetura do robô\cite{nobody}}
-    \label{fig:m3arch}
 \end{figure}
 
 \subsection{ROS}
@@ -241,4 +227,5 @@ ROS Bags é um utilitário do ROS para o registro dos eventos em cada tópico. A
 \subsection{Python API}
 
 Além do controle via ROS, o meka possui uma interface para Python que permite uma liberdade maior de controle uma vez que possui mais recursos já implementados. Além do modos de controle por posição estão também disponíveis o controle direto por torque e por velocidade das juntas. Estão implementados um controlador para compensação do efeito da gravidade a partir da biblioteca KDL com base no momento de inércia de cada junta.
+
 

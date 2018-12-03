@@ -18,7 +18,6 @@ Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistem
     \item Sistema Mecânico ( Atuadores Série Elásticos )
     \begin{itemize}
         \item Motores Brushless
-        \item Mola
         \item Harmonic Drive
     \end{itemize}
     \item Sistema Embarcado ( Atuadores Série Elásticos )
@@ -41,6 +40,16 @@ Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistem
 % Comentar sobre desempenho de sistemas
 % - Como alcançar o maior desempenho do sistema ( Custo exponencial 99.9 )
 % - Não linearidades identificadas
+
+% Avaliação Sistema Mecânico
+% - Estudo SEA
+% - Documentação
+% Avaliação Sistema Embarcado?
+% - Documentação EtherCAT, RTOS, PC
+% - Tempo de Resposta da Comunicação
+% Avaliação Controle
+% - Ensaios Estabilidade em Malha Fechada
+% - Ensaios em Degrau
 
 % TODO Colocar nos resultados:
 %No qual foi observado que aspectos particulares da plataforma não foram levados em conta como a operação em regiões não lineares do sistema devido a saturação da velocidade e torque dos motores, tempos longo de atraso de comunicação entre o computador.
@@ -83,11 +92,26 @@ Para avaliar a resposta do sistema para controle dos ângulos de junta foi propo
 
 % Comentar sobre como a informação é publicada nos tópicos
 
-\subsection{API Python}
-
-\subsection{Interface ROS}
-
 % Levantamento dos problemas
 
 % Investigação de possíveis causas
+
+\section{Meka PC}
+
+Para o controle do robô é utilizado um computador embarcado com o sistema operacional Ubuntu 12.04 e o Kernel Real Time Xenomai. Nele são implementado o driver para o protocolo EtherCAT e a biblioteca M3 responsável pela interação com cada um dos dispositivos, entre sensores e motores de cada junta.
+
+Dentro do pc é executado um script que para disparar os processos relacionados a comunicação com a robô via socket pelo protocolo Ethercat e as interface para Python. Um vez que o script está em execução o robô pode ser controlado via API ou por meio de um programa para ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:m3arch}.
+
+% m3rt_server
+% -> Interface via socket
+% -> Memórica compartilhada
+% -> API Python
+% -> ROS
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
+    \caption{Diagrama da arquitetura do robô\cite{nobody}}
+    \label{fig:m3arch}
+\end{figure}
 
