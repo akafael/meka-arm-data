@@ -1,0 +1,23 @@
+#+TITLE: Thesis 
+#+AUTHOR: Rafael Lima
+
+* Introdução
+** Será refeita
+
+* Fundamentos
+** Comenta sobre DH, Matrizes Homogênias, ...
+** Comenta sobre o Pulso Diferencial nos Fundamentos
+** Evite seções muito curtas, pelo menos meia página para detalhar sobre cada coisa.
+ * É um fato relatado na documentação
+** Não comente sobre teoria que não têm
+
+* Desenvolvimento
+** Comenta sobre algum programa extra usado? Sim
+
+* Resultados
+** Tabelas de referência
+
+* Prazos
+** Quinta: Orientadores
+** Sexta: Banca
+
