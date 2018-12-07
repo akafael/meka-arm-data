@@ -38,24 +38,51 @@ Na representação dinâmica, em oposição a cinemática, analisa as causa e ef
 \section{Quatérnions Duais}
 
 % Representação da Posição e Orientação
-Quatérnions Duais são números duais em que as partes primárias e secundárias são quatérnios \cite{nobody}.
+Quatérnions Duais são números duais em que as partes primárias e secundárias são quatérnios.  \cite{nobody}.
 
 \subsection{Quatérnions}
 %
+
+
 \subsection{Números Duais}
+
+Quatérnions tais os números complexos representam bem a magnitude e orientação no espaço. No entanto não permitem a representação de uma posição em particular \cite{Clifford1871DQ}, algo que é uma necessidade para algumas aplicações como o movimento de corpos rígidos. Para resolver este problema Clifford introduziu os números duais em 1871.
+
+O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que amplia as propriedades do números reais através da adição do elemento nilpotente $\eta^2 = 0$ em que $\eta \neq 0$. São representados de forma similar as números complexos
+
+\begin{equation}
+    Z = a + \eta b
+\end{equation}
+
+% Propriedades
+
 % Autodiferenciação
+Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{nobody} por permitirem o cálculo de forma mais eficiente com menos distorções. Uma das aplicações é operação de auto-diferenciação de polinômios que permite um melhor aproximação para o cálculo da derivada em computadores.
+
+\subsection{Quatérnions Duais}
+
+Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os chamados Quatérnions Duais definidos como
+
+\begin{equation}
+    Q = p + \eta r
+\end{equation}
+\begin{equation}
+    Q = (p_1 + p_2\mathbf{{i}} + p_3\mathbf{{j}} + p_4\mathbf{{k}}) + \eta ((r_1 + r_2\mathbf{{i}} + r_3\mathbf{{j}} + r_4\mathbf{{k}}))
+\end{equation}
 
 \subsection{Representação por Quatérnions Duais}
 
-A representação em quatérnions duais traz como vantagens com relação a outras representações: eliminar as singularidades e a inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12. % Citar paper IROS Bruno Adorno
+E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
 
-São utilizados dois quatérnions, sendo um para a representação da posição e um quatérnion unitário para representação da orientação.
+A representação em quatérnions duais traz como vantagens com relação a outras representações usadas na robótica: eliminar as singularidades e a inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogênias. % Citar paper IROS Bruno Adorno
 
 \subsection{DQ Robotics}
 
-A representação do robô usando quatérnions duais é feita com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quarténions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
+Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas é feita com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
 
 \section{Cinemática de Manipuladores}
+
+Para controlar o movimento do braço robótico é necessário o uso de alguma forma de representação. São usada 
 
 \subsection{Descrição DH}
 
@@ -68,7 +95,24 @@ Estes parâmetros são definidos de tal forma que apenas um possui variação co
 
 \subsection{Cinemática Direta}
 
-A partir da descrição, é feito uma operação de mudança de transposição de plano para cada junta com o objetivo de relacionar a posição e orientação do efetuador em relação ao ponto da base. Para cada uma das juntas do braço é avaliado a variação da orientação e da posição em relação a extremidade da junta anterior. E assim, a partir da combinação destas operações em cadeia é possível determinar uma expressão relacionando a configuração de cada junta com a posição final.
+Uma vez representado a posição do robô é necessário relacionar os parâmetros controlados: ângulo ou dimensão das juntas com a posição e orientação desejada. Este problema é denominado cinemática direta do robô. Para um link individual este pode ser definido pela seguinte transformação linear $A^1_0$ que leva um ponto $p_0$ no espaço a outro ponto $p_1$.
+
+\begin{equation}
+    p_1 = A^1_0 p_0
+\end{equation}
+
+Para um manipulador composto por links ligados em série este problema possui uma solução simples definido pela soma das contribuições no deslocamento por cada um dos links. Em outras palavras, efetuado a transformação linear de cada ponto da base até o efetuador.
+
+\begin{equation}
+    p_n = A^{n-1}_{n}\cdots A^2_1 A^1_0 p_0
+\end{equation}
+
+Para uma representação da posição a partir de matrizes a transformação linear que leva um ponto a outro é obtida através das matrizes homogenias, definidas como
+
+% Matriz Homogenia
+
+
+
 
 \subsection{Cinemática Inversa}
 
@@ -89,11 +133,18 @@ Podemos entender o problema da cinemática inversa como um problema de mapeament
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
 
-Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos. Introduzir alguma forma de complacência é por norma \cite{nobody} um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
+Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos.
+
+Introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
 
 Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($T = k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
-% Ilustração SEA
+\begin{figure}[H]
+    \centering
+    \includegraphics{}
+    \caption{Modelo Atuador Rígido e Série Elástico \cite{Konigorski2012ModelSea}}
+    \label{fig:sea}
+\end{figure}
 
 E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo como proposto \cite{nobody}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por uma placa de controle embarcada dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software. \cite{nobody}
 

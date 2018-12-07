@@ -10,22 +10,23 @@
 
 Toda tecnologia surge no intento de reduzir o gasto de energia na execução de alguma tarefa. Nela consolidamos todo o conhecimento envolvido em alguma técnica permitindo a execução com um esforço muito menor a partir da consolidação disto em um objeto. A este damos diversos nomes: ferramentas, máquinas, robôs, lápis e caneta. Essencialmente todos com a mesma missão de permitir realizar qualquer tarefa a menor quantidade de energia possível.
 
-As primeiras tecnologias pegavam um pouco desta capacidade de executar as tarefas a partir de fenômenos naturais. Desta forma, o conhecimento aliado a propagação de calor do fogo, a fluidez da água e do vento e a rigidez da pedras nos permitiram conceber ferramentas cada vez mais complexas. Alcançamos o ponto dos próprios engenhos poderem ser iniciados e deixados a executarem tarefas sozinhos sem qualquer interferência de pessoas. No que então começamos a chamada automação.
+As primeiras tecnologias pegavam um pouco desta capacidade de executar as tarefas a partir de fenômenos naturais. Desta forma, o conhecimento aliado a propagação de calor do fogo, a fluidez da água e do vento e a rigidez da pedras nos permitiram conceber ferramentas cada vez mais complexas. Com o passar da história alcançamos o ponto dos próprios engenhos poderem ser iniciados e deixados a executarem tarefas sozinhos sem qualquer interferência de pessoas. No que então começamos a chamada automação.
 
 % Citar alguma referência de história?
 % Comentar um pouco sobre a história da automação
+% História da robótica
 
-Dentre este universo novo de máquinas surge então o robô na tentativa replicar as capacidades humanas originadas em meio a evolução em um engenho que pude-se ser replicado e controlado. Em particular, replicar a capacidade de interagir com objetos de uma forma mais livre sem a necessidade de um completo estudo a respeito.
+%Dentre este universo novo de máquinas surge então o robô na tentativa replicar as capacidades humanas originadas em meio a evolução em um engenho que pude-se ser replicado e controlado. Em particular, replicar a capacidade de interagir com objetos de uma forma mais livre sem a necessidade de um completo estudo a respeito.
 
-Robôs industriais, ou manipuladores robóticos, como também são chamados, se tornaram parte essencial na produção de bens aonde alguma das etapas exijam capacidades sobre-humanas de força, precisão, repetibilidade ou ainda na tolerância a altas temperatura e materiais corrosivos. Garantindo assim consistência, rapidez e segurança em tarefas de soldagem, montagem, pintura e corte no cenário industrial.
+Robôs industriais, ou manipuladores robóticos, como também são chamados, se tornaram parte essencial na produção de bens aonde alguma das etapas exijam capacidades sobre-humanas de força, precisão, repetibilidade ou ainda na tolerância a altas temperatura e materiais corrosivos. Garantindo assim consistência, rapidez e segurança em tarefas de soldagem, montagem, pintura e corte no cenário industrial. No entanto, estas mesmas características que conferem a robustez apreciada no ambiente industrial tornam os robôs perigosos. A força, peso e velocidades de operação compõem elementos de risco na execução de atividades na presença de pessoas.
 
-No entanto, as mesmas características que conferem a robustez apreciada no ambiente industrial tornam os robôs perigosos. A força, peso e velocidades de operação compõem elementos de risco na execução de atividades na presença de pessoas. Inicialmente a segurança era garantida através do isolamento completo do robô.
+% Algo aqui
 
 Para resolver este problema novos tipos de robôs industriais têm sido desenvolvidos incorporando características para segurança em cada aspecto do design, entre elas emprego de estruturas mais leves, operação em velocidades reduzidas, protocolos para interrupção em caso de acidentes e transmissão elástica. \cite{nobody}
 
-Muito embora ainda exista a visão da robótica como grande vilão no roubo de empregos, o esforço recente é em trabalhar na cooperação entre máquinas e pessoas para facilitar cada vez mais a vida de todos. \cite{nobody} Desta forma a introdução de elementos para segurança trazer os benefícios da robótica também a outros ambientes fora da industria sem a necessidade de isolamento. Conferindo uma combinação entre a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas ainda mais complexos.
+Muito embora ainda exista a visão da robótica como grande vilão no roubo de empregos, boa parte das tarefas ainda são executadas por pessoas, uma vez que máquinas não possuem em muitas vezes destreza e a adaptabilidade que pessoas. \cite{nobody} Neste sentido, a introdução de elementos para segurança trazer os benefícios da robótica também a outros ambientes fora da industria por retirar a necessidade de isolamento permitir uma maior integração entre as características de cada um. E assim conferir uma combinação entre a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas ainda mais complexos.
 
-Uma nova arquitetura do robô completamente pensada em segurança traz também uma maior dificuldade no controle. A ciência em torno do controle de sistemas rígidos está bem consolidada. Porém ainda são necessários estudos para garantir que robôs possam ser precisos e complacentes ao mesmo tempo. Isto é que possuam certa maleabilidade em caso de colisão para não causar danos sem deixar de permitir a execução da tarefa. Uma das soluções adotadas é o uso de atuadores série elásticos.
+Para isto surgiram uma categoria de robô denominada robôs cooperativos que são intrinsecamente seguros. Isto são desenhados para que em operação ofereça o menor risco possível. Primeiro, este robôs deve oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão, para evitar que a energia transmitida possa causar algum dano. Segundo deve operar em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada.
 
 % Garantir flexibilidade e precisão: Tenho que ensinar kung fu ao robô...
 
@@ -35,10 +36,26 @@ Uma nova arquitetura do robô completamente pensada em segurança traz também u
 
 \subsection{Breve histórico}
 
-% Comentar sobre a história dos Cobots e do Meka
+% Comentar sobre a história dos Cobots
+Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa de elevar um carga na vertical para facilitar o transporte e posicionamento de peças na fabricação de carros. Trata-se de uma tarefa repetitiva, que envolve o transporte de peças pesadas mas que não é possível de ser feita utilizando robôs por envolver o posicionamento de duas partes rígidas com enorme variabilidade de posição entre si.
+
+%% Foto Lifter 
+
+%% Foto Porta
+
+Posteriormente
 
 % Domo e uso de Atuador Série Elástico
-Domo é um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de vários sistemas complexos. Em particular foi apresentado o uso de atuadores série elásticos como forma de amortecer o impacto e prevenir o dano em caso de uma colisão com uma pessoa. Este projeto teve particular importância pois muitos dos conceitos aviados vieram a compor patentes e futuramente partes dos robôs Baxter e Meka, respectivamente das empresas Rethink Robotics e Meka Robótics. 
+Domo é um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de vários sistemas complexos na interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. Facilitando o uso em tarefas de forma segura na presença de pessoas em um ambiente não estruturado.
+
+\begin{figure}
+    \centering
+    \includegraphics{tex/figs/domo-foto.jpg}
+    \caption{Foto Robô Domo (Fonte: http://www.robotsvoice.com)}
+    \label{fig:domorobot}
+\end{figure}
+
+Este projeto teve particular importância pois muitos dos conceitos explorados vieram a compor patentes e futuramente partes dos robôs Baxter e Meka, respectivamente das empresas Rethink Robotics e Meka Robótics. Da mesma equipe que desenvolveu o Domo surgiu a Meka Robótics a partir de Aaron Singer e Jeff Weber. E dos trabalhos de Pratt e Williason \cite{pratt1995series} surgiu a empresa Rethink Robotics fundada por Rodney Brooks, então professor do MIT em 1995.
 
 % Baxter vs Meka
 Embora com design completamente diferente, ambos robôs incorporam o uso atuadores série elásticos em cada uma das juntas como elemento de segurança. Desta forma qualquer pessoa pode manusear os braços de ambos robôs de maneira livre. No entanto este sistema também confere ao robô uma maior suscetibilidade a influência de outros estímulos externos como a ação da gravidade na dinâmica do robô tornado necessária o uso de soluções de controle complementares para garantir a precisão. \cite{nobody} Este problema é resolvido de forma diferente em cada uma das plataformas. No Baxter a compensação da gravidade é feita de forma completamente mecânica por uma série de molas \cite{nobody}, o que em parte explica seu maior tamanho. E no Meka esta é feita via software através do modelo dinâmico em conjunto da biblioteca KDL \cite{nobody}, conferindo um design mais compacto. 
@@ -54,7 +71,7 @@ Em trabalhos anteriores foi observado um desempenho ineficiente nos controles ci
 \section{Metodologia}
 
 % Rever completamente
-Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir da métodos científicos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros braços robóticos avaliados pelos trabalhos de MURILO() e MARCOS (2016).
+Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir da métodos científicos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros braços robóticos avaliados pelos trabalhos de Murilo \cite{nobody} e Marcos \cite{nobody}.
 
 \subsection{Estudo controle de manipuladores}
 
@@ -85,4 +102,14 @@ Com base nisto são levantadas hipóteses quanto ao comportamento quanto ao fato
 
 Resultados positivos são incorporados e resultados negativos avaliados quanto a possíveis correções. Tudo é registrado para permitir futuras avaliações. O resultado de cada dia foi feito um registro das atividades e todo material produzido foi colocado no GitHub \footnote{www.github.com/lara-unb/Meka} de forma a permitir o uso futuro na validação do comportamento após modificações futuras.
 
-Desta forma, os resultados da investigação ao longo do período deste trabalho compõe os capítulos \ref{ch:tech-reference} e \ref{ch:results} aonde são apresentados os aspectos técnicos de cada componente analisado e resultados dos testes efetuados. 
+\section{Estrutura do Documento}
+
+Este trabalho está dividido em 5 capítulos visando facilitar o entendimento. Estes estão organizados da seguinte forma:
+
+\begin{itemize}
+    \item \textit{Cap. \ref{ch:intro} Introdução} : Breve Apresentação e Histórico sobre Robótica Colaborativa.
+    \item \textit{Cap. \ref{ch:teory-reference} Fundamentos} : Conceitos teóricos e tecnologias usadas no trabalho.
+    \item \textit{Cap. \ref{ch:develop} Desenvolvimento} : Metodologia usada na investigação dos problemas e análise dos dados.
+    \item \textit{Cap. \ref{ch:results} Resultados} : Dados obtidos ao longo do trabalho.
+    \item \textit{Cap. \ref{ch:conclusoes} Conclusão} : Resultado final do trabalho e propostas de trabalhos futuros.
+\end{itemize}
