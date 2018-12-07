@@ -369,3 +369,81 @@ As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o
 %Com base no controle do torque e o uso de sensores de posição pode se emular o comportamento de uma mola com rigidez variável através de um controlador. Esta estratégia é denominada mola virtual e permite conferir o controle de força com precisão sem a necessidade de ajustar fisicamente algum elemento elástico.
 
 % Diagrama SEA Virtual
+
+\section{Estudo Controladores Cinemáticos}
+
+\subsection{Experimento de Referência}
+
+Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{nobody}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
+
+No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo a $100\%$. De modo que ao ser alterar o valor, foram obtidos resultados bem próximos para a resposta das juntas como ilustrado na figura \ref{fig:squareStifff9stateEvalv100s70}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStifff4stateEvalv70s500.png}
+    \caption{Resposta dos Controladores de Juntas para Velocidade em $70\%$ e Stifness = $5$ }
+    \label{fig:squareStiffMarcos}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStifff9stateEvalv100s70.png}
+    \caption{Resposta dos Controladores de Juntas para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStifff9stateEvalv100s70}
+\end{figure}
+
+\subsubsection{Resposta Controladores de Junta}
+
+Uma vez definido as condições usadas foi analisado individualmente cada junta, para avaliar quais tinha a maior contribuição no erro e como estava sendo solicitadas ao longo da trajetória. No que foi percebido que a juntas do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J0v100s70.png}
+    \caption{Resposta Juntas $J0$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J0v100s70}
+\end{figure}
+
+Para as demais juntas do ombro $J1$ e $J2$ o erro também foi pequeno e o torque foi aproximadamente constante. Sofrendo um pouco mais de variação em relação a $J0$ mas ainda dentro de uma margem pequena, como mostrado pelas figura \ref{fig:squareStiffJ9stateEval_J1v100s70} e \ref{fig:squareStiffJ9stateEval_J2v100s70}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J1v100s70.png}
+    \caption{Resposta Juntas $J1$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J1v100s70}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J2v100s70.png}
+    \caption{Resposta Juntas $J2$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J2v100s70}
+\end{figure}
+
+A junta $J4$ é a mais lenta dentre todas as juntas. A partir da figura \ref{fig:squareStiffJ9stateEval_J4v100s70}, nota-se uma resposta bem diferente em relação as demais. A junta não consegue acompanhar da mesma forma a referência e leva a uma acumulo de erro. Observa-se que velocidade sofre saltos próximos de $0.2 rad/s$ e o torque oscila bastante em determinadas regiões.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J4v100s70.png}
+    \caption{Resposta Juntas $J4$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J4v100s70}
+\end{figure}
+
+As juntas do pulso $J5$ e $J6$ estão acopladas mecanicamente pelo mecanismo de diferencial e separadas em $Yall$ e $Pitch$ através de um controlador dentro do PC. Em ambas é percebido o maior erro no acompanhamento da referência, similar ao ocorrido no experimento de resposta a degrau na figura\ref{fig:jointIdentification_exp3v70v100}. Porém é notado uma alta variação no torque da exercido pela junta nas figura \ref{fig:squareStiffJ9stateEval_J5v100s70} e \ref{fig:squareStiffJ9stateEval_J6v100s70}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J5v100s70.png}
+    \caption{Resposta Juntas $J5$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J5v100s70}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J6v100s70.png}
+    \caption{Resposta Juntas $J6$ para Velocidade em $70\%$ e Stifness = $100\%$ }
+    \label{fig:squareStiffJ9stateEval_J6v100s70}
+\end{figure}
+
+Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscilação produzida pelas demais juntas é transmitida diretamente ao pulso. No entanto, tendo uma rigidez mais baixa, um erro grande em regime permanente acaba tendo um impacto grande no erro da orientação do efetuador. Se considerar ainda que o ponto de referência usado está deslocado em relação ao centro do pulso diferencial, este erro de orientação será refletido também em um erro de posição.
