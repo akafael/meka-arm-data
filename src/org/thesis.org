@@ -1,9 +1,21 @@
 #+TITLE: Thesis 
 #+AUTHOR: Rafael Lima
 
-* Introduction [/]
-* Fundamentation [/]
+* Document [/]
+** TODO Update Symbols List
+* Introduction [0/3]
+** TODO History Bacground
+** TODO Metodology
+** TODO Thesis Structure Presentation
+* Fundamentation [0/4]
+** TODO Dual Quaternions [%]
+** TODO Robotics Kinematics [%]
+** TODO Robotics Control [%]
+** TODO M3 System [%]
 * Development [/]
-* Results [/]
+* Results [1/3]
+** DONE Indentification C++
+** TODO MoveUP
+** TODO SquareStiff
 * Conclusion [/]
 * Reference [/]

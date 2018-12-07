@@ -1,0 +1,617 @@
+#+TITLE: Log TG
+#+AUTHOR: Rafael Lima
+
+* Sistema Organização
+ - Itens Log com data do dia
+ - Repensar organização das tarefas para incluir inbox/backlog
+ - visual-line-mode : ativa quebra de linhas para visualização
+
+* Tarefas
+** TODO Verificar como deixar o controlador completamente separado
+ 1. <2018-05-18 Sex> Atualmente todos os controladores são calculados a cada interação do loop
+ 2. <2018-05-19 Sáb> Controladores já separados e disponíveis em uma pasta dentro catkin_ws no Meka
+    * https://sourceforge.net/p/dqrobotics/code/HEAD/tree/branches/cpp_optimization/C++/controllers/
+
+** TODO Aprender a usar tmux
+ * Estou tendo muitos problemas com o computador travando no meio de um experimento
+ * Para resolver deixarei um terminal com tudo usando tmux e acesso ele ao invés do terminator
+
+** TODO Criar um programa simples que use o shm_humanoid para controlar a garra
+ * Verificar influência do arquivo de configuração
+
+** TODO Contribuições DQ Robotics [1/3]
+*** TODO Adicionar controladores implementados pelo Marcos na DQ Robotics
+*** TODO Acrescentar lista de trabalhos acadêmicos relacionados na página do repositório
+*** DONE Verificar Existência de Artigo de revisão com a professora Mariana
+    CLOSED: [2018-07-27 Sex 12:52]
+
+
+* <2018-05-04 Fri> LOG Atividades
+** EXPERIMENTO Controle Exemplo DQ
+ * Controle não funcionou! Enviando o robô para poses perigosas e não está convergindo!
+ * Recomendação: Implementar um controle proporcional do zero em simulação.
+ * Proposta de Experimento: Testar estabilidade do controlador em um deslocamento pequeno no espaço
+
+** ESTUDO Implementação Atuadores Série Elásticos no VREP
+ É possível implementar o comportamento como Atuadores Série Elásticos no modelo dentro do VREP
+ Para tal é necessário modificar o comportamento padrão da junta:
+
+ * Implementação no VREP http://www.coppeliarobotics.com/helpFiles/en/jointDescription.htm
+ * Modelagem da equação das juntas: http://www.mdpi.com/2076-0825/6/3/26
+
+ * Robô atual do Meka não possui a massa definida corretamente
+*** TODO Implementar Parâmetros de Inercia a partir da informação do arquivo:
+ * https://github.com/ahoarau/meka-ros-pkg/blob/master/meka_description/urdf/A2R3_r_arm_defs.urdf.xacro
+
+** DÚVIDAS
+ * Qual o impacto das operações de IO nos controladores implementados pelo Marcos ?
+ * Como é a interação do controle PID com o sistema ? É possível modelar?
+
+* <2018-05-08 Tue> REUNIÃO Prof Mariana
+ * Redefinição de objetivos de trabalho para estudo técnico da plataforma Meka
+ * Análise temporal das estruturas para controle
+
+* <2018-05-09 Wed> LOG Atividades
+** ESTUDO VRepMekaInterface
+ * Bastante uso das stream cout e cerr com endl
+ * Escrita em arquivo apenas não apresenta um impacto grande pois é feita apenas ao final do loop
+*** DONE Verificar os tempos de cada etapa do algoritmo de controle
+
+** ESTUDO Python API
+ * É possível obter os torques de cada junta a partir da API em python
+
+*** DONE Montar demo sobre possíveis formas de controlar o Robô usando a API
+    CLOSED: [2018-08-16 Qui 14:44]
+
+* <2018-05-14 Mon> LOG Atividades
+** ESTUDO shm_humanoid_control
+ * Publicando o torque dos motores como effort
+ * Não permite modo de controle por torque
+ * Ignorando por completo qualquer informação sobre torque na mensagem de controle.
+ * O valor dos status das juntas obedece o arquivo de configuração m3ene/robot_config/shm_humanoid_config.yml
+ * Não têm nenhuma função para obter o valor de stifness atual através da API em python.
+ * O Valor de stiffness atual em 8 é muito alto para o robô. O que pode explicar o tremor. Ainda não identifiquei o arquivo de configuração aonde é definido o valor máximo suportado pela junta.
+ * Não consegui compilar o repositório. Terei que ver com o Marcos como fazer.
+
+*** DONE Recompilar código Marcos e avaliar diferentes valores para stifness abaixo de 1
+* <2018-05-15 Tue> LOG Atividades
+** EXPERIMENTO Controle Stifness C++
+ * Consegui compilar o código e executar porém o robô não mexeu.
+ * O comando é enviado para nó mas não é executado pelo robô.
+** REUNIÂO Prof Mariana
+ * Stifness definido como máximo para melhorar precisão no controle do robô
+ * Definir uma referência Zero e métricas para comparar possíveis modificações
+* <2018-05-18 Sex> LOG Atividades
+** EXPERIMENTO Controle Stifness C++
+ * No código atual a mesma constante está definida duas vezes.
+ * Não tem nenhuma proteção contra incluir a mesma classe mais de uma vez
+ * No /humanoid_state a medida do effort representa o torque medido indiretamente através da corrente no motor brushless
+ * No /humanoid_control a medida de effort representa o torque passado diretamente para os motores, no entanto não é utilizada
+ * Estou usando o comando pkill para matar o processo do shm_humanoid
+** EXPERIMENTO Usando a API em Python junto com shm_humanoid
+ * Ao usar a API em python a comunicação do shm_humanoid é encerrada obrigando matar o processo e o terminal com o shm_humanoid para retomar os experimentos
+ * O nó do shm_humanoid é executado em uma velocidade muito alta
+ * Vale a pena injetar o controle direto no shm_humanoid ?
+** TODO Montar um script para retornar para a posição inicial
+ * Dentro da pasta shm_humanoid têm um código feito pelo Murilo chamado *gravity_right_arm* que pode ser utilizado com base para retornar para início após cada experimento
+ * Uma aplicação interessante de usar stifiness 0 é montar uma demo para "ensinar o robô" através do registro das posições atuais das junta 
+
+* <2018-05-19 Sáb> LOG Atividades
+** ESTUDO Controladores DQ Robotics
+ * Diversos Controladores já implementados na DQ robotics
+ * O trabalho do Marcos acrescentou LQR e Feedfoward Proporcional mas não foram submetidos a biblioteca
+ * Verificar com o Marcos a possibilidade de envio como colaboração e tbm como associar ao TG dele
+ * Vale a pena associar a DQ com o ros_control?
+  * http://wiki.ros.org/ros_control/Tutorials/Create%20your%20own%20hardware%20interface
+  * http://wiki.ros.org/ros_control/Tutorials/Loading%20and%20starting%20controllers%20through%20service%20calls
+ * Vale a pena associar a DQ com o MoveIt ?
+** ESTUDO shm_humanoid
+ * *A frequência máxima do shm_humanoid está em 100hz* ( definida pela constante RT_TASK_FREQUENCY_MEKA_OMNI_SHM  dentro shm_humanoid_controler.cpp ), sendo esta a taxa com que o último valor fornecido através do tópico do ROS será passado para a memória compartilhada. Caso o processamento demore mais que 0.01 s esta frequência é reduzida automáticamente e só retoma ao valor de 100hz quando o programa é reiniciado.
+ * Tal valor é bem próximo das as taxas de amostragem de 8ms ( 125hz ) e 20ms ( 50Hz ) pelo @marcos.si.pereira e pode explicar as limitações no uso de frequências maiores pelo ROS, uma vez que boa parte dos valores passados do controlador serão completamente ignorados e trarão um aumento no erro acumulado em virtude da informação sobre a posição atual não ter se alterado ao longo do tempo.
+ * Na Avaliação feita pelo Marcos o sampling time está 200hz para os controladores
+ * :REFERENCE: https://www.rtai.org/userfiles/documentation/documents/RTAI_User_Manual_34_03.pdf
+* <2018-05-22 Ter> REUNIÃO Prof Mariana e Prof Geovany
+ * Apresentei o problema relacionado a baixa frequência na etapa de passar os valores do ROS para a camada a memória compartilhada
+ * A instabilidade pode ser justificada pela uso de um frequência maior num controle mais externo que no interno. Fugindo assim um critério de estabilidade para controles em cascata.
+ * Tarefas sugeridas: Pesquisar sobre controle em cascata, Medir o tempo gasto pelo loop de interação do shm_humanoid e tentar reduzir o tempo para 90% de folga
+ * Sugestão de usar *10ns* como período, isto é uma frequência de 100Mhz
+ * Conceito aprendido do dia: Boilerplate: porção de código usada sem muita alteração. O que explica o fato de ter dois estilos de código dentro do código da shm_humanoid
+* <2018-05-23 Qua> LOG Atividades + Marcos
+** ESTUDO Logs Experimentos Marcos e Procedimento de execução
+*** Método de trabalho
+ 1. Efetuar testes usando simulação no megaman
+ 2. Copiar somente vrep_meka_interface/src do megaman para o meka utilizando o script e depois executar no meka
+ 3. Avaliar no meka 
+ 4. Copiar resultados do meka para megaman usando script
+
+*** Reference
+ * Scripts localizados na pasta /home/megaman/git_repositories/Meka/scripts/pc para compilar e passar o código para o robô
+ * Scripts localizdos na pasta sftp://192.168.1.53/home/meka/git_projects/Meka/scripts/meka para execução no meka
+ * NOTA: ignorar scp para passar o código do meka para megaman
+
+** ESTUDO vrep_meka_interface_node_2
+ * Logs sendo salvos na pasta /home/megaman/git_repositories/Meka/catkin_ws/meka-plotter/meka-plotter
+ * O controle está demorando em torno de *8ms* (12.5 Hz) por interação do loop, o que poderia ser otimizado para permitir um tempo de amostragem menor
+ * Criar um trajetória "offline" a partir dos controladores e enviar as juntas sem o feedback de posição de junta no loop de controle
+  * Como são 7 graus de liberdade a cinemática inversa não possui solução única e não dá para apenas aplicar a operação.
+ * Como avaliar somente o controlador de baixo nível?
+ * Será criado uma tag e um novo branch a partir do branch msp_branch2
+*** DONE Verificar como compilar o shm_humanoid e testar alterar a frequência
+    CLOSED: [2018-06-08 Sex 16:52]
+   * Teste Feito com uma frequência 10x maior. O robô ficou super instável.
+*** DONE Verificar como avaliar resposta PID quanto distância minima e tempo mínimo
+    CLOSED: [2018-06-08 Sex 16:53]
+ * Ver deslocamento entre dois pontos e tentar reduzir tempo entre a passagem de cada um dos comandos de junta
+ * Levantar Distância entre as configurações de junta escolhidas
+ * SUGESTÃO Marcos: Enviar variação de ângulo para uma única junta
+*** TODO Avaliar controladores vrep_meka_interface em posição fixa.
+* <2018-06-01 Sex> LOG Atividades
+  * Houve um atraso relacionado a dificuldade de vir para o laboratório.
+  * Apenas comecei o script em python para os testes neste dia
+
+* <2018-06-08 Sex> LOG Atividades + Marcos
+** EXPERIMENTO Avaliação PID alternando entre duas posições pela API em Python
+ * O controle começa a apresentar instabilidade quando não dá tempo de chegar a posição final desejada. Ou seja quando o dtheta é muito grade e dt muito pequeno.
+ * O menor deslocamento verificado com estabilidade foi dtheta = 5 graus e dt = 1s
+*** DONE [#A] Criar Log para os dado dos experimentos em python
+    CLOSED: [2018-08-16 Qui 10:13]
+** EXPERIMENTO Aumentar frequência shm_humanoid_controller
+ * Avaliado com um aumento de 10x na frequência (10000hz)
+ * Robô fico super instável. Cuidado ao repetir!
+ * NOTA: Para compilar o shm_humanoid é necessário ir direto na pasta de build do shm e executar make
+
+** ESTUDO vrep_meka_interface_node_2
+ * Adicionado a leitura dos efforts do meka a partir do nó /humanoid_state correspondendo a medida de torque das juntas
+ 
+** EXPERIMENTO Avaliar Controladores em c++ alternando entre dois pontos
+ * O controle não responde entre dois pontos para dt 8ms
+ * não dá tempo para a malha interna responder
+** EXPERIMENTO Avaliando trajetoria linear com 100 pontos para 10cm 8ms
+ * O robô demora em torno de 25 * 8ms interações para começar a se mexer
+ * Em seguida ocorre um overshot para compensar o erro
+ * Não dá ver o controle estabilizar
+
+** EXPERIMENTO Avaliando trajetória linear com 100 pontos para 10cm 100ms
+ * O robô já mexe na segunda interação do controlador
+ * São necessários em torno de 11 interações para os controladores avaliados estabilizarem
+
+** EXPERIMENTO Avaliando trajetoria linear com 1000 pontos para 10cm 8ms
+ * O robô começa a mexer somente depois de 25 interações
+ * O controlador começa estabilizar depois 200 interações ( verificar )
+ * Dá para perceber um overshot periódico nos controladores robustos com período próximo de 300ms ( verificar )
+
+** EXPERIMENTO Avaliando trajetória com 1000 pontos para 10cm 100ms
+ * Cancelado, demora muito. Não deu tempo.
+* <2018-06-11 Seg> LOG Atividades
+** ESTUDO ROS
+*** Ploting
+ * Consegui plotar usando o seguinte comando *rqt_plot /humanoid_state/effort[0]* onde 0 é o indice do vetor da propriedade effort
+ * É possível plotar mais de um gráfico indicando mais de uma propriedade porém o valor final têm que ser numérico
+ * Vetores não são associados diretamente com uma curva para cada indice no gráfico.
+*** Remote
+ * é possível conectar remotamente ao ROS a partir dos comandos descritos no seguinte tutorial http://wiki.ros.org/ROS/Tutorials/MultipleMachines
+ * No entanto é necessário liberar o acesso a porta através do firewall e da rede
+*** Log - Rosbags
+ * O ROS possui um sistema para registrar o log de todos os dados e permitir emular o comportamento através do ROS bags
+ * Desta forma um mesmo expermimento pode ser analisado sem depender do hardware está em execução.
+ * Basta usar *rosbag record -a* para registrar todos os topicos e rosbag play logfile.bag para emular a execução dos tópicos de novo. http://wiki.ros.org/rosbag/Tutorials/Recording%20and%20playing%20back%20data
+ * É possível chamar o rosbags através de uma API dentro do Python e do C++ http://wiki.ros.org/rosbag/Code%20API
+**** TODO Criar um nó que escuta o /hummanoid_state e enviar como comandos para o vrep
+* <2018-06-13 Qua> REUNIÃO Prof. Mariana
+ * O problema observado pode ser explicado pela parte de controles acomplados e pela questão da dinâmica do sistema.
+ * O controle de alto nível está mais rápido que a dinâmica do sistema e por tal motivo o erro está acumulando.
+ * Pode ser implementado um controlador a nível macro para fornecer um trajetória que alimenta o controle do Marcos a partir de quaternions duais.
+ * Recomendo a leitura: https://tel.archives-ouvertes.fr/tel-01285383v2/document
+* <2018-06-18 Seg> LOG Atividades
+** ESTUDO Controles Internos
+ * O Guilherme propos de verificar a taxa de comunicação do robô pois pode estar mais lenta que o programa shm_humanoid
+ * Verificar qual é a taxa de atualização do m3rt_server
+ * ros -> shm_humanoid -> m3rt_server -> m3.rt_proxy ->
+ * m3rt_proxy -> m3rt_server_run -> 
+   * /lib/modules/2.6.32.20-rtai-3.9/extra/m3ec.ko
+   * m3rt_server
+ * TCP/IP port 10000 defined at m3.rt_proxy ( self.data_port=10000 #Currently hardcoded in M3 )
+
+** EXPERIMENTO Avaliação Intervalo Comunicação - Python API
+ * Levantar tempo que demora para ter um valor diferente através do proxy.getStatus()
+ * intervalo encontrado de 0.0160s ou 16ms para o proxy.step()
+ * aproximadament 0.00002s gastos outras operações fora fora do proxy.step()
+
+** EXPERIMENTO Manter posição com base na referência passada
+ * intervalo do proxy.step() mantido em aproximadamente 16ms
+ * braço começou a subir
+
+* <2018-06-19 Ter> LOG Atividades
+** EXPERIMENTO Registro vrep_meka_interface_node_2 com rosbags
+ * Registro de leitura dos tópicos para análise offline
+ * LOG: *2018-06-19-MoveUP_vrep-meka-interface_node_2.bag*
+ * NOTA: Lembrar sempre de compactar o log antes de mandar para o git, limite de tamanho 100mb
+*** TODO Verificar Tempo de atualização da posição em relação tempo de atualização do controle
+** ESTUDO Configuração meka-man
+ * notei uma pasta chamada /shm dentro de /run . não descobrir para que está sendo usada
+ * verificar depois se a memória compartilhada é alocada dentro de /run 
+ * Registra no log procedimento para rosbag
+
+* <2018-07-11 Qua> LOG Atividades
+** EXPERIMENTO Avaliação da precisão do encoder
+ * Script feito para verificar a variação da leitura do encoder para determinar condições de parada
+ * testNoCommandPrecisionEncoder()
+ * Maior valor encontrado 0.0301 graus para a norma da diferença
+
+** EXPERIMENTO Avaliação da velocidade de resposta do controle de baixo nível
+ * A precisão do encoder é de 0.1 graus
+ * Como são 7 encoders do mesmo tipo podemos assumir 7*0.1 = 0.7 como um valor tolerável para avaliar estabilidade do controlador de baixo nível
+ * A velocidade máxima do motor é do motor mais rápido é de 4.6 rad/s e 2 rad/s para o motor mais lento
+*** DONE Fazer um programa que espera o tempo necessário para o controle de baixo nível estabilizar
+    CLOSED: [2018-07-12 Qui 13:44]
+ * Feito um programa que espera 2s sempre entre uma posição e outra
+
+** ESTUDO Python API
+ * ao invés de chamar a função de get_theta_angle_deg podemos acessar o valor direto por bot.status.right_arm.angle.deg
+
+** ACHADOS 
+ * http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#main
+ * https://github.com/severin-lemaignan/hri-beamer-theme
+ * https://github.com/makokal/beamer-themes
+ * https://github.com/matze/mtheme
+
+* <2018-07-12 Qui> LOG Atividades
+** EXPERIMENTO Avaliação da resposta dos controladores de juntas
+ * Montei um script com uma variação de 45 graus e 2 segundos de intervalo para cada um das juntas
+ * Os motores estão ajustados para usar a velocidade máxima porém a velocidade angular percebida é bem mais lenta
+ * A tentativa de usar a velocidade da documentação para calcular o tempo gasto falhou: a velocidade máxima real é mais lenta
+ * Parte da lentidão pode ser explicada pela resposta do PID a depender da maneira com está ajustado
+ * Dados registrados via rosbags
+ * *rosbag record /humanoid_state -o testJointControl*
+
+** ESTUDO Ploting data with python
+ * Sugestão de biblioteca: plot.ly
+ * foi necessário instalar o python3 para poder executar pois não consegui fazer o update do python2.7
+ * Consegui plotar um gráfico simples
+ * http://www.athenian-robotics.org/plotly/
+
+** ESTUDO Extraindo dados do rosbag
+ * Recomendação Gabriel: usar algum conversor para csv e depois ler no matlab ou qualquer ferramenta
+ * conversor indicado: https://github.com/Gastd/bag2csv
+
+* <2018-07-13 Fri> LOG Atividades
+** ESTUDO Extraindo dados do rosbags
+ * Consegui converter usando a ferramenta indicada pelo Gabriel, porém os campos dos vetores ficaram misturados
+ * Corrigi o problema alterando manualmente os valores usando o sed
+ * Falta plotar usando alguma ferramenta
+
+* <2018-07-16 Seg> REUNIÃO Prof Mariana
+** PAUTA
+ 1. Modelagem e Caracterização da Planta
+ 2. Reformular Objetivo ( Definição de trajetórias )
+ 3. Definir Métrica
+ 4. Estratégia de Controle
+  * Ajustar Controladores
+** PLANEJAMENTO
+ * Terminar a etapa de modelagem. Para esta semana fazer os testes e obter gráficos que endorsem as hipóteses levantadas
+ * Pegar a última semana do mês para escrever o tg1, nele deve conter:
+  * Introdução teórica
+  * Estudo da plataforma com análise feita
+  * Experimentos preliminares feitos
+  * Gráficos e a análise de todos os experimentos
+  * Sugestão de como proceder para o TG2
+
+* <2018-07-17 Tue> LOG Atividades
+** ESTUDO Python + Plotly
+ * Instalei o Pandas e o Plotly no python 3 e no python 2 no meu computador para poder analizar os dados
+ * Montei um Exemplo de como plotar os dados offline no plotly usando jupyter
+** ESTUDO Rosbags
+ * Criei um pequeno script que obtem a saída gerada pelo bag2csv e muda o cabeçalho e substitui alguns caracteres para facilitar
+ * Script feito de maneira burra, Funciona apenas com dados do /humanoid_state com a garra e o braço direito
+
+* <2018-07-18 Wed> LOG Atividades
+** ESTUDO Ploting Rosbags data com Plotly
+ * Acrescentei o script do ros2csv dentro da pasta de logs
+ * Consegui gerar o gráfico dos ângulos de junta a partir do csv
+ * Os gráficos ficaram muito bons mas não consegui separar bem os dados relacionados ao teste de cada junta.
+ * Faltou o dado de quando o comando é disparado para avaliar a demora entre o inicio do comando e o inicio da resposta
+*** TODO Verificar possibilidade de usar o plotly lendo diretamente a partir do rosbags
+ * É possível chamar um subprocesso usando python e controlar ele com os comandos
+   * rosbag_proc = subprocess.Popen(...)
+   * rosbag_proc.send_signal(subprocess.signal.SIGINT)
+ * https://answers.ros.org/question/10714/start-and-stop-rosbag-within-a-python-script/
+ * https://pythonspot.com/python-subprocess/
+*** TODO Montar Experimento que efetua teste e controla o log através do rosbag
+*** TODO Acrescentar o log do comando efetuado para cada junta
+*** DONE Montar Experimento que efetua teste e controla o log através do rosbag
+    CLOSED: [2018-07-27 Sex 12:46]
+*** DONE Acrescentar o log do comando efetuado para cada junta
+    CLOSED: [2018-07-27 Sex 12:46]
+* <2018-07-27 Sex> LOG Atividades
+** EXPERIMENTO Identificação da planta
+ * Experimento atualizado para separar logs visando facilitar identificação
+ * Acrescentei o rosbag para registrar o log do experimento separado para cada junta
+ * Ambos computadores estão com pouco espaço no HD de modo que não consegui registrar os logs do experimentos
+*** TODO [#A] Liberar espaço nos computadores meka-pc e meka-man
+* <2018-08-01 Wed> LOG Atividades
+** ESCRITA TG1
+ * Comecei a escrita do tg detalhando cada um dos componentes de harware presentes no meka
+ * Enumerei alguns dos tópicos relacionados ao Software do robô
+ * O documento encontra-se no github e possui um repositório privado próprio
+* <2018-08-02 Thu> LOG Atividades
+** ESCRITA TG1
+ * Não escrevi nada, porém li um bocado sobre controle de manipuladores.
+
+*** TODO Avaliar o uso de controle de velocidade no lugar de controle de posição pelo robô
+ * https://web.stanford.edu/class/cs234/past_projects/2017/2017_Wang_Li_Mastering_Robotics_Manipulation_Contact%20Dynamics_Paper.pdf
+*** TODO Fazer fork da documentação do meka
+ * Disponível no link https://meka-docs.readthedocs.io/en/latest/index.html
+ * Mesclar com as informações da ensta paris ? https://github.com/ahoarau/mekabot/wiki/Meka-robot-overview
+ * Acrescentar como usar o meka no Lara
+* <2018-09-03 Seg> LOG Atividades
+** ESTUDO Liberar espaço nos computadores mekapc e vermilion
+ * Trouxe um pen-drive para armazenar o logs.
+ * Sugestão: definir um repositório git local no vermilion com vinculo com um repositório remoto para o mekapc via sftp assim evita a necessidade de ter multiplas cópias da mesma pasta para backup e melhorar a gestão do espaço.
+ * Movi a pasta old_dropbbox para outra partição para liberar espaço
+
+** EXPERIMENTO Indentificação C++
+ * Criei um arquivo para estudo chamado **vrep_meka_interface_node_identification**
+ * Falta criar uma rotina para enviar a posição de cada junta e esperar
+ * http://juser.fz-juelich.de/record/840637/files/HPCxx.pdf
+* <2018-09-04 Ter> LOG Atividades
+** EXPERIMENTO Identificação da planta C++
+ * Comando mágico para montar o pen-drive *sudo mount -o rw,users,umask=000 /dev/sdb1 /mnt/pen-drive*
+ * Comando salvar log *rosbag record /humanoid_state /humanoid_command -o jointIdentification_highstiff*
+ * Feito vários experimentos variando a velocidade e a rigidez
+ * Baixas velocidades geram mais tremor
+ * Salvo no pendrive
+ * Verificar possibilidade de usar o git entre os pcs
+* <2018-09-06 Qui> REUNIÃO Prof Mariana
+** PAUTA
+*** Resultados atuais e hipóteses levantadas
+ 1. Atraso de 200ms devido a comunicação do sistema
+  - Ajustar controladores das camadas superiores para respeitarem o tempo
+ 2. Breve histórico do sistemas complacentes comparando Domo, Baxter e Meka
+  - Projeto que envolveram as mesmas pessoas no desenvolvimento
+ 3. O uso de controle de velocidade ao invés controle de posição
+  - Elimnina a etapa de integração e derivação usada nos controladores da DQ
+
+** PLANEJAMENTO
+ 1. Concluir o TG em português
+ 2. Incluir no TG a discursão sobre o uso de atuadores série elásticos e a implicação disto no controle de manipuladores
+ 3. Preparar dados relacionados a identificação do sistema
+  - Estimulo de primeira ordem
+ 4. Implementar controle proporcional baseado no controlador de velocidade
+ 5. Ler bibliografia sobre controle de velocidade e identificação de sistemas robóticos
+* <2018-09-10 Seg> LOG Atividades
+** REFERÊNCIAS
+ * https://github.com/KirstieJane/STEMMRoleModels/wiki/Syncing-your-fork-to-the-original-repository-via-the-browser
+ * Link Interessante -> Repetibilidade de Estudos Ciêntificos https://thenib.com/repeat-after-me
+ * Laboratório Cientifico https://whitakerlab.github.io/
+ * https://metafizzy.co/blog/one-docs-to-rule-them-all/
+** ESTUDO Identificação modelo sistema
+ * Sugestão Prof. Geovany: Simular modelo no Simulink
+ * Comando para Executar o matlab no vermilion *~/matlab_R2014_WORKING/R2014a/bin/matlab*
+*** Modelando Delay - Controle Proporcional Posição
+ * Montei um modelo simples de uma planta usando controle proporcional com e sem delay para avaliar a resposta no simulink
+ * Resultado: o delay introduz oscilações e modifica o comportamento do sistema
+ * O controlador proporcional implementado ficou mais lento e mais sensível ao ganho ( pequenas variações introduzem oscilação )
+ * No ajuste rápido com o controlador proporcional usando método de busca binária o sistema ficou mais lento em relação a melhor configuração com sistema sem delay
+ * Arquivo: pControlDelay
+ * referências:
+  * http://users.ece.utexas.edu/~buckman/H3.pdf
+  * https://www.mathworks.com/help/control/examples/analyzing-control-systems-with-delays.html
+  * http://maxon.blaetterkatalog.ch/b9991/catalog/index.html?data=b9991/b999145&lang=e#39
+
+*** Modelo Delay - Controle em cascata Velocidade + Posição
+ * Modelo Instável quando acrescentado o delay 
+ * Apresentou oscilação afinal o sistema passa a se comportar com ordem 2
+* <2018-09-29 Sat> LOG Atividades
+** ESTUDO Analise logs experimento de identificação
+ * Montei um Makefile para processar os arquivos .bag e transformar em arquivos .csv
+ * Operações de Substituição generalizadas facilitar o uso com o tópico /humanoid_command
+
+* <2018-09-30 Sun> LOG Atividades
+** ESTUDO Co-robots
+*** TODO Acrescentar definição sobre Cobots dentro do TG
+* <2018-09-17 Seg> LOG Atividades
+** ESTUDO Modelagem Processo
+* <2018-09-18 Ter> LOG Atividades
+** EXPERIMENTO Controle por velocidade Python
+ * Montar um controle proporcional de posição com e sem integrador
+* <2018-10-01 Seg> LOG Atividades
+** ESTUDO Travemento PC
+ * O meka-pc trava quando está super aquecido o que explica o fato de não conseguir executar experimentos pela manhã e algumas vezes pela tarde.
+ * O vermilion está esquentando muito, verificar limpeza dos Coolers futuramente
+ * Recomendo tirar um dia para manutenção completa do computador e gerar um setup de configuração para qualquer PC.
+** EXPERIMENTO Estudo Controladores Interno vel_gc
+ * Consegui montar um controlador proporcional simples a partir do controle de velocidade de baixo nível do meka
+ * O robô não conseguiu chegar na posição pretendida a partir da implementação que fiz
+ * O controle de velocidade com compensação da gravidade acumula muito erro e não consegue manter o robô parado
+** EXPERIMENTO Estudo Controlador Interno theta_deg
+ * É possível definir a velocidade e a posição ao usar controle
+ * Ao se colocar a velocidade como 0 para todas as juntas e a posição zero o braço ficou completamente rígido. Ao se passar um novo comando de de posição para a posição de referência, o robô não move todas as juntas. Foi necessário mudar o modo de controle para mode_off para diminuir a rigidez.
+ * No teste sem definir a velocidade, o robô 
+** ESTUDO Mola Virtual -> Complacência por software
+ * Termo Virtual Spring é relatado em um dos trabalho do Aron
+ * Definir como funciona um controlador para emular o efeito de uma mola a partir do controle de torque e feedback de posição.
+** ESTUDO Preditor
+ * Qual o efeito de ter um preditor em um sistema com atraso?
+ * O preditor auxilia a antecipar o efeito da dinâmica do sistema permitindo uma maior estabilidade no sistema com ganhos maiores
+ * https://en.wikipedia.org/wiki/Smith_predictor
+
+* <2018-10-08 Seg> LOG Atividades
+** ESCRITA TG2
+ * Foi revisado parte da introdução e acrescentado alguns resultados qualitativos dos experimentos feitos no Meka
+ * Em todo o trabalho estão faltando referências referente a cada uma das afirmações
+*** TODO Dúvida: Como funciona um controle proporcional em quaternions duais
+*** TODO Dúvida: Porque o controlador implementado em c++ dispensa a cinemática inversa
+*** TODO Dúvida: Como funciona o elemento de feedfowrd?
+** ESTUDO Saturação Velocidade
+ * O controle pode estar solicitando velocidades maiores que o tolerado pelas juntas, ocasionando uma acumulo do erro.
+ * Verificar uso de anti-windup: https://www.mathworks.com/help/simulink/examples/anti-windup-control-using-a-pid-controller.html
+ * O efeito de ter dois motores com pontos de saturação diferente atuando no mesmo objetivo é que um maior uso do motor com ponto de saturaçãom maior.
+
+* <2018-10-09 Tue> LOG Atividades
+** ESTUDO Análise Resultados atuais
+*** Pouca Rigidez nas juntas do pulso
+ * O pulso move bastante sobre influência da ação do outros motores, avaliar como aumentar a rigidez
+ * Estudar comparativo com modelo biológico: ombro controle de postura, antebraço controle de precisão
+ * Avaliar a influência na avaliação dos resultados
+ * Ter um elemento com folga amplifia o erro devido ao tremor, mas não representa a causa no caso das juntas do ombro. Um vez que os encoders são bastante precisos, tal pode ser entendido com uma pertubação no controle, permitindo o ajuste a partir das acelerações introduzidas pelo controlador para evitar o tremor.
+
+*** Saturação da velocidade
+ * Como modelar um experimento que demonstre a saturação dos motores?
+ * Como lidar com saturação dos motores?
+
+*** Controle da Rigidez da Mola
+ * Controle de Complacência: O ajuste da rigidez da mola interfere na resposta das velocidades
+ * Como posso avaliar o Damping Ratio ?
+
+*** Atraso na Comunicação
+ * Incluir no modelo para o controle
+
+* <2018-10-11 Thu> LOG Atividades
+** ESTUDO Mecânica
+ * Consegui escrever o email para o Jeff, e envie hoje <2018-10-11 Thu>
+ * Velocidades Limites dos motores: 4.6/4.6/4.5/4.5/2.0/3.6/3.6   
+ * Rigidez: 417/417/190/190/23/46/46
+ * Retirado da Documentação do Meka
+ * Ponto importânte: este motores são desenhado para ter uma resposta plana, isto é o torque ser o mesmo para todas as velocidades
+** ESTUDO Mola Como Circuito RLC
+ * massa: indutor, capacitência: mola, amortecimento: resistor
+** CONVERSA Marcos
+ * Apresentei os resultados obtidos para o Marcos junto a algumas das hipóteses
+ * Ele recomendou registrar a Jacobiana e traçar as análises a partir dela quanto a perca de posto e singularidades
+ * Também recomendou montar um experimento em c++ com uma trajetória e registrar tudo dele para assim poder analisar com mais clareza, pois avaliar apenas posições poderia não trazer uma boa conclusão a respeito do todo.
+*** Resumo feito pelo Marcos
+"No geral acho que pode seguir esse procedimento
+
+1. Avaliar a velocidade angular de cada junta. Armazenar a informação de velocidade da junta (ou então armazenar a posição angular e calcular a velocidade a partir da derivada numérica - usar o sample time utilizado para diferenciar a posição)
+2. Armazenar a matriz Jacobiana a cada iteração.
+3. Calcular o número de condicionamento da jacobiana a cada iteração. Com isso voce consegue ver se o robô está próximo de uma singularidade e quando isso ocorre.
+4. Avaliar a cada iteração se a jacobiana perde posto (linhas ou colunas passam a ser linearmente dependentes). Isso pode fazer com que a jacobiana deixe de ser invertível (no nosso caso sempre conseguimos inverter a jacobiana, pois usamos pseudo inversa de More Penrose, mas acho que dá para fazer essa avaliação da Jacobiana perder posto).
+5. Dado que você sabe quando o robô está próximo de uma singularidade, você pode checar qual a velocidade das juntas naquele instante e comparar com a velocidade limite especificada para o robô.
+
+E sempre armazenar posição da junta e sample time."
+
+*** Resumo análise Jacobiana
+"
+1) Avaliar a velocidade angular de cada junta. Armazenar a informação de velocidade da junta (ou então armazenar a posição angular e calcular a velocidade a partir da derivada numérica - usar o sample time utilizado para diferenciar a posição)
+2) Armazenar a matriz Jacobiana a cada iteração.
+3) Calcular o número de condicionamento da jacobiana a cada iteração. Com isso voce consegue ver se o robô está próximo de uma singularidade e quando isso ocorre.
+4) Avaliar a cada iteração se a jacobiana perde posto (linhas ou colunas passam a ser linearmente dependentes). Isso pode fazer com que a jacobiana deixe de ser invertível (no nosso caso sempre conseguimos inverter a jacobiana, pois usamos pseudo inversa de More Penrose, mas acho que dá para fazer essa avaliação da Jacobiana perder posto).
+5) Dado que você sabe quando o robô está próximo de uma singularidade, você pode checar qual a velocidade das juntas naquele instante e comparar com a velocidade limite especificada para o robô.
+"
+
+*** Indicação de Capítulo Sobre Cinemática Inversa Diferencial
+"
+Cap.3 do livro do Spong - parte de cinemática inversa
+Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção da Jacobiana analítica e jacobiana geométrica
+"
+** CONVERSA Cris
+ * Algortímo de Dinâmica Direta e Inversa foi desenvolvido porém ela está com dificuldades em montar um controlador que use isto
+ * Sugestões:
+   * Controle de Impedância -> Mola Virtual no Espaço de Trabalho
+   * Compensação da Gravidade -> Experimento Gravidade Zero
+** ESTUDO Código Vrep-meka interface
+ * Incluir Limitações mecânicas no código para avaliar o efeito nos controladores
+* <2018-10-12 Fri> LOG Atividades
+** ESTUDO Código C++
+* <2018-10-15 Mon> LOG Atividades
+** ESTUDO Cinemática Diferencial
+ * Hoje tirei para estudar como é calculado a variação do ângulo de juntas a partir da variação do espaço de trabalho e do jacobiano
+ * A variação do ângulo é obtida pelo cálculo do Jacobiano que por sua vez alimenta todos os controladores. 
+ * Consegui entender somente o controlador proporcional implementado pelo Marcos, os demais ainda estão confuso para mim.
+*** Proposta de análise
+ * Relacionar a velocidade ângular obtida pelos seguintes métodos
+  * valor gerado pelos controladores (Jacobiano vs Objetivo)
+  * Valor gerado pela derivação da posição
+  * valor fornecido pelos sensores
+  * limite dos atuadores
+*** Dúvidas
+ * Qual é o impacto da variação de um grau em um quaternion dual?
+ * Porque usar o erro absoluto no lugar do diferença das posições?
+* <2018-10-17 Qua> REUNIÃO Prof. Geovany
+** FEEDBACK Avaliações feitas
+*** MODELO Controle em Malha Fechada
+ * Começar do modelo atual e colocar o efeito da complacência como uma pertugação no valor medido final.
+ * Comparar com o modelo com atraso na etapa final
+ * Deixar por hora as suposições feitas quanto comportamento do SEA
+*** FOLGA Juntas
+ * Verificar como desmontar o pulso para retirar a folga das juntas
+ * Foi percebido uma folga nas juntas do pulso e do antebraço ( junta esférica )
+
+*** OVERSHOT Periódicos
+ * Avaliar o ganho do controle proporcional quanto a dinâmica do sistema.
+ * Medir os tempos de convergência e a velocidade de cada junta.
+*** CONTROLE Proporcional com Feedfoward
+ * Montar o modelo de um controle proporcional com feedforward com todos os elementos para avaliar o impacto do atraso e da pertubação gerada pelo SEA
+*** CONTATO Jeff
+ * Verificar como desmontar pulso
+** CONVERSA Prof. João
+ * Acrescentar limitações dentro do espaço de trabalho e do espaço de juntas no modelo
+* <2018-10-19 Fri> LOG Atividades
+** EXPERIMENTO Avaliação Controladores Marcos
+*** Frequência RosRate
+ * Verifiquei o desempenho dos controladores implementados pelo Marcos usando diferentes valores de rosrate
+ * Valores avaliados (Hz): 50, 100, 200, 500
+ * Com frequẽncias bem altas a trajetória fica bem ruim e o robô passa a saltar entre posições
+
+*** Stiffness
+ * Frequencia: 50hz , Velocidade: 0.7
+ * Valores: 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 , 1, 5 , 8
+ * Quando colocar pouca rigidez o robô fica bem impreciso e demora mais para responder
+ * Com 50hz: O robô está mexendo loucamente no início e durante o loop ele mexe numa frequência próxima de 1Hz em pequenos saltos. Tá bem estranho
+ * Com 500hz O robô se moveu de maneira mais suave com menos saltos, tenho de montar um código mais enxuto para avaliar a interação com a DQ
+ * O controle atuando de forma contínua permitiu um rigidez boa na junta do pulso e o efeito da folga nas juntas não ficou aparente. Logo acredito que dá para prosseguir sem ter que desmontar o robq
+
+* <2018-10-22 Mon> REUNIÃO Prof. Geovany
+** ESTUDO Finalização dos experimentos
+ * Feedback: A folga das juntas não é um problema
+ * Foi apontado a falta da presença de uma ação integral nos controladores de juntas de baixo nível, fato percebido pela juntas não terem atingido a posição desejada em 1 rad no experimento de identificação
+
+*** TODO Montar o modelo no Simulink detalhado do robô para permitir a avaliação dos controladores
+*** TODO Identificar os parâmetros de junta a partir dos dados disponíveis
+*** TODO Buscar a documentação do Robô e enviar ao prof. Geovany
+ * 
+*** DONE Verificar como ajustar o PID de baixo nível
+ * O controle atual está sendo feito apenas usando um controle proporcional ( registrado no arquivo Meka/meka_robotics_source/mekabot/m3ene/robot_config/ma26/m3actuator_ec_ma26_j* referente a cada junta )
+
+* <2018-11-18 Sun> LOG Atividades
+** ESCRITA TG
+*** Gráficos Rosbag
+ * Consegui gerar gráficos no matlab a partir dos arquivos no rosbag. Com base neles foi possível detectar situações em que o controle externo solicita uma ação que exige velocidade e torque maiores que o suportado pela plataforma levando a instabilidade no controle
+ * Também consegui plotar os gráficos referente ao tópico /hummanoid_control mas todas as mensagens estão sem timestamp, então não dá para relacionar o momento em que foi públicado a mensagem de controle com o momento em que foi executado pelo robô. Deu para perceber algumas variações bruscas na posição passada, no entanto somente quando conseguir colocar o timestamp poderei saber o quão bruscas são. Pois suspeito que estão sendo passadas velocidades muito altas.
+ * Como backup eu gerei também os logs no formato do Marcos, porém terei que descobrir como usá-los. Pois estão separados em múltiplos arquívos ao invés de um só.
+
+*** Atuadores Série Elásticos
+ * Um ponto fundamental na hora de analisar a ação de elementos elásticos é examinar as variáveis internas do sistema. Em particular no caso de SEA os torques de entrada possuem bastante relevância, uma vez que uma rápida variação da posição no motor é transmitida diretamente como torque ao elemento final.
+* <2018-11-29 Thu> LOG Atividades
+** ESTUDO Logs Marcos
+*** Processamento
+ * Para processar os logs gerados pelo programa feito pelo Marcos, devo substituir os espaços por , usando o comando =tr -s ' ' ','=
+ * As velocidades das juntas estão identificada como *d_theta_control* 
+ * O tempo está identificado como *controller_execution_time* 
+ * Os arquivos estão no formato *<nomeExp><varId><controlType><controlParams>.txt*
+* <2018-12-02 Sun> LOG Atividades
+** ESCRITA TG
+*** Experimento Step C++
+ * Foram feito os gráficos e as tabelas referênte ao experimento de resposta a um degrau de 1 rad. Através dos dados foi possível extrair as informações de erro em regime permanente e overshot.
+ * Não consegui obter o tempo para o controle estabilizar via código. Dá para notar que é menor que 2s mas não consegui medir o tanto
+ * Terei que alterar as tabelas geradas para mostrarem o valor em porcentagem ao invés de frações inteiras
+ * Quebrei o código de matlab em funções para facilitar, estava começando a ficar complicado de manter um código com parte que queria executar e partes para serem ignoradas.
+
+*** Estudo Delay e Saturação
+ * Foi feito um estudo simples do efeito do atraso de transporte e da saturação no simulink. Devo acrescentar no trabalho para usar como parâmetro para as considerações feitas em relação aos resultados obtidos.
+
+*** Experimento MoveUP
+ * Dados ainda não foram analisados
+
+*** Experimento SquareStiff
+ * Gostaria de montar um gráfico mostrando a contribuição no erro da posição (X,Y,Z) e na orientação por cada junta para explicitar o efeito do haraquiri
+ * Posso montar por componente do Quaternion Dual, uma vez que os controladores são baseados nas componentes
+
+*** Frustação
+ * TG ainda conta com poucas páginas até o momento. Estou seriamente inseguro se vai realmente dar certo o planejamento deste semestre.
+* <2018-12-03 Mon> LOG Atividades
+** ESCRITA TG
+ * Data Remarcada para 12/12/2018. Ainda há esperança!
+*** Open Source Thesis
+ * Assim que terminar devo deixar o repositório completo da escrita do TG aberto. Certamente alguma parte (.big, figuras, tabelas, logs, ...) podem vir a ser utéis para trabalhos futuros
+ * Modifiquei o repositório no overleaf integrar com o github e poder usar as ferramentas locais no PC para gerar partes do relatório
