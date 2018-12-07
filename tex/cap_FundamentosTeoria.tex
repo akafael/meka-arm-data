@@ -10,7 +10,17 @@
 %A primeira etapa de qualquer processo na engenharia é modelagem. A partir dela relacionamos todos conhecimentos relacionados a um sistema em busca de avaliar o comportamento através de uma descrição mais simplificada. Uma das principais formas é a modelagem matemática, em que é descrito as relações lógicas entre cada parte do sistema,. E assim, através de operações matemáticas podemos analisar em profundidade bem como extrapolar o estudo para sistema com modelos parecidos.
 
 % Definição manipulador, resumo capítulo
-Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}. Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}.
+
+
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{tex/figs/meka-inside.png}
+    \caption{Robô Meka - Vista interna (Fonte:  http://machinedesign.com )}
+    \label{fig:meka-inside}
+\end{figure}
 
 \section{Manipuladores Robóticos} 
 
@@ -111,9 +121,6 @@ Para uma representação da posição a partir de matrizes a transformação lin
 
 % Matriz Homogenia
 
-
-
-
 \subsection{Cinemática Inversa}
 
 A cinemática inversa consiste em identificar uma possível configuração de juntas que satisti
@@ -141,7 +148,7 @@ Tendo que a mola está em série entre o atuador e a carga, a contração da mol
 
 \begin{figure}[H]
     \centering
-    \includegraphics{}
+    \includegraphics[width=0.8\linewidth]{tex/figs/sea_ulrich.png}
     \caption{Modelo Atuador Rígido e Série Elástico \cite{Konigorski2012ModelSea}}
     \label{fig:sea}
 \end{figure}
@@ -230,7 +237,7 @@ Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um moto
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{figs/meka}
-    \caption{Braço Robótico Meka A2}
+    \caption{Braço Robótico Meka A2 disponívelo no Lara}
     \label{fig:meka_arm}
 \end{figure}
 

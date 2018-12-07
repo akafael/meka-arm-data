@@ -10,9 +10,14 @@ Em trabalhos anteriores foram propostos e implementados vários controladores ci
 
 Em \cite{nocite} Marcos propôs diversas métricas e avaliar os controladores cinemáticos implementados. Enquanto foi possível um excelente detalhamento da desempenho comparativa de cada um dos controladores, foi descoberto limitações na interação com a plataforma. Neste trabalho será analisado o robô enquanto sistema observando as implicações dos componentes mecânicos, software e sistemas de controle operando de forma conjunta. O objetivo é avaliar dentro do que já foi implementado os limites de desempenho permitidos pela plataforma para permitir um melhor desempenho em trabalhos futuros. 
 
-% Gráfico Desempenho
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{tex/figs/system_perfomance.png}
+    \caption{Representação do Desempenho de um sistema \cite{paine2014high}}
+    \label{fig:system_perfomance}
+\end{figure}
 
-Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistema Mecânico, Sistema Embarcado e Algorítimos de Controle. Para o Meka estes estão implementados na seguinte forma
+Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistema Mecânico, Sistema Embarcado e Algorítimos de Controle conforme ilustrado na figura \ref{fig:system_perfomance} proposta por N. A. Paine em \cite{paine2014high} para o desenvolvimento de um sistema série elástico de alta performance. Para o Meka estas camadas estão implementados na seguinte forma:
 
 \begin{itemize}
     \item Sistema Mecânico ( Atuadores Série Elásticos )
@@ -36,6 +41,8 @@ Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistem
         \item Gerador de Trajetória
     \end{itemize}
 \end{itemize}
+
+Como forma de alcançar um maior desempenho com o Meka foram avaliadas cada parte quanto a possíveis limitações e assim orientar trabalhos futuros no controle do robô.
 
 % Comentar sobre desempenho de sistemas
 % - Como alcançar o maior desempenho do sistema ( Custo exponencial 99.9 )
