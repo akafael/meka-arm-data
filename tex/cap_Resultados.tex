@@ -37,13 +37,16 @@ A partir da antiga documentação disponibilizada no site original da Meka Robot
     \label{tab:a2armActuationDoc}
 \end{table}
 
-Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso esta não atuam. E para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade velocidades grandes para garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
 
 % Pulso Diferencial
 
 \subsubsection{Sensores}
 
 % encoder, temperatura, corrente, força
+
+A partir da documentação temos que não existe nenhuma forma de medida da velocidade, esta é apenas estimada com base na resposta
+
 
 \begin{table}[H]
     \centering
@@ -153,19 +156,17 @@ Para a API em Python estes passos foram executados 3 vezes para cada uma das jun
 
 \subsubsection{Controle de Posição sem Compensação da Gravidade}
 
-O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita o fato do impacto de toda a estratégia de compensação da gravidade ser feita por software. A precisão do controle, depende da qualidade do modelo dinâmico e da estratégia utilizada. Esta solução que o sistema de controle possa ser sempre atualizado, uma vez que não está embutido no projeto de hardware.
-
-Para tal é tomado a posição de referência passada
+O controle de posição sem o uso de compensação da gravidade foi avaliado em estudo e não foi possível atingir a posição desejada de 45 graus partido do zero em nenhuma das juntas. Na maioria dos caso o braço movia apenas 10 graus. O que explicita o fato do impacto de toda a estratégia de compensação da gravidade ser feita por software. A precisão do controle, depende da qualidade do modelo dinâmico e da estratégia utilizada. Esta solução que o sistema de controle possa ser sempre atualizado, uma vez que não está embutido no projeto de hardware, no entanto fica preso a qualidade do modelo.
 
 \subsubsection{Controle de Velocidade}
 
-Foi feito apenas um ensaio utilizando o controle de velocidade disponível na API em Python. No entanto ao ser definido velocidade zero a braço robótico ficou completamente rígido e passou a ignorar comandos para outros valores de referência de velocidade. O que demonstrou um esforço grande sendo feito pelo controle de torque e pelos motores. Somente quando foi alterado o modo de controle para posição que o braço voltou a mover normalmente. Para evitar qualquer dano a plataforma, não foram feitos outros testes neste modo de operação. Em \cite{mekartfd} este modo de controle foi classificado como instável, recomendando evitar o uso.
+Na hipótese de utilizar um controle de baixa nível de velocidade ao invés de posição, foi feito apenas um ensaio utilizando o controle de velocidade disponível na API em Python. No entanto ao ser definido velocidade zero a braço robótico ficou completamente rígido e passou a ignorar comandos para outros valores de referência de velocidade. O que demonstrou um esforço grande sendo feito pelo controle de torque e pelos motores. Somente quando foi alterado o modo de controle para posição que o braço voltou a mover normalmente. Para evitar qualquer dano a plataforma, não foram feitos outros testes neste modo de operação. Em \cite{mekartfd} este modo de controle foi classificado como instável, recomendando evitar o uso pois o sinal da velocidade possui muito ruído.
 
 % Teria como controlar a velocidade diretamente ?
 
-\subsubsection{Controle de Torque}
+%\subsubsection{Controle de Torque}
 
-O controle de torque está disponível em dois modos: com e sem compensação da gravidade. Na estratégia sem compensação da gravidade, o valor de referência de torque é passado diretamente a controlador das juntas.
+%O controle de torque está disponível em dois modos: com e sem compensação da gravidade. Na estratégia sem compensação da gravidade, o valor de referência de torque é passado diretamente a controlador das juntas.
 
 % Por que não foi avaliado o controle de torque?
 
@@ -191,7 +192,7 @@ Já no experimento feito de referência mostrado na \ref{fig:jointIdentification
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp1v100v100.png}
+    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp1v100v100.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 1}
     \label{fig:jointIdentification_exp1v100v100}
 \end{figure}
@@ -200,7 +201,7 @@ Pela figura \ref{fig:jointIdentification_exp2v100v50} observa-se que a variaçã
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp2v100v50.png}
+    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp2v100v50.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 0.5}
     \label{fig:jointIdentification_exp2v100v50}
 \end{figure}
@@ -209,7 +210,7 @@ Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{tex/figs/jointIdentification_exp3v70v100.png}
+    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp3v70v100.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 0.7 e Rigidez = 1}
     \label{fig:jointIdentification_exp3v70v100}
 \end{figure}
@@ -279,6 +280,34 @@ Foi observado que o robô leva um tempo até começar a mexer e um tempo até o 
 % Gráficos ?
 
 % Saltos a cada 300 ms
+
+\section{Estudo Velocidade atuador}
+
+% Resposta do Sensor
+Como mostrado na tabela \ref{tab:a2armSensorDoc} não existe um sensor de velocidade embarcado em cada uma das juntas. A medida fornecida de velocidade é uma estimativa com base no valor da posição. Assim para estudar em mais detalhes a resposta do atuador foi feito uma análise da resposta do tópico em comparação com a estimativa da velocidade calculada diretamente.
+
+% Gráfico
+
+Ao que é percebido a origem do ruído na medida da velocidade: em momentos que o informação da posição é consultada na memória compartilhada antes da informação ser atualizada gera uma velocidade nula, uma vez que não houve variação do dado. Consultando os códigos foi notado que o valor da medida da estimativa é filtrado por um filtro passa baixa de Butterworth de 3 ordem com frequência de corte em $80 Hz$ para cada uma das juntas.
+
+% Valores Extraídos de robot_config/ma_26/m3actuator_ma26_j4
+% Montar tabela com todos os atuadores
+% angle_df:
+%     theta_df:
+%       cutoff_freq: 80
+%       order: 3
+%       type: butterworth
+%     thetadot_df:
+%       cutoff_freq: 20
+%       order: 3
+%       type: diff_butterworth
+%     thetadotdot_df:
+%       cutoff_freq: 20
+%       order: 3
+%       type: diff_butterworth
+%     type: df_chain
+
+Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$. De modo pode ser utilizado um filtro passa baixa com a frequência de corte mais baixa para avaliar o comportamento da velocidade em conjunto com a estimativa obtida diretamente pela posição.
 
 \section{Estudo sobre não linearidades}
 
