@@ -15,17 +15,17 @@ Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnolog
 
 Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics{tex/figs/meka-inside.png}
-    \caption{Robô Meka - Vista interna (Fonte:  http://machinedesign.com )}
-    \label{fig:meka-inside}
-\end{figure}
-
 \section{Manipuladores Robóticos} 
 
 % Modelagem Matemática
 Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\linewidth]{tex/figs/meka-inside.png}
+    \caption{Robô Meka - Vista interna (Fonte:  http://machinedesign.com )}
+    \label{fig:meka-inside}
+\end{figure}
 
 % Modelagem Cinemática
 Na cinemática estamos interessado apenas na geometria do movimento de pontos e objetos rígidos a partir da posição de cada ponto de referência e a variações no tempo, expressas como a velocidade e aceleração. Não são levados em conta as causas do movimento, isto é as forças e torques envolvidos.
@@ -52,7 +52,6 @@ Quatérnions Duais são números duais em que as partes primárias e secundária
 
 \subsection{Quatérnions}
 %
-
 
 \subsection{Números Duais}
 
