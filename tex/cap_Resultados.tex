@@ -119,7 +119,7 @@ Como a maior parte do código da M3 está implementada em Python, para avaliar o
 
 Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da m3 e obtido de forma recursiva pela biblioteca KDL\cite{nobody}.
 
-\subsubsection{Avaliação do Atraso de Comunicação}
+\subsubsection{Avaliação do Atraso de Comunicação}\label{subsec:deadtimepython}
 
 A comunicação com o robô é feita através de uma memória compartilhada. Assim, o primeiro experimento foi levantar o tempo gasto pela instrução \textit{proxy.step()} que atualiza esta memória pegando as medidas dos sensores e informando os comandos para os controladores. Este teste foi feito através avaliando o intervalo de tempo entre cada chamada após sucessivas interações tendo como resultado o valor médio de 16ms entre cada chamada indicando que a frequência máxima possível para um controlador implementado com base na API é de $f = 1/16ms = 62.5Hz$. Isto, obviamente, desconsiderando qualquer tempo extra gasto com as operações realizadas pelo próprio controlador.
 
@@ -215,7 +215,7 @@ Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o 
     \label{fig:jointIdentification_exp3v70v100}
 \end{figure}
 
-No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite}. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada.
+No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite} e também próximo do valor obtido na seção \ref{subsec:deadtimepython}. O que reforça a tese boa parte do atraso ocorre devido a camadas abaixo do nó de ROS. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada. Como obtido experimentalmente por Marcos.
 
 % Comentar sobre o varição do intervalo de tempo medido da entre os comandos enviados para a \hummanoid_command
 
@@ -275,18 +275,27 @@ Os controladores de posição do efetuador foram avaliado a partir da estratégi
     \item Trajetória dividida em $1000$ pontos, intervalo de $8 ms$
 \end{enumerate}
 
-Foi observado que o robô leva um tempo até começar a mexer e um tempo até o controle estabilizar. De modo que está sempre atrasado em relação a referência. Para o período $8 ms$ foram necessárias $25$ interações até o robô começar a se mover, com o período de $100 ms$ o robô começo a se mover já na segunda interação sugerindo um atraso na comunicação de $200 ms$ entre o tempo que o comando é passado via ROS e o tempo que o robô executa o comando.
+Foi observado que o robô leva um tempo até começar a mexer e um tempo até o controle estabilizar. De modo que está sempre atrasado em relação a referência. Para o período $8 ms$ foram necessárias $25$ interações até o robô começar a se mover, com o período de $100 ms$ o robô começo a se mover já na segunda interação sugerindo um atraso de $200 ms$ entre o tempo que o comando é passado via ROS e o tempo que o robô executa o comando.
 
 % Gráficos ?
 
 % Saltos a cada 300 ms
 
-\section{Estudo Velocidade atuador}
+\section{Estudo velocidade atuador}
+
+Em extensão ao estudo feito na seção \ref{subsec:stepcpp}, foi analisado a resposta da velocidade fornecida pelo tópico ao longo da trajetória. Pelas figuras \ref{fig:jointIdentification_exp1v100v100}, \ref{fig:jointIdentification_exp2v100v50} e \ref{fig:jointIdentification_exp3v70v100} foi notado notado que a velocidade é aproximadamente constante ao longo dos momentos de maior deslocamento e com valores próximos de $v_{max} = 0.5 rad/s$ para todas as juntas. Para avaliar o comportamento ao longo do tempo foi comparado a resposta fornecida no tópico do ROS $/hummanoid\_state$ para os valores de \textit{position}, \textit{velocity} e \textit{effort}, respectivamente posição, velocidade e torque nas juntas, conforme mostrado nas figuras \ref{fig:jointIdentificationFullSpeed_stiff90p} e \ref{fig:jointIdentificationSpeed10p_stiff90p2}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{tex/figs/jointIdentificationFullSpeed_stiff90p.png}
+    \caption{Resposta Controladores Juntas - Velocidade Máxima e 90\% de rigidez}
+    \label{fig:jointIdentificationFullSpeed_stiff90p}
+\end{figure}
+
+A medida do torque varia bastante de junta para junta, uma vez que o esforço necessário para mover o braço inteiro é bem menor que para mover uma das partes. Em razão disto foi feito um ajuste na nos valores de $effort$ a dividindo os valores ao longo da trajetória pelo valor máximo observado para permitir avaliar o formato da resposta do torque de forma igual para todas as juntas.
 
 % Resposta do Sensor
-Como mostrado na tabela \ref{tab:a2armSensorDoc} não existe um sensor de velocidade embarcado em cada uma das juntas. A medida fornecida de velocidade é uma estimativa com base no valor da posição. Assim para estudar em mais detalhes a resposta do atuador foi feito uma análise da resposta do tópico em comparação com a estimativa da velocidade calculada diretamente.
-
-% Gráfico
+Obviamente a velocidade é apenas uma estimativa da velocidade real a partir do valor de posição que chega no computador. Pois, como mostrado na tabela \ref{tab:a2armSensorDoc} não existe um sensor de velocidade embarcado em cada uma das juntas, apenas sensores de posição. Este valor é notadamente ruidoso pois devido ao atraso de comunicação e detecção, a medida dos valores de posição também sofre de não linearidades, apresentando apresentando momentos em que esta não varia.
 
 Ao que é percebido a origem do ruído na medida da velocidade: em momentos que o informação da posição é consultada na memória compartilhada antes da informação ser atualizada gera uma velocidade nula, uma vez que não houve variação do dado. Consultando os códigos foi notado que o valor da medida da estimativa é filtrado por um filtro passa baixa de Butterworth de 3 ordem com frequência de corte em $80 Hz$ para cada uma das juntas.
 
@@ -307,21 +316,30 @@ Ao que é percebido a origem do ruído na medida da velocidade: em momentos que 
 %       type: diff_butterworth
 %     type: df_chain
 
-Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$. De modo pode ser utilizado um filtro passa baixa com a frequência de corte mais baixa para avaliar o comportamento da velocidade em conjunto com a estimativa obtida diretamente pela posição.
+Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt}$ $80Hz$ representa em torno $10 \cross f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, filtros mais melhores podem ser implementados, visando melhorar a qualidade da estimativa.
 
-\section{Estudo sobre não linearidades}
+Avaliando o mesmo valor de rigidez para $10\%$ da velocidade máxima, nota-se um ruído maior para as velocidades apresentadas. Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{tex/figs/jointIdentificationSpeed10p_stiff90p2.png}
+    \caption{Resposta Controladores Juntas - Velocidade em 10\%e 90\% de rigidez}
+    \label{fig:jointIdentificationSpeed10p_stiff90p2}
+\end{figure}
+
+%\section{Estudo sobre não linearidades}
 
 % Acrescentar simulação no simulink pControlSaturation
 % - Comparativo da resposta para o mesmo ganho em um sistema de primeira ordem ( com delay e saturação )
 % - Verificar necessidade de mudar a ordem e puxar a seção para antes
 
-Uma vez que os modelos usados para o controle são lineares, a existência de comportamentos não lineares representam perturbações e podem gerar erros ou até instabilidade no controle caso não consideradas. Em razão disto uma atenção especial foi dada a este aspecto visando identificar a contribuição da perca de desempenho. A grande dificuldade é podem ocorrem em qualquer uma das partes do sistema de controle gerando um acumulo do efeito com o aumento da quantidade de camadas em cascata.
+Uma vez que os modelos usados para o controle são lineares, a existência de comportamentos não lineares como saturação representam perturbações e podem gerar erros ou até instabilidade no controle caso não consideradas. Em razão disto uma atenção especial foi dada a este aspecto visando identificar a contribuição na perca de desempenho. A grande dificuldade é que ocorrem ao longo de todo o processo, principalmente devido a discretização, gerando um acumulo do efeito com o aumento da quantidade de camadas em cascata.
 
-\subsection{Saturação do Atuador}
+\subsection{Saturação do Atuador na Trajetória}
 
-O efeito de saturação do atuador ocorre quando é solicitado uma ação de torque ou velocidade acima do que o atuador permite. Em diversos sistemas isto é limitado através de algum dispositivo de proteção evitando danificar o atuador. Do lado do controle, este é percebido como uma resposta mais lenta que o esperado para aquele determinado ganho em simulação podendo levar a instabilidade no controle do sistema real.
+O efeito de saturação do atuador ocorre quando é solicitado uma ação de torque ou velocidade acima do que o atuador permite. Em diversos sistemas isto é limitado através de algum dispositivo de proteção evitando danificar o atuador. Do lado do controle, este é percebido como uma resposta mais lenta que o esperado para aquele determinado ganho em simulação podendo levar a instabilidade no controle do sistema real devido ao acumulo do erro no integrador.
 
-Como o controle da posição é feito em colaboração pela ação de cada uma das juntas, este problema é mascarado na métrica do erro de posição. Como a contribuição de cada junta em manipulador não cartesiano muda de acordo com a posição, o atraso devido a saturação pode fazer com que o robô tenha um erro maior para determinadas posições no decorrer da trajetória que outras. Outro efeito é a saturação de um motor levar a um uso maior dos outro motores na tentativa de compensar o erro acumulado. Como são utilizados diferentes motores para cada uma das juntas, conferindo limitações especificas na atuação, em particular na velocidades máximas que cada junta pode atingir. Por conta disto, é percebido um maior uso das juntas com velocidade máxima maior para compensar o erro acumulado pela juntas com velocidade máxima menor, quando o controle começa solicitar uma velocidade maior que a permitida pelos outros motores. Em particular no Meka, este fenômeno leva a um uso maior das juntas do ombro para corrigir orientação ao acumulado pela saturação das juntas do pulso.
+Como o controle da posição é feito em colaboração pela ação de cada uma das juntas, este problema é mascarado na métrica do erro de posição. A contribuição de cada junta em manipulador não cartesiano muda de acordo com a posição, o atraso devido a saturação pode fazer com que o robô tenha um erro maior para determinadas posições no decorrer da trajetória que outras. Outro efeito é a saturação de um motor levar a um uso maior dos outro motores na tentativa de compensar o erro acumulado. Como são utilizados diferentes motores para cada uma das juntas, conferindo limitações especificas na atuação, em particular na velocidades máximas que cada junta pode atingir. Por conta disto, é percebido um maior uso das juntas com velocidade máxima maior para compensar o erro acumulado pela juntas com velocidade máxima menor, quando o controle começa solicitar uma velocidade maior que a permitida pelos outros motores. Em particular no Meka, este fenômeno leva a um uso maior das juntas do ombro para corrigir orientação ao acumulado pela saturação das juntas do pulso.
 
 Em um manipulador robótico composto por juntas rotacionais, a tarefa de deslocamento no espaço é distribuída entre todas as juntas ao longo de praticamente toda a região do espaço de trabalho. O deslocamento de cada junta produz um arco que inevitavelmente gera movimentação em pelo menos duas direções no espaço e uma rotação. Desta forma o tarefa de atingir uma posição e orientação no espaço é distribuída por várias juntas, permitindo um esforço menor em um determinado atuador. No entanto, em particular para um braço antropomórfico a orientação é resolvida de forma conjunta pelo pulso e pelo ombro gerando um amplo espaço nulo a permitindo para uma mesma posição do pulso, diversas posições para o cotovelo.
 
@@ -329,18 +347,18 @@ Tais relações geométricas indicam que a tarefa de manter uma orientação pos
 
 As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{nobody} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{nobody}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em experimento disponível no YouTube \footnote{https://www.youtube.com/watch?v=bU7Ocphhifg} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
 
-% aqui entra o kung-fu 
 
-% Citar o trabalho da UT com campo de potenciais
+
+% aqui entra o kung-fu 
 
 % Fenômeno Harakiri: O cotovelo do meka vai se aproximando do tronco com o passar do tempo, o robô move bruscamente com pertubações na orientação a partir da posição de referência usada nos trabalhos do Koji e do Marcos
 
 % Montar experimentos Harakiri 2DOF, Harakiri Meka em simulação no Matlab, Harakiri Meka real
 % Estudo do erro por junta ao invés de por posição -> Pontuar necessidade introduzir novas métricas
 
-\subsection{Atraso da Comunicação}
+%\subsection{Atraso da Comunicação}
 
-Dado a existência de várias camadas entre o controle cinemático e o atuador de fato, existe um atraso na comunicação que influência na dinâmica do sistema. O controlador cinemático interagem com o ROS que por sua vez interage com uma memória compartilhada que é atualizada com um frequência de $1 KHz$. Para avalia o atraso foi feito a medida a partir do ensaio em degrau, entre o tempo de envio do comando de controle no tópico $/humanoid_control$ e o primeiro instante em que a posição da junta atinge um valor diferente de zero na leitura do valor correspondente no tópico $/humanoid_state$. Uma vez que existe um pouco de ruído na leitura da posição, foi considerado a valor de referência $\Delta\theta_0 = 0.1 rad = 5^\circ$.
+%Dado a existência de várias camadas entre o controle cinemático e o atuador de fato, existe um atraso na comunicação que influência na dinâmica do sistema. O controlador cinemático interagem com o ROS que por sua vez interage com uma memória compartilhada que é atualizada com um frequência de $1 KHz$. Para avalia o atraso foi feito a medida a partir do ensaio em degrau, entre o tempo de envio do comando de controle no tópico $/humanoid_control$ e o primeiro instante em que a posição da junta atinge um valor diferente de zero na leitura do valor correspondente no tópico $/humanoid_state$. Uma vez que existe um pouco de ruído na leitura da posição, foi considerado a valor de referência $\Delta\theta_0 = 0.1 rad = 5^\circ$.
 
 % Resultados
 
