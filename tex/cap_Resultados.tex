@@ -265,12 +265,36 @@ Os controladores de posição do efetuador foram avaliado a partir da estratégi
 \begin{enumerate}
     \item Trajetória dividida em $100$ pontos, intervalo de $8 ms$
     \item Trajetória dividida em $100$ pontos, intervalo de $100 ms$
-    \item Trajetória dividida em $1000$ pontos, intervalo de $8 ms$
 \end{enumerate}
 
 Foi observado que o robô leva um tempo até começar a mexer e um tempo até o controle estabilizar. De modo que está sempre atrasado em relação a referência. Para o período $8 ms$ foram necessárias $25$ interações até o robô começar a se mover, com o período de $100 ms$ o robô começo a se mover já na segunda interação sugerindo um atraso de $200 ms$ entre o tempo que o comando é passado via ROS e o tempo que o robô executa o comando.
 
 % Gráficos ?
+
+Assim foram feitos novos experimentos para as seguintes variações:
+
+\begin{enumerate}
+    \item Trajetória dividida em $100$ pontos, $velocidade em 100\%$, intervalo de $2 ms$
+    \item Trajetória dividida em $100$ pontos, $velocidade em 100\%$, intervalo de $10 ms$
+\end{enumerate}
+
+No primeiro experimento, figura \ref{fig:moveUp1}, o robô executou a trajetória sem problemas movendo para cima com velocidade constante.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp1stateEvalv70s10.png}
+    \caption{Experimento Trajetória na Vertical $dt=10ms$ }
+    \label{fig:moveUp1}
+\end{figure}
+
+Já quando o intervalo de tempo entre os pontos é muito abaixo de $20ms$ é percebido saltos periódicos com intervalo aproximado de $5s$ devido ao acumulo do erro nas juntas. Nota-se que as juntas movem em velocidade constante por um tempo e em seguida rola o salto. Dá para notar que as juntas $J5$ e $J6$ são as que possuem a maior variação no esforço ao longo da trajetória.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp3stateEvalv70s50.png}
+    \caption{Experimento Trajetória na Vertical $dt=2ms$ }
+    \label{fig:moveUp3}
+\end{figure}
 
 % Saltos a cada 300 ms
 
@@ -363,7 +387,7 @@ As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o
 
 \section{Estudo Controladores Cinemáticos}
 
-\subsection{Experimento de Referência}
+\subsection{Avaliação do controle de Rigidez}
 
 Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{marcosps2016}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
 
@@ -385,7 +409,7 @@ No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo 
     \label{fig:squareStifff9stateEvalv100s70}
 \end{figure}
 
-\subsubsection{Resposta Controladores de Junta}
+\subsubsection{Análise individual dos Controladores de Junta}
 
 Uma vez definido as condições usadas foi analisado individualmente cada junta, para avaliar quais tinha a maior contribuição no erro e como estava sendo solicitadas ao longo da trajetória. No que foi percebido que a juntas do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
 
@@ -449,4 +473,17 @@ As juntas do pulso $J5$ e $J6$ estão acopladas mecanicamente pelo mecanismo de 
 \end{figure}
 
 Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscilação produzida pelas demais juntas é transmitida diretamente ao pulso. No entanto, tendo uma rigidez mais baixa, um erro grande em regime permanente acaba tendo um impacto grande no erro da orientação do efetuador. Se considerar ainda que o ponto de referência usado está deslocado em relação ao centro do pulso diferencial, este erro de orientação será refletido também em um erro de posição.
+
+\begin{table}[H]
+    \centering
+    \caption{Avaliação esforço de controle por junta}
+    $$\begin{array}{cc|ccccccc}
+         \hline
+         V & S & J_0 & J_1 & J_2 & J_3 & J_4 & J_5 & J_6\\
+         \hline
+         \input{tex/tables/jointIdentification_errortable.tex}
+         \hline
+    \end{array}$$
+    \label{tab:squareStiffEffort_table}
+\end{table}
 
