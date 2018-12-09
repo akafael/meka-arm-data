@@ -4,7 +4,7 @@
 * Document [/]
 ** TODO Update Symbols List
 * Introduction [0/3]
-** TODO History Bacground
+** TODO History Background
 ** TODO Metodology
 ** TODO Thesis Structure Presentation
 * Fundamentation [0/4]

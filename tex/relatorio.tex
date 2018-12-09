@@ -51,13 +51,15 @@
 \usepackage{makeidx}
 \usepackage{indentfirst}
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption} % permite o uso de multiplas figuras com legenda (ambiente subfigure)
 % Pacotes para adição de figuras do inkscape
 \usepackage{graphicx}
 \usepackage{lastpage}
 \usepackage{import}
 
 % Escolher um dos seguintes formatos:
-\usepackage{ft2unb} % segue padrão de fontes do Latex
+\usepackage{ft2unb} % segue padrão de fontes do LaTeX
 
 \makeindex
 
@@ -86,35 +88,20 @@ Estudo e caracterização de arquitetura de controle de braço robótico complac
 
 \titulolinhaiv{}
 
-\begin{comment}
-Autores. Basta retirar o texto totalmente caso não haja um determinado
-autor.
-\end{comment}
-
-
+% Autores. Basta retirar o texto totalmente caso não haja um determinado autor.
 \autori{Rafael Lima}
-
 \autorii{}
-
 \autoriii{}
 
-\begin{comment}
-Membros da banca. Basta retirar o texto totalmente caso não haja um
-determinado membro da banca.
-\end{comment}
-
-
+% Membros da banca. Basta retirar o texto totalmente caso não haja um determinado membro da banca.
 \membrodabancai{Prof. Geovany Araujo Borges, ENE/UnB}
-
 \membrodabancaifuncao{Orientador}
-
 \membrodabancaii{Prof. Mariana Bernardes, FGA/UnB}
 \membrodabancaiifuncao{Co-orientador}
 \membrodabancaiii{Prof. João Yoshiyuki Ishihara, ENE/UnB}
 \membrodabancaiiifuncao{Examinador interno}
 \membrodabancaiv{Prof. Hugo Tadashi Muniz Kussaba, ENE/UnB}
 \membrodabancaivfuncao{Examinador interno}
-
 \membrodabancav{}
 \membrodabancavfuncao{}
 
@@ -133,7 +120,7 @@ determinado membro da banca.
 \frontmatter
 
 % Dedicatória primeiro autor
-\dedicatoriaautori{}
+\dedicatoriaautori{Dedico este trabalho a todos que queriam conhecer um pouquinho deste vasto mundo da tecnologia}
 
 % Texto de dedicatória do segundo autor. Caso não tenha um segundo autor, este texto não será mostrado
 %\dedicatoriaautorii{Dedicatória do autor 2}
@@ -145,8 +132,36 @@ determinado membro da banca.
 
 % Agradecimentos --------------------------------------------------------
 
-\agradecimentosautori{Agradecimentos!}
-% Colegas, Professores Graduação, Professores Intercâmbio, Professores Anteriores, Pais
+\agradecimentosautori{
+% Intro
+% Absolutamente nada nesta vida se faz só. Para chegar até aqui devo a tantos que citando teria mais páginas que o TG.
+
+% Familia
+%Agradeço primeiramente a meus pais, Franscico e Zely pois devo tudo a eles, desde minha vida a cada aspecto construído nela. A meus irmãos Lorrane e Mateus, pela imensa parceria em qualquer situação. A minha namorada Lia, que me ajudou ao longo de tantas vezes que esqueci completamente de mim enquanto envolvido com alguma tarefa do curso. A minha família, tios, primos e avós.
+
+% Amigos: Ciro, Pedro
+% Turma 27:
+% Aos colegas da turma 27 de engenharia mecatrônica: Ataías, David, Marina, Marcos, Marco Emilio,,, Jessé, Rodrigo, Caixeta, De Hong, Fugita, Carioca, Gabriel, Caveira, Guilherme, Victor, Artur , Cris, Iuri, Fred, Pedro, José, Luís, Caio, Jéssica e Ícaro.
+% Lara2: Eric, Miguel, Gabriel Moisés, Bruno, Breno,
+% Lara1: Cláudia, David, Roberto, Thiago, George
+% I3E: Pâmela, Oniran, Josh, ...
+% Amigos: André, Arthur
+% Amigos Curso: A tantos amigos no curso, 
+
+% Professores Matérias pesadas
+%Aos professores Benilton e Felipe da sala de recurso, onde comecei meu aprendizado sobre computadores e robótica. Dentro da universidade aos professores Clod Wagner, Célius Magalhães, Rathie Puspa, Arthur Vicentini, Fábio Menezes, Marcos Lamar, José Maurício, Renato Borges, Rafael Shayani, por terem me ajudado a construir uma base sólida ao longo do curso.
+
+% Funcionários
+% Valter, Carlos, 
+
+%Ao professor Yuri Dumaresq e a professora Carla Koike, dois enormes preceptores ao longo de quase todo tempo na UnB. Aos professores do Lara, prof Antônio, a qual devo a honra do convite para começar a fazer parte do Lara e a participação no projeto da prótese, ..., prof. Adolfo,...
+
+%Aos professores no intercâmbio, Holly, Ilene, Dean, Laura, Ammar e Ana, aprendi tanto com cada um. Em especial Mohammad Mehrmohammad, que me acompanhou durante todo tempo e no laboratório de Ultrassom, jamais conheci alguém com o coração tão bondoso e tão motivado a fazer a diferença.
+
+%E por fim em especial para a prof. Mariana, que propôs a temática e me acompanhou durante toda jornada desde o trabalho no Cyton, passando por quatérnions duais até atuadores série elásticos. E ao prof. Geovany por me ajudar na orientação deste trabalho com diversas dicas extremamente precisas em vários momentos que eu estava completamente perdido.
+
+%A cada
+}
 
 %\agradecimentosautorii{A inclusão desta seção de agradecimentos é opcional e fica à critério do(s) autor(es), que caso deseje(em) inclui-la deverá(ão) utilizar este espaço, seguindo esta formatação.}
 
@@ -213,26 +228,32 @@ determinado membro da banca.
 
 \bibliographystyle{abnt-num}
 \bibliography{relatorio}
+\nocite{adorno2017robot}
 \nocite{mmurilo-biorob}
-\nocite{book:siciliano:2009}
 \nocite{Adorno2011}
 \nocite{figueredo:2013}
+\nocite{sentis2007synthesis}
+\nocite{pratt1997stiffness}
+\nocite{iyer2012modeling}
+%\nocite{abeyrathna2013simulation} % Cited
+\nocite{book:siciliano:2009}
 \nocite{book:spong:}
-\nocite{edsinger2004domo}
+\nocite{murlow2014}
+\nocite{lee2017generalization}
 %\nocite{pratt1995series} % Cited!
 % Citar Livro
 % https://new.abb.com/process-automation/process-automation-service/reference-pages/single-loop-control-methods
 
 % Anexos -------------------------------------------------------------
-\anexos
-\makeatletter
-% não retirar estes comandos
- \renewcommand{\@makechapterhead}[1]{%
-   {\parindent \z@ \raggedleft \setfontarial\bfseries
-     \LARGE \thechapter. \space\space
-     \uppercase{#1}\par
-     \vskip 40\p@ }}
-\makeatother
+% \anexos
+% \makeatletter
+% % não retirar estes comandos
+%  \renewcommand{\@makechapterhead}[1]{%
+%   {\parindent \z@ \raggedleft \setfontarial\bfseries
+%      \LARGE \thechapter. \space\space
+%      \uppercase{#1}\par
+%      \vskip 40\p@ }}
+%\makeatother
 
 % Anexo I: Descrição do CD
 %\include{anexo_CD}

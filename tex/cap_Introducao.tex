@@ -1,12 +1,11 @@
 \chapter{Introdução} \label{ch:intro}
 
 % Resumo opcional. Comentar se não usar.
-%\resumodocapitulo{Resumo opcional}
+\resumodocapitulo{"I never think of the future - it comes soon enough." - Albert Einstein}
 
 % "I never think of the future - it comes soon enough." - Albert Einstein
 
 \section{Contextualização}
-
 
 Toda tecnologia surge no intento de reduzir o gasto de energia na execução de alguma tarefa. Nela consolidamos todo o conhecimento envolvido em alguma técnica permitindo a execução com um esforço muito menor a partir da consolidação disto em um objeto. A este damos diversos nomes: ferramentas, máquinas, robôs, lápis e caneta. Essencialmente todos com a mesma missão de permitir realizar qualquer tarefa a menor quantidade de energia possível.
 
@@ -20,14 +19,11 @@ As primeiras tecnologias pegavam um pouco desta capacidade de executar as tarefa
 
 Robôs industriais, ou manipuladores robóticos, como também são chamados, se tornaram parte essencial na produção de bens aonde alguma das etapas exijam capacidades sobre-humanas de força, precisão, repetibilidade ou ainda na tolerância a altas temperatura e materiais corrosivos. Garantindo assim consistência, rapidez e segurança em tarefas de soldagem, montagem, pintura e corte no cenário industrial. No entanto, estas mesmas características que conferem a robustez apreciada no ambiente industrial tornam os robôs perigosos. A força, peso e velocidades de operação compõem elementos de risco na execução de atividades na presença de pessoas.
 
-% Algo aqui
+Embora seja uma tecnologia bastante interessante na automação de processos que envolvam a manipulação de objetos, o uso de braços robóticos pode oferecer diversos riscos. Para garantir a segurança em ambiente industrial, diversas soluções são usadas como grades de isolamento, botões de parada e sistemas de detecção de pessoas. Atuando em geral na desativação do robô como forma de mitigar o risco. No entanto para algumas atividade existe a necessidade da atuação conjunta de pessoas e máquinas. Para resolver este problema novos tipos de braços têm sido desenvolvidos incorporando características para segurança em cada aspecto do design, entre elas emprego de estruturas mais leves, operação em velocidades reduzidas, protocolos para interrupção em caso de acidentes e complacência. \cite{nobody}
 
-Para resolver este problema novos tipos de robôs industriais têm sido desenvolvidos incorporando características para segurança em cada aspecto do design, entre elas emprego de estruturas mais leves, operação em velocidades reduzidas, protocolos para interrupção em caso de acidentes e transmissão elástica. \cite{nobody}
+Ao que integra a categoria de robôs cooperativos de sistemas desenvolvidos para serem intrinsecamente seguros no uso em atividade em colaboração com pessoas. Sendo desenhados para que seja oferecido o menor risco possível. Primeiro, este robôs deve oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão ou no por uma intenção diferente de movimento por parte da pessoas que a energia transmitida possa causar algum dano. Segundo deve permitir operação em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada.
 
-Muito embora ainda exista a visão da robótica como grande vilão no roubo de empregos, boa parte das tarefas ainda são executadas por pessoas, uma vez que máquinas não possuem em muitas vezes destreza e a adaptabilidade que pessoas. \cite{nobody} Neste sentido, a introdução de elementos para segurança trazer os benefícios da robótica também a outros ambientes fora da industria por retirar a necessidade de isolamento permitir uma maior integração entre as características de cada um. E assim conferir uma combinação entre a alta capacidade de repetibilidade e precisão dos robôs junto a habilidade humana de rápida aprendizagem na hora de lidar com problemas ainda mais complexos.
-
-Para isto surgiram uma categoria de robô denominada robôs cooperativos que são intrinsecamente seguros. Isto são desenhados para que em operação ofereça o menor risco possível. Primeiro, este robôs deve oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão, para evitar que a energia transmitida possa causar algum dano. Segundo deve operar em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada.
-
+Muito embora sempre exista a visão da tecnologia como vilã no roubo de empregos ao permitir ao uso de menos energia na execução de uma tarefa a redução do custo gera novas oportunidade por aumenta a capacidade de carga. Ainda que junto exista a necessidade de ressignificar o papel das pessoas no desenvolvimento de alguma atividade, deslocando o papel de total responsabilidade pela execução para incorporar papeis de planejamento pelo auxílio da automação, a incorporação de novas tecnologias traz um maior alcance dos produtos gerados.
 % Garantir flexibilidade e precisão: Tenho que ensinar kung fu ao robô...
 
 % Robótica Cooperativa
@@ -37,7 +33,7 @@ Para isto surgiram uma categoria de robô denominada robôs cooperativos que sã
 \subsection{Breve histórico}
 
 % Comentar sobre a história dos Cobots
-Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa de elevar um carga na vertical para facilitar o transporte e posicionamento de peças na fabricação de carros. Trata-se de uma tarefa repetitiva, que envolve o transporte de peças pesadas mas que não é possível de ser feita utilizando robôs por envolver o posicionamento de duas partes rígidas com enorme variabilidade de posição entre si.
+%Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa de elevar um carga na vertical para facilitar o transporte e posicionamento de peças na fabricação de carros. Trata-se de uma tarefa repetitiva, que envolve o transporte de peças pesadas mas que não é possível de ser feita utilizando robôs por envolver o posicionamento de duas partes rígidas com enorme variabilidade de posição entre si.
 
 %% Foto Lifter 
 
@@ -45,8 +41,11 @@ Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa
 
 %Posteriormente
 
+% COG
+%Seguindo uma filosofia diferente surgiu COG ( figura \ref{fig:domorobot} ), um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de várias tecnologias existentes na época para a interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. De igual forma, ao ser introduzido um componente passivo permite reduzir a necessidade de um extenso planejamento na execução da tarefa como ocorre com braços rígidos.
+
 % Domo e uso de Atuador Série Elástico
-Domo é um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de vários sistemas complexos na interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. Facilitando o uso em tarefas de forma segura na presença de pessoas em um ambiente não estruturado.
+Baseado em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e Jeff Weber o robô Domo, mostrado na figura \ref{fig:domorobot}. Em seu projeto foram incorporadas diversas características visando permitir segurança através do uso de juntas complacentes com percepção de força. Bem como características para uso contínuo do ponto de vista mecânico como o uso de atuadores série elásticos baseados em fuso de esferas, proteção de superaquecimento para os motores e modularização do design. Para o controle são utilizados DSP para cada uma das juntas do robô\cite{edsinger2004domo}.
 
 \begin{figure}[H]
     \centering
@@ -55,23 +54,52 @@ Domo é um robô humanoide desenvolvido pelo MIT para interação com pessoas\ci
     \label{fig:domorobot}
 \end{figure}
 
-Este projeto teve particular importância pois muitos dos conceitos explorados vieram a compor patentes e futuramente partes dos robôs Baxter e Meka, respectivamente das empresas Rethink Robotics e Meka Robótics. Da mesma equipe que desenvolveu o Domo surgiu a Meka Robótics a partir de Aaron Singer e Jeff Weber. E dos trabalhos de Pratt e Williason \cite{pratt1995series} surgiu a empresa Rethink Robotics fundada por Rodney Brooks, então professor do MIT em 1995.
+Anos depois, os mesmos conceitos foram incorporados no robô Meka, figura \ref{fig:meka}, surgido como produto da empresa Meka Robotics fundada por Aaron e Jeff em 2006. Como pode ser notado pelas similaridades do ombro e desing do braço em relação a figura \ref{fig:domorobot}. Este robô foi adquirido pelo LARA, porém em 2013 a empresa é adquirida pela Google e toda a documentação do Meka foi retirada do ar. 
+
+% Citar OceanOne (Stanford)?
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{tex/figs/meka-robot.png}
+    \caption{Meka M1 (Fonte: https://spectrum.ieee.org)}
+    \label{fig:meka}
+\end{figure}
+
+Da mesma linha de trabalhos surgiu a empresa Rethink Robotics fundada por Rodney Brooks, então professor do MIT em 1995. Estes aspectos estudados nos humanoides desenvolvidos no MIT como o COG e o DOMO permitiram que manipuladores robóticos pudessem ter um custo reduzido e atuar com um pouco mais de flexibilidade no ambiente, permitindo a presença de pessoa em proximidade.
+
+%Este projeto teve particular importância pois muitos dos conceitos explorados vieram a compor patentes e futuramente partes dos robôs Baxter e Meka, respectivamente das empresas Rethink Robotics e Meka Robótics. Da mesma equipe que desenvolveu o Domo surgiu a Meka Robótics a partir de Aaron Singer e Jeff Weber.
+%Bem como dos trabalhos de Pratt e Williason \cite{pratt1995series} surgiu a empresa Rethink Robotics fundada por Rodney Brooks, então professor do MIT em 1995. Estes aspectos estudados permitiram que manipuladores robóticos pudessem ter um custo reduzido e atuar com um pouco mais de flexibilidade no ambiente, permitindo a presença de pessoa em proximidade.
 
 % Baxter vs Meka
-Embora com design completamente diferente, ambos robôs incorporam o uso atuadores série elásticos em cada uma das juntas como elemento de segurança. Desta forma qualquer pessoa pode manusear os braços de ambos robôs de maneira livre. No entanto este sistema também confere ao robô uma maior suscetibilidade a influência de outros estímulos externos como a ação da gravidade na dinâmica do robô tornado necessária o uso de soluções de controle complementares para garantir a precisão. \cite{nobody} Este problema é resolvido de forma diferente em cada uma das plataformas. No Baxter a compensação da gravidade é feita de forma completamente mecânica por uma série de molas \cite{nobody}, o que em parte explica seu maior tamanho. E no Meka esta é feita via software através do modelo dinâmico em conjunto da biblioteca KDL \cite{nobody}, conferindo um design mais compacto. 
+Embora com design completamente diferente, o Meka e o Baxter têm como semelhança o uso atuadores série elásticos em cada uma das juntas como elemento de segurança. Desta forma qualquer pessoa pode manusear os braços de ambos robôs além de proteger a estrutura em caso de colisão\cite{pratt1995series}. No entanto este sistema também confere ao robô uma maior suscetibilidade a influência de outros estímulos externos como a ação da gravidade na dinâmica do robô. \cite{nobody}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\linewidth]{tex/figs/baxter_production.jpg}
+    \caption{Baxter em linha de produção}
+    \label{fig:baxter}
+\end{figure}
+
+A compensação da gravidade é resolvido de forma diferente em cada uma das plataformas. No Baxter a compensação da gravidade é feita de forma completamente mecânica por uma série de molas \cite{nobody}, o que em parte explica seu maior tamanho. E no Meka esta é feita via software através do modelo dinâmico em conjunto da biblioteca Orocos KDL \cite{mekaguide}, conferindo um design mais compacto.
 
 % Robonauta -> Paradigmas atuais
 
 \section{Definição do problema}
 
-No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Daqui em diante será denominado apenas Meka. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Cada uma das juntas possui um atuador série elástico composto de um motor sem escova e um redução mecânica por onda de deformação.
+No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Daqui em diante será denominado apenas Meka. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender sua implicação no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando em conta as características próprias do sistema.
 
-Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender sua implicação no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando em conta as características próprias do sistema.
+% Foto Meka
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{figs/meka}
+    \caption{Braço Robótico Meka A2 disponível no Lara \cite{marcosps2016}}
+    \label{fig:meka_arm}
+\end{figure}
 
 \section{Metodologia}
 
 % Rever completamente
-Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir da métodos científicos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros braços robóticos avaliados pelos trabalhos de Murilo \cite{nobody} e Marcos \cite{nobody}.
+Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir da métodos científicos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros braços robóticos avaliados pelos trabalhos de Murilo \cite{murlow2014} e Marcos \cite{marcosps2016}.
 
 \subsection{Estudo controle de manipuladores}
 
@@ -83,7 +111,7 @@ Inicialmente foi feito um estudo sobre os trabalho anteriores desenvolvidos na p
 
 \subsection{Investigação e experimentação a partir da plataforma}
 
-Após o estudo preliminar foi adotado uma metodologia de investigação baseada em ciclos compostos por 3 etapas, descritas a seguir. Estas etapas são baseadas nos princípios de desenvolvimento ágil \ref{noref} e têm como objetivo acelerar e otimizar os esforços.
+Após o estudo preliminar foi adotado uma metodologia de investigação baseada em ciclos compostos por 3 etapas, descritas a seguir. Estas etapas são baseadas nos princípios de desenvolvimento ágil \footnote{\url{http://agilemanifesto.org}} e têm como objetivo acelerar e otimizar os esforços.
 
 % TODO Colocar Referência
 

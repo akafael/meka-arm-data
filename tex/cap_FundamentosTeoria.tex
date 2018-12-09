@@ -1,8 +1,6 @@
 \chapter{Fundamentos}\label{ch:teory-reference}
 
-\begin{flushright}
-\textit{"Se eu vi mais longe, foi por estar sobre ombros de gigantes"}\\ (Isaac Newton)
-\end{flushright}
+\resumodocapitulo{``Se eu vi mais longe, foi por estar sobre ombros de gigantes''\ (Isaac Newton)} 
 
 % Resumo opcional. Comentar se não usar.
 %\resumodocapitulo{}
@@ -10,22 +8,15 @@
 %A primeira etapa de qualquer processo na engenharia é modelagem. A partir dela relacionamos todos conhecimentos relacionados a um sistema em busca de avaliar o comportamento através de uma descrição mais simplificada. Uma das principais formas é a modelagem matemática, em que é descrito as relações lógicas entre cada parte do sistema,. E assim, através de operações matemáticas podemos analisar em profundidade bem como extrapolar o estudo para sistema com modelos parecidos.
 
 % Definição manipulador, resumo capítulo
-Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}.
-
-
-Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
 
 \section{Manipuladores Robóticos} 
 
+Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}.
+
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+
 % Modelagem Matemática
 Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.6\linewidth]{tex/figs/meka-inside.png}
-    \caption{Robô Meka - Vista interna (Fonte:  http://machinedesign.com )}
-    \label{fig:meka-inside}
-\end{figure}
 
 % Modelagem Cinemática
 Na cinemática estamos interessado apenas na geometria do movimento de pontos e objetos rígidos a partir da posição de cada ponto de referência e a variações no tempo, expressas como a velocidade e aceleração. Não são levados em conta as causas do movimento, isto é as forças e torques envolvidos.
@@ -51,11 +42,11 @@ Na representação dinâmica, em oposição a cinemática, analisa as causa e ef
 Quatérnions Duais são números duais em que as partes primárias e secundárias são quatérnios.  \cite{nobody}.
 
 \subsection{Quatérnions}
-%
+% Hamilton
 
 \subsection{Números Duais}
 
-Quatérnions tais os números complexos representam bem a magnitude e orientação no espaço. No entanto não permitem a representação de uma posição em particular \cite{Clifford1871DQ}, algo que é uma necessidade para algumas aplicações como o movimento de corpos rígidos. Para resolver este problema Clifford introduziu os números duais em 1871.
+Quatérnions tais os números complexos representam bem a magnitude e orientação no espaço, no entanto não permitem a representação de uma posição em particular \cite{Clifford1871DQ}, algo que é uma necessidade para algumas aplicações como o movimento de corpos rígidos. Para resolver este problema Clifford introduziu os números duais em 1871.
 
 O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que amplia as propriedades do números reais através da adição do elemento nilpotente $\eta^2 = 0$ em que $\eta \neq 0$. São representados de forma similar as números complexos
 
@@ -135,6 +126,19 @@ Podemos entender o problema da cinemática inversa como um problema de mapeament
 
 % Como forma de avaliar pequenas 
 
+\section{Braço Robótico Meka A2}
+
+% Descrição Meka
+Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
+
+% Foto Meka
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\linewidth]{tex/figs/meka-inside.png}
+    \caption{Robô Meka - Vista interna ( Fonte:  http://machinedesign.com )}
+    \label{fig:meka-inside}
+\end{figure}
+
 \section{Atuadores Série Elásticos}
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
@@ -143,7 +147,7 @@ Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implement
 
 Introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
 
-Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($T = k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
+Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($\tau = -k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
 \begin{figure}[H]
     \centering
@@ -152,7 +156,7 @@ Tendo que a mola está em série entre o atuador e a carga, a contração da mol
     \label{fig:sea}
 \end{figure}
 
-E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo como proposto \cite{nobody}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por uma placa de controle embarcada dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software. \cite{nobody}
+E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo \cite{pratt1997stiffness}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por placas DSP embarcadas dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software \cite{abeyrathna2013simulation}.
 
 Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas.
 
@@ -183,14 +187,23 @@ Para cada junta são utilizados encoders para a medidas das grandezas a posiçã
 % Descrição
 % Modelo 
 
-Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. É bastante popular na área de robótica por ter baixo deslizamento junto a uma alta capacidade de redução em um tamanho compacto. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, uma vez que rigidez possa ser modelada. Na figura \ref{fig:harmonic_drive}.
+Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. Na figura \ref{fig:harmonic_drive} temos detalhados os 3 componentes principais: as duas partes rígidas denotadas na figura como \textit{Circular Spline} e \textit{Wave Generator} e parte flexível \textit{Flex Spline}. Com a rotação do gerador de ondas a membrana flexível vai deslizando e movendo ao longo do engrenamento da parte mais externa gerando uma rotação em uma velocidade reduzida em relação ao velocidade de entrada.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\linewidth]{tex/figs/harmonic_drive.jpg}
-    \caption{Harmonic Drive (fonte: https://commons.wikimedia.org)}
+    \includegraphics[width=0.6\linewidth]{tex/figs/harmonic-gear-structure.jpg}
+    \caption{Harmonic Drive (Fonte: https://https://www.orientalmotor.com)}
     \label{fig:harmonic_drive}
 \end{figure}
+
+Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em um tamanho compacto é um tipo de transmissão bastante comum na área de robótica. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, desde que rigidez possa ser modelada.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.4\linewidth]{tex/figs/harmonic_drive.jpg}
+%     \caption{Harmonic Drive (fonte: https://commons.wikimedia.org)}
+%     \label{fig:harmonic_drive}
+% \end{figure}
 
 %% Porque é necessário colocar uma redução ?
 %% Gráfico Torque vs Velocidade
@@ -204,18 +217,18 @@ Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é 
 \subsection{Motores Brushless}
 % Descrição
 % Comparativo com ServoMotores
-Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. \cite{nobody} Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka.
+Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor Brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. \cite{nobody} Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.6\linewidth]{figs/maxon_servo.jpg}
+    \includegraphics[width = 0.5\linewidth]{figs/maxon_servo.jpg}
     \caption{Motor utilizado nas juntas do Ombro}
     \label{fig:maxon-servo}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.6\linewidth]{figs/maxon_flat_servo.jpg}
+    \includegraphics[width = 0.5\linewidth]{figs/maxon_flat_servo.jpg}
     \caption{Motor utilizado nas juntas do braço}
     \label{fig:maxon-flat-servo}
 \end{figure}
@@ -228,17 +241,63 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 %% -> Motor Brushless: controle de velocidade baseado em sensor hall ( mais barato ), mais suave
 % https://www.orientalmotor.com/brushless-dc-motors-gear-motors/technology/brushless-dc-motors-servo-motors-inverter.html
 
-\section{Braço Robótico Meka A2}
+\section{Sistema Embarcado}
 
-% Descrição Meka
-Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle. 
+O Meka é controlado pelo conjunto de dois sistema: um embarcado diretamente no braço para o controle da juntas e um externo sendo executado em PC com Ubuntu 12.04 com Kernel RTOS Xenomai em conjunto do sistema M3 da Meka Robotics e do framework ROS. No sistema embarcado são feita todas as interfaces com os sensores e atuadores. Enquanto no PC é feito o controle de cada uma das juntas e demais tarefas. A comunicação entre estes dois se dá por uma porta Ethernet e opera no protocolo proprietário EtherCAT. Desta forma é sistema pode ser facilmente expandido com o acréscimo de novos dispositivos e sensores.
+
+\subsection{DSP Control Boards}
+% Controle de torque
+O controle de cada junta a partir do acionamento dos motores e da leitura dos sensores é feito pela placa DSP desenvolvida pela Meka Robotics. Nela estão implementados o controle de posição, velocidade, torque e rigidez de cada atuador. Cada uma das placas possui uma interface de comunicação EtherCAT ligada a um concentrador dentro do tronco do robô. Sendo este ligado através da porta Ethernet a um computador embarcado externo responsável pelo comando de cada uma das partes do robô.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{figs/meka}
-    \caption{Braço Robótico Meka A2 disponívelo no Lara}
-    \label{fig:meka_arm}
+    \includegraphics[width = 0.8\linewidth]{figs/dsp-control-wrist}
+    \caption{Destaque Placas de controle dentro do braço \cite{nobody}}
+    \label{fig:dsp-control-wrist}
 \end{figure}
+
+O uso de DSP e um barramento de comunicação de auto desempenho no lugar facilita o controle em tempo real em relação a controles baseados em PC, além de oferecer modularidade e velocidade de inicialização\cite{edsinger2004domo}. Desta forma o os controles implementados no PC podem operar em frequências menores.
+
+% Foto Portas Atrás
+
+\subsection{Meka PC}
+
+Toda a parte de controle é feita no PC. Para iniciar a comunicação com o robô é executado um script que dispara os processos relacionados a comunicação com a robô via Socket pelo protocolo EtherCAT e a interface para Python. Um vez que o script está em execução o robô pode ser controlado por uma das interface da M3 entre elas a API em Python ou pelo ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:mekaarch}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
+    \caption{Diagrama da arquitetura do robô \cite{hoarau_2015}}
+    \label{fig:mekaarch}
+\end{figure}
+
+% m3rt_server
+% -> Interface via socket
+% -> Memórica compartilhada
+% -> API Python
+% -> ROS
+\section{M3}
+
+M3 é o sistema de controle em tempo real para os robô desenvolvidos pela Meka Robotics. Representa core do robô em termos de controle e responde por todos acionamentos, sensores e ações do Meka. É bem extensa e baseada em módulos visando permitir a integração de múltiplos tipos de hardware. Possui código aberto e atualmente este encontra-se todo disponível nos repositórios do LARA \footnote{\url{https://github.com/lara-unb/Meka/tree/master/meka_robotics_source/mekabot}} e da Ensta Paris \footnote{\url{https://github.com/ahoarau/mekabot}}.
+
+% Descrição dos diretórios da m3
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{tex/figs/m3arch.png}
+    \caption{Arquitetura sistema de controle M3 \cite{mekaguide}}
+    \label{fig:m3arch}
+\end{figure}
+
+\subsection{Arquivos de Configuração}
+
+Todas as configurações do Meka são guardadas através de arquivos $.yml$, localizados dentro da pasta $config$ de cada diretório. Em particular, dentro da pasta $m3ene$ estão tudo que é particular de configuração, drivers e ajuste para o funcionamento do robô do LARA. Esta pasta é baseada na $m3ens$ da Ensta Paris. Nela consta tudo para que o hardware completo disponível do robô e respectivos controladores funcionem, incluindo informações sobre sensor de força, atuadores, garra e parâmetros do modelo dinâmico do robô e da garra.
+
+\subsection{ROS}
+
+Robotics Operating System (ROS) é um \textit{framework} voltado para a robótica que reúne as melhores práticas para robótica em conjunto com um sistema de comunicação distribuída que permite o uso de diferentes linguagens de programação no mesmo projeto. Começou em 2007 reunindo conceitos de diversos projetos de software aberto anteriores e com o passar dos anos se tornou um padrão dentro da comunidade de robótica, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada exclusivamente para a industria. \cite{nobody}
+
+\subsection{Controladores}
 
 O controle é feito em cascata por uma série de controladores interagindo entre si. Cada nível opera na execução de uma tarefa possibilitando ao nível superior uma maior abstração do sistema e do objetivo a ser cumprido. Para garantir a estabilidade é preciso a dinâmica de cada controlador seja mais rápida. São estes, ordenados da dinâmica mais rápida para a mais lenta:
 
@@ -250,6 +309,17 @@ O controle é feito em cascata por uma série de controladores interagindo entre
     \item Controlador de Trajetória
 \end{enumerate}
 
+No Meka estes estão implementados a partir de uma série de controladores em cascata descritos da figura \ref{fig:controlarch}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{tex/figs/controlarch.png}
+    \caption{Arquitetura dos controladores do Meka \cite{mekaguide}}
+    \label{fig:controlarch}
+\end{figure}
+
+A compensação da gravidade é feita a partir do calculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$.
+
 %\subsection{Servo Controladores}
 % Entrada como torque ou velocidade e saída posição
 
@@ -257,59 +327,6 @@ O controle é feito em cascata por uma série de controladores interagindo entre
 
 %\subsection{Compensação da Gravidade}
 
-
 % Matemática por trás
 % Biblioteca Dinâmica
 % Controle Feedforward
-
-%\subsection{Controladores Cinemáticos}
-
-\section{Sistema Embarcado}
-
-O Meka é controlado pelo conjunto de dois sistema: um embarcado diretamente no braço para o controle da juntas e um externo sendo executado em PC com Ubuntu 12.04 com Kernel RTOS Xenomai em conjunto do sistema M3 da Meka Robotics e do framework ROS. No sistema embarcado são feita todas as interfaces com os sensores e atuadores. Enquanto no PC é feito o controle de cada uma das juntas e demais tarefas. A comunicação entre estes dois se dá por uma porta Ethernet e opera no protocolo proprietário EtherCAT. Desta forma é sistema pode ser facilmente expandido com o acréscimo de novos dispositivos e sensores.
-
-\subsection{DSP Control Boards}
-% Controle de torque
-O controle de cada junta a partir do acionamento dos motores e da leitura dos sensores é feito pela placa DSP desenvolvida pela Meka Robotics. Nela estão implementados o controle de posição, velocidade, torque e rigidez de cada atuador. Cada uma das placas possui uma interface de comunicação EtherCAT ligada a um concentrador dentro do tronco do robô. Sendo este ligado através da porta Ethernet a um computador embarcado externo responsável pelo comando de cada uma das partes do robô.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.7\linewidth]{figs/dsp-control-wrist}
-    \caption{Destaque Placas de controle dentro do braço \cite{nobody}}
-    \label{fig:dsp-control-wrist}
-\end{figure}
-
-% Foto Portas Atrás 
-
-\subsection{Meka PC}
-
-Toda a parte de controle é feita no PC. Para iniciar a comunicação com o robô é executado um script que dispara os processos relacionados a comunicação com a robô via Socket pelo protocolo EtherCAT e a interface para Python. Um vez que o script está em execução o robô pode ser controlado por uma das interface da M3 entre elas a API em Python ou pelo ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:m3arch}.
-
-% m3rt_server
-% -> Interface via socket
-% -> Memórica compartilhada
-% -> API Python
-% -> ROS
-\section{M3}
-
-M3 é o sistema de controle em tempo real para os robô desenvolvidos pela Meka Robotics. Representa core do robô em termos de controle e responde por todos acionamentos, sensores e ações do Meka. É bem extensa e baseada em módulos visando permitir a integração de múltiplos tipos de hardware. Possui código aberto e atualmente este encontra-se todo disponível nos repositórios do LARA \footnote{\url{https://github.com/lara-unb/Meka/tree/master/meka_robotics_source/mekabot}} e da Ensta Paris \footnote{\url{https://github.com/ahoarau/mekabot}}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
-    \caption{Diagrama da arquitetura do robô \cite{hoarau_2015}}
-    \label{fig:m3arch}
-\end{figure}
-
-% Descrição dos diretórios da m3
-
-\subsection{Arquivos de Configuração}
-
-Todas as configurações do Meka são guardadas através de arquivos $.yml$, localizados dentro da pasta $config$ de cada diretório. Em particular, dentro da pasta $m3ene$ estão tudo que é particular de configuração, drivers e ajuste para o funcionamento do robô do LARA. Esta pasta é baseada na $m3ens$ da Ensta Paris. Nela consta tudo para que o hardware completo disponível do robô e respectivos controladores funcionem, incluindo informações sobre sensor de força, atuadores, garra e parâmetros do modelo dinâmico do robô e da garra.
-
-\subsection{ROS}
-
-Robotics Operating System (ROS) é um \textit{framework} voltado para a robótica que reúne as melhores práticas para robótica em conjunto com um sistema de comunicação distribuída que permite o uso de diferentes linguagens de programação no mesmo projeto. Começou em 2007 reunindo conceitos de diversos projetos de software aberto anteriores e com o passar dos anos se tornou um padrão dentro da comunidade de robótica, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada exclusivamente para a industria. \cite{nobody}
-
-
-

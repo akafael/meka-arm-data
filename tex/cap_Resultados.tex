@@ -26,6 +26,7 @@ A partir da antiga documentação disponibilizada no site original da Meka Robot
 
 \begin{table}[H]
     \centering
+    \caption{Especificação Preliminar dos Atuadores, adaptado de \cite{mekaguide}}
     \begin{tabular}{c|ccccccc}
          \hline
          A2.R4 Spec & $\theta_0$ & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\theta_5$ & $\theta_6$\\
@@ -33,11 +34,10 @@ A partir da antiga documentação disponibilizada no site original da Meka Robot
          \input{tex/tables/a2armActuationDoc.tex}
          \hline
     \end{tabular}
-    \caption{Especificação Preliminar dos Atuadores, adaptado de \cite{nobody}}
     \label{tab:a2armActuationDoc}
 \end{table}
 
-Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ( $J0$, $J1$ e $J2$ ) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ($J0$, $J1$ e $J2$) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
 
 % Pulso Diferencial
 
@@ -45,11 +45,12 @@ Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada ju
 
 % encoder, temperatura, corrente, força
 
-A partir da documentação temos que não existe nenhuma forma de medida da velocidade, esta é apenas estimada com base na resposta
+Com base na documentação temos que não existe nenhuma forma de medida da velocidade, esta é apenas estimada a partir da posição pelo PC. Na tabela \ref{tab:a2armSensorDoc} são relacionados todos os sensores disponíveis.
 
 
 \begin{table}[H]
     \centering
+    \caption{Especificação dos Sensores, adaptado de \cite{mekaguide}}
     \begin{tabular}{ll}
          \hline
          Sensor & Descrição\\
@@ -57,11 +58,10 @@ A partir da documentação temos que não existe nenhuma forma de medida da velo
          \input{tex/tables/a2armSensorDoc.tex}
          \hline
     \end{tabular}
-    \caption{Especificação dos Sensores, adaptado de \cite{nobody}}
     \label{tab:a2armSensorDoc}
 \end{table}
 
-Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de encoder. De forma que percebe que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e por tanto mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial\cite{nobody} de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
+Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento nota-se o uso do encoder como sensor de força. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de sensor. Tendo que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e serão também mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial\cite{nobody} de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
 
 \subsection{Sistema Embarcado}
 
@@ -69,38 +69,31 @@ Como em um atuador série elástico a medida do torque é feita de maneira indir
 
 O código opera a partir de uma estrutura em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca m3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=1\linewidth]{figs/shm_arch}
     \caption{Arquitetura Controle C++}
     \label{fig:shm_arch}
 \end{figure}
 
-Todo o código relacionado ao controle do robô é disponibilizado pelo fabricante e compõe a biblioteca M3, implementada em Python e com interface em C++. A partir da análise do código foi possível observar alguns pontos importantes que contribuem para ineficiência dos controladores implementado anteriormente:
+Todo o código relacionado ao controle do robô é disponibilizado pelo fabricante e compõe a biblioteca M3, implementada em Python e com interface em C++. Dentro do programa de interface com o ROS pela análise do código foi possível observar alguns pontos importantes dos controladores controladores de posição com e sem compensação da gravidade. Os valores de velocidade e torque informados para o controle são completamente ignorados. Além disto a taxa de envio da informação obtida pelo ROS para a memória compartilhada é de apenas $100Hz$ definidos \textit{hardcode}. Foi feito um teste para alterar este valor para $1KHz$ porém o robô ficou completamente instável. De movo que novos testes não foram repetidos para evitar danos ao robô.
 
-\begin{itemize}
-    \item Apenas controle por posição de juntas está implementado em C++
-    \item A taxa de atualização da memória compartilhada é de $100 Hz$
-\end{itemize}
-
-Dentro do programa de interface com o ROS foi possível observar alguns pontos importantes que contribuem para ineficiência dos controladores controladores de posição com e sem compensação da gravidade. Os valores de velocidade e torque informados para o controle são completamente ignorados. Além disto a taxa de envio da informação obtida pelo ROS para a memória compartilhada é de apenas $100Hz$ definidos \textit{hardcode}. Foi feito um teste para alterar este valor para $1KHz$ porém o robô ficou completamente instável. De movo que novos testes não foram repetidos para evitar danos ao robô.
-
-Este valor é bem próximo das taxas de amostragem de $8 ms$ ($125 hz$) e $20 ms$ ($50 Hz$) dos controladores implementados em C++ obtidas para os melhores resultados em \cite{nobody} obtidos por Marco Pereira. Sendo estes valores definidos pelo tempo mínimo necessário para efetuar todos os cálculos relacionados ao controladores cinemáticos implementados usando quatérnions duais.
+Este valor é bem próximo das taxas de amostragem de $8 ms$ ($125 hz$) e $20 ms$ ($50 Hz$) dos controladores implementados em C++ obtidas para os melhores resultados em \cite{marcosps2016} obtidos por Marco Pereira. Sendo estes valores definidos pelo tempo mínimo necessário para efetuar todos os cálculos relacionados ao controladores cinemáticos implementados usando quatérnions duais.
 
 \section{Estudo Controladores M3}
 
 \subsection{Código de Demonstração}
 
-São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
+São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines \cite{nobody}. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
 
 \begin{figure}[H]
     \centering
-    \includegraphics{tex/figs/m3demo.png}
-    \caption{Interface Código de Demonstração}
+    \includegraphics[width=0.5\linewidth]{tex/figs/mekademo.png}
+    \caption{Interface Código de Demonstração \cite{mekaguide}}
     \label{fig:m3demo}
 \end{figure}
 
-Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo do código de demonstração e a documentação disponibilizada no ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{nobody}.
+Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo do código de demonstração e a documentação disponibilizada no site ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{koji2017}.
 
 A partir da execução do código de demonstração foi possível perceber que a posição das juntas varia conforme o valor de rigidez é ajustado. O valor da velocidade máxima e da rigidez variam de 0 a 1 internamente do código representando uma porcentagem do valor máximo possível. Ao que foi notado que mesmo com a rigidez no máximo o braço continua demonstrando um comportamento complacente. Com a rigidez em zero o controle é instável e o robô não consegue manter a posição e para valores abaixo de 0.2 o desempenho na execução de uma trajetória é visivelmente ruim.
 
@@ -117,7 +110,7 @@ Como a maior parte do código da M3 está implementada em Python, para avaliar o
     \item PWM
 \end{itemize}
 
-Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da m3 e obtido de forma recursiva pela biblioteca KDL\cite{nobody}.
+Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da M3 e obtido de forma recursiva pela biblioteca Orocos KDL\footnote{\url{http://www.orocos.org/KDL}}.
 
 \subsubsection{Avaliação do Atraso de Comunicação}\label{subsec:deadtimepython}
 
@@ -188,7 +181,7 @@ Feito uma avaliar a resposta do controlador em C++ foi aplicado um degrau para c
 
 Estes passos foram repetidos, ajustando-se os os parâmetros de rigidez e velocidade máxima do controlador. A velocidade máxima de cada junta pode ser ajusta para um valor entre $0$ e $1$, de igual forma a rigidez do braço gerada pelo controlador também pode ser ajustada entre $0$ e $1$. Valores maiores que 1 foram testados porém não houve mudança significativa em relação a comportamento com valor $1$. Muito embora em trabalhos anteriores na plataforma fosse usado $rigidez = 5$. Vale reforçar que estes são parâmetros usados pelos controladores no PC ( posição e compensação da gravidade ) de forma que não é possível obter diretamente os parâmetros de rigidez e velocidade máxima pela resposta do estado atual fornecida por \textit{/hummanoid\_state}.
 
-Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade próxima de $V = 1.5 rad/s$. O que mostra que os controladores de posição estão ajustados para operarem na faixa linear comum a todos os motores, que é abaixo da velocidade máxima do junta mais lenta $j4$ de $V_4 = 2.0 rad/s$, conforme registrado na tabela \ref{tab:a2armActuationDoc}.
+Já no experimento feito de referência mostrado na \ref{fig:jointIdentification_exp2v100v50}, pode-se notar que existe um atraso de cerca de $20ms$ entre o comando e o recebimento do sinal de resposta do atuador no tópico. Também percebe-se um erro grande em regime permanente das juntas do pulso ($5$ e $6$). Percebe-se uma longa rampa indicando aonde o controle da posição passou a atuar como um controle tudo ou nada passando a velocidade máxima possível. Curiosamente, embora sejam motores distintos em cada uma das juntas com diferentes limites de velocidade a resposta do controlador é indica uma velocidade próxima de $V = 1.5 rad/s$. O que mostra que os controladores de posição estão ajustados para operarem na faixa linear comum a todos os motores, que é abaixo da velocidade máxima do junta mais lenta $J4$ de $V_4 = 2.0 rad/s$, conforme registrado na tabela \ref{tab:a2armActuationDoc}.
 
 \begin{figure}[H]
     \centering
@@ -223,6 +216,7 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
 
 \begin{table}[H]
     \centering
+    \caption{Error Percentual para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     $$\begin{array}{cc|ccccccc}
          \hline
          V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
@@ -230,12 +224,12 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
          \input{tex/tables/jointIdentification_errortable.tex}
          \hline
     \end{array}$$
-    \caption{Error Percentual para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     \label{tab:jointIdentification_errortable}
 \end{table}
 
 \begin{table}[H]
     \centering
+    \caption{Percentual Overshot para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     $$\begin{array}{cc|ccccccc}
          \hline
          V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
@@ -243,12 +237,12 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
          \input{tex/tables/jointIdentification_overshottable.tex}
          \hline
     \end{array}$$
-    \caption{Percentual Overshot para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     \label{tab:jointIdentification_overshottable}
 \end{table}
 
 \begin{table}[H]
     \centering
+    \caption{Valor em regime permanente para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     $$\begin{array}{cc|ccccccc}
          \hline
          V & S & \theta_0 & \theta_1 & \theta_2 & \theta_3 & \theta_4 & \theta_5 & \theta_6\\
@@ -256,7 +250,6 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
          \input{tex/tables/jointIdentification_steadstatetable.tex}
          \hline
     \end{array}$$
-    \caption{Valor em regime permanente para diferentes valores de velocidade ($V$) e rigidez ($S$)}
     \label{tab:jointIdentification_steadstatetable}
 \end{table}
 
@@ -316,7 +309,7 @@ Ao que é percebido a origem do ruído na medida da velocidade: em momentos que 
 %       type: diff_butterworth
 %     type: df_chain
 
-Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt}$ $80Hz$ representa em torno $10 \cross f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, filtros mais melhores podem ser implementados, visando melhorar a qualidade da estimativa.
+Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt}$ $80Hz$ representa em torno $10 \cross f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
 
 Avaliando o mesmo valor de rigidez para $10\%$ da velocidade máxima, nota-se um ruído maior para as velocidades apresentadas. Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
 
@@ -345,9 +338,7 @@ Em um manipulador robótico composto por juntas rotacionais, a tarefa de desloca
 
 Tais relações geométricas indicam que a tarefa de manter uma orientação possui uma relação com o movimento necessário pelas juntas notadamente diferente da tarefa de manter uma posição. De forma a permitir separar a complacência da posição ou da orientação conforme necessário para a tarefa. Ao se utilizar a representação cinemática por Quatérnions Duais tanto a referência da posição como a da orientação estão acopladas. Um bom controlador por outro lado necessita de uma rápida resposta a uma perturbação, gerando uma rigidez maior ao invés de uma complacência. Como para os experimentos em questão a orientação de referência era mantida como a orientação inicial do robô, parte do esforço de controle era direcionado em manter a orientação. O que gerava uma pertubação na posição. Este problema em composição com diferença de velocidade dos atuadores do pulso e da ombro fazia com que uma perturbação na orientação percebida no pulso provoca-se uma movimentação juntas do ombro e por consequência uma movimentação da posição do cotovelo. O que gerava uma aproximação do cotovelo para a base provocando em cascata uma maior chance colisão do braço com o tronco e uma dificuldade em manter a estabilidade as referências do controle através da cinemática diferencial. Pois o robô se aproximava do limite da junta e de regiões com bloqueio de movimento.
 
-As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{nobody} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{nobody}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em experimento disponível no YouTube \footnote{https://www.youtube.com/watch?v=bU7Ocphhifg} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
-
-
+As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{marcosps2016} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{koji2017}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em experimento disponível no YouTube \footnote{https://www.youtube.com/watch?v=bU7Ocphhifg} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
 
 % aqui entra o kung-fu 
 
@@ -374,7 +365,7 @@ As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o
 
 \subsection{Experimento de Referência}
 
-Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{nobody}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
+Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{marcosps2016}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
 
 No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo a $100\%$. De modo que ao ser alterar o valor, foram obtidos resultados bem próximos para a resposta das juntas como ilustrado na figura \ref{fig:squareStifff9stateEvalv100s70}.
 
@@ -398,52 +389,64 @@ No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo 
 
 Uma vez definido as condições usadas foi analisado individualmente cada junta, para avaliar quais tinha a maior contribuição no erro e como estava sendo solicitadas ao longo da trajetória. No que foi percebido que a juntas do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J0v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J0v100s70.png}
     \caption{Resposta Juntas $J0$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J0v100s70}
 \end{figure}
 
 Para as demais juntas do ombro $J1$ e $J2$ o erro também foi pequeno e o torque foi aproximadamente constante. Sofrendo um pouco mais de variação em relação a $J0$ mas ainda dentro de uma margem pequena, como mostrado pelas figura \ref{fig:squareStiffJ9stateEval_J1v100s70} e \ref{fig:squareStiffJ9stateEval_J2v100s70}.
 
+\vspace{1cm}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J1v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J1v100s70.png}
     \caption{Resposta Juntas $J1$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J1v100s70}
 \end{figure}
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J2v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J2v100s70.png}
     \caption{Resposta Juntas $J2$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J2v100s70}
 \end{figure}
 
 A junta $J4$ é a mais lenta dentre todas as juntas. A partir da figura \ref{fig:squareStiffJ9stateEval_J4v100s70}, nota-se uma resposta bem diferente em relação as demais. A junta não consegue acompanhar da mesma forma a referência e leva a uma acumulo de erro. Observa-se que velocidade sofre saltos próximos de $0.2 rad/s$ e o torque oscila bastante em determinadas regiões.
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J4v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J4v100s70.png}
     \caption{Resposta Juntas $J4$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J4v100s70}
 \end{figure}
 
 As juntas do pulso $J5$ e $J6$ estão acopladas mecanicamente pelo mecanismo de diferencial e separadas em $Yall$ e $Pitch$ através de um controlador dentro do PC. Em ambas é percebido o maior erro no acompanhamento da referência, similar ao ocorrido no experimento de resposta a degrau na figura\ref{fig:jointIdentification_exp3v70v100}. Porém é notado uma alta variação no torque da exercido pela junta nas figura \ref{fig:squareStiffJ9stateEval_J5v100s70} e \ref{fig:squareStiffJ9stateEval_J6v100s70}.
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J5v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J5v100s70.png}
     \caption{Resposta Juntas $J5$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J5v100s70}
 \end{figure}
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J6v100s70.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ9stateEval_J6v100s70.png}
     \caption{Resposta Juntas $J6$ para Velocidade em $70\%$ e Stifness = $100\%$ }
     \label{fig:squareStiffJ9stateEval_J6v100s70}
 \end{figure}
 
 Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscilação produzida pelas demais juntas é transmitida diretamente ao pulso. No entanto, tendo uma rigidez mais baixa, um erro grande em regime permanente acaba tendo um impacto grande no erro da orientação do efetuador. Se considerar ainda que o ponto de referência usado está deslocado em relação ao centro do pulso diferencial, este erro de orientação será refletido também em um erro de posição.
+
