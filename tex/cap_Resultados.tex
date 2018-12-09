@@ -3,7 +3,11 @@
 % Simple, clear purpose and principles give rise to complex, intelligent behavior. Complex rules and regulations give rise to simple and stupid behavior. (Dee Hock)
 
 % Resumo opcional. Comentar se não usar.
-%\resumodocapitulo{Resumo opcional.}
+\resumodocapitulo{``De forma mais simples, uma vez que cada pedaço de matéria no
+Universo é, de alguma forma, afetado por todos os outros pedaços de
+matéria do Universo, é teoricamente possível extrapolar a totalidade da
+criação – cada sol, cada planeta, suas órbitas, sua composição e sua
+história econômica e social a partir de, digamos, um pedaço de pão-de-ló.''(Guia do Mochileiro da Galáxia, Douglas Adams}
 
 % Resumo informações da arquitetura relevantes do ponto de vista de controle
 
@@ -12,7 +16,7 @@
 
 % \digraph[scale=0.5]{ab}{rankdir=LR; a->b;}
 
-Para algum conhecimento se tornar cientifico é preciso a sistematização. Nesta capítulo serão apresentados os resultados qualitativos e numéricos do estudo feito em cima da plataforma.
+%Para algum conhecimento se tornar cientifico é preciso a sistematização. Nesta capítulo serão apresentados os resultados qualitativos e numéricos do estudo feito em cima da plataforma.
 
 \section{Estudo Arquitetura}
 
@@ -185,7 +189,7 @@ Já no experimento feito de referência mostrado na \ref{fig:jointIdentification
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp1v100v100.png}
+    \includegraphics[width=0.8\linewidth]{tex/figs/jointIdentification_exp1v100v100.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 1}
     \label{fig:jointIdentification_exp1v100v100}
 \end{figure}
@@ -194,21 +198,21 @@ Pela figura \ref{fig:jointIdentification_exp2v100v50} observa-se que a variaçã
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp2v100v50.png}
+    \includegraphics[width=0.8\linewidth]{tex/figs/jointIdentification_exp2v100v50.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 1 e Rigidez = 0.5}
     \label{fig:jointIdentification_exp2v100v50}
 \end{figure}
 
 Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o tempo necessário para cada uma das juntas atingir a posição aumentou, tendo em vista a fase em que o controlador utiliza a velocidade máxima permitida, o erro em regime permanente para cada um permanece com pouca alteração. No entanto é percebido que a inclinação da curva durante as fase de controle entre o tempo $t=1s$ e $2s$ com a velocidade máxima muda de forma diferente para cada uma duas juntas. Estes dados encontram-se na figura \ref{fig:jointIdentification_exp3v70v100}.
 
+No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite} e também próximo do valor obtido na seção \ref{subsec:deadtimepython}. O que reforça a tese boa parte do atraso ocorre devido a camadas abaixo do nó de ROS. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada. Como obtido experimentalmente por Marcos.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{tex/figs/jointIdentification_exp3v70v100.png}
+    \includegraphics[width=0.8\linewidth]{tex/figs/jointIdentification_exp3v70v100.png}
     \caption{Resposta a um degrau de entrada com Velocidade = 0.7 e Rigidez = 1}
     \label{fig:jointIdentification_exp3v70v100}
 \end{figure}
-
-No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite} e também próximo do valor obtido na seção \ref{subsec:deadtimepython}. O que reforça a tese boa parte do atraso ocorre devido a camadas abaixo do nó de ROS. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada. Como obtido experimentalmente por Marcos.
 
 % Comentar sobre o varição do intervalo de tempo medido da entre os comandos enviados para a \hummanoid_command
 
@@ -474,16 +478,29 @@ As juntas do pulso $J5$ e $J6$ estão acopladas mecanicamente pelo mecanismo de 
 
 Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscilação produzida pelas demais juntas é transmitida diretamente ao pulso. No entanto, tendo uma rigidez mais baixa, um erro grande em regime permanente acaba tendo um impacto grande no erro da orientação do efetuador. Se considerar ainda que o ponto de referência usado está deslocado em relação ao centro do pulso diferencial, este erro de orientação será refletido também em um erro de posição.
 
-\begin{table}[H]
-    \centering
-    \caption{Avaliação esforço de controle por junta}
-    $$\begin{array}{cc|ccccccc}
-         \hline
-         V & S & J_0 & J_1 & J_2 & J_3 & J_4 & J_5 & J_6\\
-         \hline
-         \input{tex/tables/jointIdentification_errortable.tex}
-         \hline
-    \end{array}$$
-    \label{tab:squareStiffEffort_table}
-\end{table}
+% \begin{table}[H]
+%     \centering
+%     \caption{Avaliação torque por junta}
+%     $$\begin{array}{cc|ccccccc}
+%          \hline
+%          V & S & J_0 & J_1 & J_2 & J_3 & J_4 & J_5 & J_6\\
+%          \hline
+%          \input{tex/tables/squareStiff_jointEffort.tex}
+%          \hline
+%     \end{array}$$
+%     \label{tab:squareStiff_jointEffort}
+% \end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \caption{Esforço de controle por junta}
+%     $$\begin{array}{cc|ccccccc}
+%          \hline
+%          V & S & J_0 & J_1 & J_2 & J_3 & J_4 & J_5 & J_6\\
+%          \hline
+%          \input{tex/tables/squareStiff_jointControlEffort.tex}
+%          \hline
+%     \end{array}$$
+%     \label{tab:squareStiff_jointControlEffort}
+% \end{table}
 

@@ -1,6 +1,6 @@
 \chapter{Fundamentos}\label{ch:teory-reference}
 
-\resumodocapitulo{``Se eu vi mais longe, foi por estar sobre ombros de gigantes''\ (Isaac Newton)} 
+\resumodocapitulo{``Se eu vi mais longe, foi por estar sobre ombros de gigantes''\\ (Isaac Newton)} 
 
 % Resumo opcional. Comentar se não usar.
 %\resumodocapitulo{}
@@ -80,49 +80,49 @@ A representação em quatérnions duais traz como vantagens com relação a outr
 
 Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas é feita com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
 
-\section{Cinemática de Manipuladores}
+% \section{Cinemática de Manipuladores}
 
-Para controlar o movimento do braço robótico é necessário o uso de alguma forma de representação. São usada 
+% Para controlar o movimento do braço robótico é necessário o uso de alguma forma de representação. São usada 
 
-\subsection{Descrição DH}
+% \subsection{Descrição DH}
 
-Cada barra do braço, pode ser descrita a partir dos dois pontos em cada uma das extremidades. Por sua vez cada um dos pontos é definido por 6 parâmetros, 3 para a posição em relação aos eixos x,y e z e 3 para orientação a partir da rotação em relação a cada um dos eixos. Somando 12 parâmetros para cada barra. Como forma de reduzir a quantidade de parâmetros necessários para cada link é adotado uma convenção baseada em apenas 4 valores denominada parâmetros de Denavit-Hatemberg. Cada barra é descrita a partir de 2 valores de distância e dois ângulos. Esta redução leva em conta que as partes do braço estão sempre conectadas e por tanto a descrição a partir dos pontos nas extremidade traria sempre redundância nos valores. Assim é descrito a relação entre cada um dos pontos através das medidas da distância e orientação dos encaixes nas extremidades de cada barra.
+% Cada barra do braço, pode ser descrita a partir dos dois pontos em cada uma das extremidades. Por sua vez cada um dos pontos é definido por 6 parâmetros, 3 para a posição em relação aos eixos x,y e z e 3 para orientação a partir da rotação em relação a cada um dos eixos. Somando 12 parâmetros para cada barra. Como forma de reduzir a quantidade de parâmetros necessários para cada link é adotado uma convenção baseada em apenas 4 valores denominada parâmetros de Denavit-Hatemberg. Cada barra é descrita a partir de 2 valores de distância e dois ângulos. Esta redução leva em conta que as partes do braço estão sempre conectadas e por tanto a descrição a partir dos pontos nas extremidade traria sempre redundância nos valores. Assim é descrito a relação entre cada um dos pontos através das medidas da distância e orientação dos encaixes nas extremidades de cada barra.
 
-% Ilustração DH
+% % Ilustração DH
 
-% Configuração de junta?
-Estes parâmetros são definidos de tal forma que apenas um possui variação com o acionamento. Em juntas prismáticas este representa variação da distância enquanto em enquanto em juntas cilíndricas um do ângulos que variam. O registro de posição atual de cada junta é referenciado como a configuração das juntas ou a pose do efetuador.
+% % Configuração de junta?
+% Estes parâmetros são definidos de tal forma que apenas um possui variação com o acionamento. Em juntas prismáticas este representa variação da distância enquanto em enquanto em juntas cilíndricas um do ângulos que variam. O registro de posição atual de cada junta é referenciado como a configuração das juntas ou a pose do efetuador.
 
-\subsection{Cinemática Direta}
+% \subsection{Cinemática Direta}
 
-Uma vez representado a posição do robô é necessário relacionar os parâmetros controlados: ângulo ou dimensão das juntas com a posição e orientação desejada. Este problema é denominado cinemática direta do robô. Para um link individual este pode ser definido pela seguinte transformação linear $A^1_0$ que leva um ponto $p_0$ no espaço a outro ponto $p_1$.
+% Uma vez representado a posição do robô é necessário relacionar os parâmetros controlados: ângulo ou dimensão das juntas com a posição e orientação desejada. Este problema é denominado cinemática direta do robô. Para um link individual este pode ser definido pela seguinte transformação linear $A^1_0$ que leva um ponto $p_0$ no espaço a outro ponto $p_1$.
 
-\begin{equation}
-    p_1 = A^1_0 p_0
-\end{equation}
+% \begin{equation}
+%     p_1 = A^1_0 p_0
+% \end{equation}
 
-Para um manipulador composto por links ligados em série este problema possui uma solução simples definido pela soma das contribuições no deslocamento por cada um dos links. Em outras palavras, efetuado a transformação linear de cada ponto da base até o efetuador.
+% Para um manipulador composto por links ligados em série este problema possui uma solução simples definido pela soma das contribuições no deslocamento por cada um dos links. Em outras palavras, efetuado a transformação linear de cada ponto da base até o efetuador.
 
-\begin{equation}
-    p_n = A^{n-1}_{n}\cdots A^2_1 A^1_0 p_0
-\end{equation}
+% \begin{equation}
+%     p_n = A^{n-1}_{n}\cdots A^2_1 A^1_0 p_0
+% \end{equation}
 
-Para uma representação da posição a partir de matrizes a transformação linear que leva um ponto a outro é obtida através das matrizes homogenias, definidas como
+% Para uma representação da posição a partir de matrizes a transformação linear que leva um ponto a outro é obtida através das matrizes homogenias, definidas como
 
 % Matriz Homogenia
 
-\subsection{Cinemática Inversa}
+% \subsection{Cinemática Inversa}
 
-A cinemática inversa consiste em identificar uma possível configuração de juntas que satisti
+% A cinemática inversa consiste em identificar uma possível configuração de juntas que satisti
 
-\subsection{Matrizes Homogenias}
+% \subsection{Matrizes Homogenias}
 
 % Jacobiano
-\subsection{Cinemática Diferencial}
+% \subsection{Cinemática Diferencial}
 
-O problema da cinemática inversa nem sempre é simples de resolver e muitas vezes possui solução única. Uma forma de resolver é buscar uma solução aproximada na redondezas da posição atual.
+% O problema da cinemática inversa nem sempre é simples de resolver e muitas vezes possui solução única. Uma forma de resolver é buscar uma solução aproximada na redondezas da posição atual.
 
-Podemos entender o problema da cinemática inversa como um problema de mapeamento de uma região $R^n$ em uma representação de posição no espaço $(X,Y,Z)$ em conjunto de uma orientação $(Pich, Yaw, Row)$.
+% Podemos entender o problema da cinemática inversa como um problema de mapeamento de uma região $R^n$ em uma representação de posição no espaço $(X,Y,Z)$ em conjunto de uma orientação $(Pich, Yaw, Row)$.
 
 % Como forma de avaliar pequenas 
 
@@ -241,6 +241,17 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 %% -> Motor Brushless: controle de velocidade baseado em sensor hall ( mais barato ), mais suave
 % https://www.orientalmotor.com/brushless-dc-motors-gear-motors/technology/brushless-dc-motors-servo-motors-inverter.html
 
+\subsection{Pulso Diferencial}
+
+Para o movimento do pulso é utilizado um mecanismo diferencial (figura \ref{fig:meka-wrist}, baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} é acionado os dois motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\linewidth]{tex/figs/meka_wrist.png}
+    \caption{Diagrama mecanismo diferencial do pulso \cite{mekartfd}}
+    \label{fig:meka-wrist}
+\end{figure}
+
 \section{Sistema Embarcado}
 
 O Meka é controlado pelo conjunto de dois sistema: um embarcado diretamente no braço para o controle da juntas e um externo sendo executado em PC com Ubuntu 12.04 com Kernel RTOS Xenomai em conjunto do sistema M3 da Meka Robotics e do framework ROS. No sistema embarcado são feita todas as interfaces com os sensores e atuadores. Enquanto no PC é feito o controle de cada uma das juntas e demais tarefas. A comunicação entre estes dois se dá por uma porta Ethernet e opera no protocolo proprietário EtherCAT. Desta forma é sistema pode ser facilmente expandido com o acréscimo de novos dispositivos e sensores.
@@ -264,9 +275,9 @@ O uso de DSP e um barramento de comunicação de auto desempenho no lugar facili
 
 Toda a parte de controle é feita no PC. Para iniciar a comunicação com o robô é executado um script que dispara os processos relacionados a comunicação com a robô via Socket pelo protocolo EtherCAT e a interface para Python. Um vez que o script está em execução o robô pode ser controlado por uma das interface da M3 entre elas a API em Python ou pelo ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:mekaarch}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{figs/m3_arch.pdf}
+    \includegraphics[width=0.9\linewidth]{figs/m3_arch.pdf}
     \caption{Diagrama da arquitetura do robô \cite{hoarau_2015}}
     \label{fig:mekaarch}
 \end{figure}
@@ -295,11 +306,20 @@ Todas as configurações do Meka são guardadas através de arquivos $.yml$, loc
 
 \subsection{ROS}
 
-Robotics Operating System (ROS) é um \textit{framework} voltado para a robótica que reúne as melhores práticas para robótica em conjunto com um sistema de comunicação distribuída que permite o uso de diferentes linguagens de programação no mesmo projeto. Começou em 2007 reunindo conceitos de diversos projetos de software aberto anteriores e com o passar dos anos se tornou um padrão dentro da comunidade de robótica, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada exclusivamente para a industria. \cite{nobody}
+Robotics Operating System (ROS) é um \textit{middleware} desenvolvido para a robótica. Desenvolver um robô é uma tarefa muito complexa para uma pessoa só ou mesmo um grupo de pesquisa, de modo que o ROS atua conectando diversos \textit{frameworks}, bibliotecas permitindo o uso de uma variedade de tipos de hardware e linguagens de programação \cite{quigley2009ros}. De igual forma atua conectando toda a comunidade de robótica em uma linguagem comum. Seu desenvolvimento começou em 2007 reunindo conceitos de diversos projetos de software aberto existentes até então e com o passar dos anos se tornou um padrão dentro da comunidade, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada para a industria.
+
+Como exemplo temos o módulo \textit{MovitIt} ( figura \ref{fig:movit-baxter} ) que reúne varias aplicações para facilitar o planejamento de trajetórias bem como a definição dos parâmetros de ajuste dos controladores com auxílio de métodos heurísticos através da biblioteca OMPL \cite{openMPL}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{tex/figs/movit-ros-baxter.png}
+    \caption{Planejamento de Trajetória no Baxter com Auxílio do MoveIt \cite{coleman2014reducing}}
+    \label{fig:movit-baxter}
+\end{figure}
 
 \subsection{Controladores}
 
-O controle é feito em cascata por uma série de controladores interagindo entre si. Cada nível opera na execução de uma tarefa possibilitando ao nível superior uma maior abstração do sistema e do objetivo a ser cumprido. Para garantir a estabilidade é preciso a dinâmica de cada controlador seja mais rápida. São estes, ordenados da dinâmica mais rápida para a mais lenta:
+O controle do Meka é feito em estrutura de cascata por uma série de controladores interagindo entre si. Cada nível opera na execução de uma tarefa possibilitando ao nível superior uma maior abstração do sistema e do objetivo a ser cumprido. Para garantir a estabilidade é preciso a dinâmica de cada controlador seja mais rápida. São estes, ordenados da dinâmica mais rápida para a mais lenta:
 
 % Diagrama Controle em Cascata de Manipuladores
 \begin{enumerate}
@@ -318,7 +338,7 @@ No Meka estes estão implementados a partir de uma série de controladores em ca
     \label{fig:controlarch}
 \end{figure}
 
-A compensação da gravidade é feita a partir do calculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$.
+A compensação da gravidade é feita a partir do calculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$ \cite{mekaguide}.
 
 %\subsection{Servo Controladores}
 % Entrada como torque ou velocidade e saída posição
