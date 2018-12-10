@@ -1,21 +1,40 @@
 #+TITLE: Thesis 
 #+AUTHOR: Rafael Lima
+#+TODO: TODO DOING | DONE
 
-* Document [/]
-** TODO Update Symbols List
-* Introduction [0/3]
-** TODO History Background
-** TODO Metodology
-** TODO Thesis Structure Presentation
-* Fundamentation [0/4]
-** TODO Dual Quaternions [%]
-** TODO Robotics Kinematics [%]
-** TODO Robotics Control [%]
-** TODO M3 System [%]
-* Development [/]
+* Document [1/1]
+** DONE Acrescentar anexo com descrição do conteúdo do cd/repositório
+** TODO Refazer Resumo
+ * Está com cara de introdução e não de resumo
+* Introduction [3/3]
+** DONE History Background
+** DONE Metodology
+** DONE Thesis Structure Presentation
+* Fundamentation [1/4]
+** TODO Dual Quaternions [/]
+ * Not Started Yet
+** TODO Robotics Kinematics [/]
+ * Not Started Yet
+** TODO Robotics Mechanics[/]
+*** TODO Encoder
+**** TODO Explicar o que é um encoder
+*** TODO SEA
+**** TODO Add image from a real SEA
+**** TODO Explaing why complaice at joint level.
+** DONE M3 System [/] 
+* Development [0/1]
+** TODO Acrescentar parágrafo sobre desempenho de sistemas
+** TODO Resolver problema de Capítulo muito pequeno. (3pg)
+ * Sugestão prof. Geovany: fundir com capitulo 4
 * Results [1/3]
 ** DONE Indentification C++
-** TODO MoveUP
+** DOING MoveUP
+ * Acrescentar dados experimentais ( tempo para começar a se mover, error, esforço controle )
 ** TODO SquareStiff
-* Conclusion [/]
-* Reference [/]
+ * Acrescentar dados experimentais ( tempo controle vs tempo sensor )
+** TODO Montar mini conclusão do capítulo
+* Conclusion [1/1]
+** DONE Comentar sobre aspectos mecânico, eletrônicos e computacionais
+* Reference [0/1]
+** TODO Corrigir referências marcadas com cite nobody
+** TODO Corrigir referências com informações faltando
