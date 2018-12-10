@@ -1,6 +1,6 @@
 \chapter{Fundamentos}\label{ch:teory-reference}
 
-\resumodocapitulo{``Se eu vi mais longe, foi por estar sobre ombros de gigantes''\\ (Isaac Newton)} 
+\resumodocapitulo{``Se eu vi mais longe, foi por estar sobre ombros de gigantes''(Isaac Newton)} 
 
 % Resumo opcional. Comentar se não usar.
 %\resumodocapitulo{}
@@ -13,7 +13,7 @@
 
 Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}.
 
-Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por 7 juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
 
 % Modelagem Matemática
 Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
@@ -129,7 +129,7 @@ Para este trabalho a representação do robô usando quatérnions duais e opera�
 \section{Braço Robótico Meka A2}
 
 % Descrição Meka
-Cada uma das juntas do Meka A2 utiliza um atuador elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
+Cada uma das juntas do Meka A2 utiliza um atuador série elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
 
 % Foto Meka
 \begin{figure}[H]
@@ -243,13 +243,20 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 
 \subsection{Pulso Diferencial}
 
-Para o movimento do pulso é utilizado um mecanismo diferencial (figura \ref{fig:meka-wrist}, baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} é acionado os dois motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
+Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fig:meka-wrist} e \ref{fig:armdroid-wrist}), baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} é acionado os dois motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.6\linewidth]{tex/figs/meka_wrist.png}
     \caption{Diagrama mecanismo diferencial do pulso \cite{mekartfd}}
     \label{fig:meka-wrist}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 0.6\linewidth]{tex/figs/armdroid_diff_wrist.jpg}
+    \caption{Pulso diferenecial do robô Armdroid (Fonte: https://www.flickr.com/photos/chris_malcolm)}
+    \label{fig:armdroid-wrist}
 \end{figure}
 
 \section{Sistema Embarcado}
@@ -263,7 +270,7 @@ O controle de cada junta a partir do acionamento dos motores e da leitura dos se
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\linewidth]{figs/dsp-control-wrist}
-    \caption{Destaque Placas de controle dentro do braço \cite{nobody}}
+    \caption{Destaque Placas de controle dentro do braço}
     \label{fig:dsp-control-wrist}
 \end{figure}
 
