@@ -24,6 +24,8 @@ A primeira etapa foi de estudo do código e documentação em busca de identific
 
 \subsection{Sistema Mecânico}
 
+Inicialmente foi avaliado as limitações de atuação e sensoriamento através das especificações fornecidas na documentação. Estes valores, embora possam não corresponder a situação atual do sistema servem como um primeiro parâmetro para orientar as análises feitas posteriormente pelo outros métodos. A documentação original do Meka foi obtida através de arquivos de backup armazenados no PC de desenvolvimento, uma vez que o site oficial está indisponível.
+
 \subsubsection{Atuadores}
 
 A partir da antiga documentação disponibilizada no site original da Meka Robotics\footnote{\url{http://mekabot.com/wiki/doku.php?id=user_guides:arm_a2r4}} temos os seguintes parâmetros da especificação do robô, registrados na tabela \ref{tab:a2armActuationDoc}. Nesta tabela são indicando os limites permitidos pela plataforma segundo especificação de projeto, obviamente com o desgaste e o tempo estes valores podem sofrer alterações.
@@ -65,7 +67,7 @@ Com base na documentação temos que não existe nenhuma forma de medida da velo
     \label{tab:a2armSensorDoc}
 \end{table}
 
-Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento nota-se o uso do encoder como sensor de força. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de sensor. Tendo que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e serão também mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial\cite{nobody} de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
+Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento nota-se o uso do encoder como sensor de força. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de sensor. Tendo que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e serão também mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
 
 \subsection{Sistema Embarcado}
 
@@ -86,9 +88,13 @@ Este valor é bem próximo das taxas de amostragem de $8 ms$ ($125 hz$) e $20 ms
 
 \section{Estudo Controladores M3}
 
+O sistema de controle M3 fornece diversos controladores e incorporados a plataforma. Para avaliar o desempenho dos controladores já existes foram feitos alguns experimentos, detalhados a seguir.
+
 \subsection{Código de Demonstração}
 
-São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines \cite{nobody}. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
+São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo dos códigos de demonstração e a documentação disponibilizada no site ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{koji2017}.
+
+Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines \cite{nobody}. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
 
 \begin{figure}[H]
     \centering
@@ -96,8 +102,6 @@ São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao 
     \caption{Interface Código de Demonstração \cite{mekaguide}}
     \label{fig:m3demo}
 \end{figure}
-
-Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo do código de demonstração e a documentação disponibilizada no site ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{koji2017}.
 
 A partir da execução do código de demonstração foi possível perceber que a posição das juntas varia conforme o valor de rigidez é ajustado. O valor da velocidade máxima e da rigidez variam de 0 a 1 internamente do código representando uma porcentagem do valor máximo possível. Ao que foi notado que mesmo com a rigidez no máximo o braço continua demonstrando um comportamento complacente. Com a rigidez em zero o controle é instável e o robô não consegue manter a posição e para valores abaixo de 0.2 o desempenho na execução de uma trajetória é visivelmente ruim.
 
@@ -126,9 +130,9 @@ Para verificar o acumulo do erro após sucessivas interações foi feito o teste
 
 Por outro ao ser enviado a mesma posição de referência suscetivamente, o braço desloca até o ponto desejado e permanece parado, mostrando que o controle para um referência em degrau é estável. O que viabilizou os testes de identificação a partir do uso de uma entrada em Degrau.
 
-\subsubsection{Entrada em rampa}
+\subsubsection{Acompanhamento de Referência}
 
-Foram então feitos testes para um referência em rampa. Como se trata de um controle feito de maneira discreta, foram passados valores de ângulos em sequência incrementados por um valor contante e separados por um pequeno tempo de espera emulando uma entrada em rampa porém discretizada no tempo.
+No intuito de avaliar o comportamento dos controladores com um referência  com variação fixa da velocidade foram então feitos testes para uma entrada em rampa. Como se trata de um controle feito de maneira discreta, foram passados valores de ângulos em sequência incrementados por um valor contante e separados por um pequeno tempo de espera emulando uma entrada em rampa porém discretizada no tempo.
 
 Para estudo da velocidade de resposta do controlador, o valor incrementado entre um ângulo e outro foi mantido enquanto o intervalo de tempo era ajustado. Neste experimento foi observado que para intervalos muito pequenos de tempo o robô não consegue acompanhar mantendo uma velocidade constante. Em tais casos a velocidade é mantida aproximadamente constante e com o acúmulo do erro ocorre saltos periódicos para compensar o atraso em relação a referência. Este fato decorre da interação entre o controlador de posição das juntas e o controlador de torque. O erro acumulado é corrigido com a passagem de um torque mais alto produzindo um salto na posição, seguido de uma leve oscilação para compensar o efeito da inercia.
 
@@ -173,7 +177,7 @@ Em C++ não estão disponíveis todos os modos de operação para o uso a partir
 
 \subsection{Controle de Posição de Juntas}\label{subsec:stepcpp}
 
-Feito uma avaliar a resposta do controlador em C++ foi aplicado um degrau para cada uma das juntas individualmente com registro dos dados. Este teste foi definido a partir dos seguintes passos:
+Para avaliar a resposta do controlador em C++ foi aplicado um degrau para cada uma das juntas individualmente com registro dos dados. Este teste foi definido a partir dos seguintes passos:
 
 \begin{enumerate}
     \item Começa com a junta na posição $0$ rad
@@ -337,7 +341,7 @@ Ao que é percebido a origem do ruído na medida da velocidade: em momentos que 
 %       type: diff_butterworth
 %     type: df_chain
 
-Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt}$ $80Hz$ representa em torno $10 \cross f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
+Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt} = 80Hz$ representa em torno $10 f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
 
 Avaliando o mesmo valor de rigidez para $10\%$ da velocidade máxima, nota-se um ruído maior para as velocidades apresentadas. Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
 
@@ -366,7 +370,7 @@ Em um manipulador robótico composto por juntas rotacionais, a tarefa de desloca
 
 Tais relações geométricas indicam que a tarefa de manter uma orientação possui uma relação com o movimento necessário pelas juntas notadamente diferente da tarefa de manter uma posição. De forma a permitir separar a complacência da posição ou da orientação conforme necessário para a tarefa. Ao se utilizar a representação cinemática por Quatérnions Duais tanto a referência da posição como a da orientação estão acopladas. Um bom controlador por outro lado necessita de uma rápida resposta a uma perturbação, gerando uma rigidez maior ao invés de uma complacência. Como para os experimentos em questão a orientação de referência era mantida como a orientação inicial do robô, parte do esforço de controle era direcionado em manter a orientação. O que gerava uma pertubação na posição. Este problema em composição com diferença de velocidade dos atuadores do pulso e da ombro fazia com que uma perturbação na orientação percebida no pulso provoca-se uma movimentação juntas do ombro e por consequência uma movimentação da posição do cotovelo. O que gerava uma aproximação do cotovelo para a base provocando em cascata uma maior chance colisão do braço com o tronco e uma dificuldade em manter a estabilidade as referências do controle através da cinemática diferencial. Pois o robô se aproximava do limite da junta e de regiões com bloqueio de movimento.
 
-As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{marcosps2016} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{koji2017}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em experimento disponível no YouTube \footnote{https://www.youtube.com/watch?v=bU7Ocphhifg} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
+As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o acréscimo de uma espuma de proteção no tronco do robô, minimizando o risco de dano. Em \cite{marcosps2016} foi resolvida pelo Marcos Pereira pela escolha de posições iniciais com o cotovelo distante do tronco e operando em uma região limitada por um plano paralelo a frente do robô. Em \cite{koji2017}, Rafael Koji, no capítulo 3, página 33, apresenta como solução a separação do acoplamento do controle das 2 juntas do pulso ($j5$ e $j6$) com a redução do modelo cinemático do manipulador para 5 juntas apenas. O que permitindo o controle de posição em malha fechada com 5 graus de liberdade e a orientação em malha aberta pelas juntas do pulso, reduzindo as instabilidades. Em um experimento disponível no YouTube \footnote{https://sites.utexas.edu/hcrl/2010/11/09/experiments-on-prioritized-compliant-control/} Luís Sentis demonstra a utilização de campos potenciais como forma de manter a postura do robô e evitar a colisão enquanto permite a priorização do controle complacente em uma das 3 direções $X$, $Y$ e $Z$ a partir da arquitetura implementada em \cite{sentis2007synthesis} no Meka.
 
 % aqui entra o kung-fu 
 
@@ -391,11 +395,9 @@ As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o
 
 \section{Estudo Controladores Cinemáticos}
 
-\subsection{Avaliação do controle de Rigidez}
+\subsection{Análise individual dos Controladores de Junta}
 
 Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{marcosps2016}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
-
-No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo a $100\%$. De modo que ao ser alterar o valor, foram obtidos resultados bem próximos para a resposta das juntas como ilustrado na figura \ref{fig:squareStifff9stateEvalv100s70}.
 
 \begin{figure}[H]
     \centering
@@ -403,17 +405,6 @@ No entanto foi observado que o valor máximo para rigidez é de $1$ equivalendo 
     \caption{Resposta dos Controladores de Juntas para Velocidade em $70\%$ e Stifness = $5$ }
     \label{fig:squareStiffMarcos}
 \end{figure}
-
-\vspace{1cm}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStifff9stateEvalv100s70.png}
-    \caption{Resposta dos Controladores de Juntas para Velocidade em $70\%$ e Stifness = $100\%$ }
-    \label{fig:squareStifff9stateEvalv100s70}
-\end{figure}
-
-\subsubsection{Análise individual dos Controladores de Junta}
 
 Uma vez definido as condições usadas foi analisado individualmente cada junta, para avaliar quais tinha a maior contribuição no erro e como estava sendo solicitadas ao longo da trajetória. No que foi percebido que a juntas do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
 
@@ -504,3 +495,33 @@ Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscila�
 %     \label{tab:squareStiff_jointControlEffort}
 % \end{table}
 
+\subsection{Controle de Rigidez}
+
+O mesmo experimento foi feito para vários valores de rigidez. Nas figuras \ref{fig:squareStiffJ10stateEval_J6v100s90}, \ref{fig:squareStiffJ6stateEval_J6v100s50} e \ref{fig:squareStiffJ7stateEval_J6v100s20} são apresentados a resposta da junta $J6$ do pulso, para rigidez igual a $90\%$,$50\%$ e $20\%$ respectivamente. Conforme a rigidez é reduzida o erro aumenta em relação ao controle. Com $20\%$ de rigidez o atuador varia pouco a posição e o maior dentre os 3 casos.
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ10stateEval_J6v100s90.png}
+    \caption{Resposta Juntas $J6$ para Velocidade em $100\%$ e Stifness = $90\%$ }
+    \label{fig:squareStiffJ10stateEval_J6v100s90}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ6stateEval_J6v100s50.png}
+    \caption{Resposta Juntas $J6$ para Velocidade em $100\%$ e Stifness = $50\%$ }
+    \label{fig:squareStiffJ6stateEval_J6v100s50}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/squareStiffJ7stateEval_J6v100s20.png}
+    \caption{Resposta Juntas $J6$ para Velocidade em $100\%$ e Stifness = $20\%$ }
+    \label{fig:squareStiffJ7stateEval_J6v100s20}
+\end{figure}

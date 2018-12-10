@@ -6,7 +6,7 @@
 
 Em trabalhos anteriores foram propostos e implementados vários controladores cinemáticos como forma de corrigir o efeito das pertubações devido a interação com uma agente externo e da ação da gravidade. No entanto o desempenho foi abaixo do apresentado pela código de demonstração do fabricante para o robô e pelos mesmos controladores no uso em outra plataforma explicitando a necessidade de um maior estudo da arquitetura do manipulador robótico Meka A2. Com base nisto foi feito uma análise do componentes do braço e a implementação dos sistemas de controle das juntas em software e hardware. Neste capítulo será descrito os métodos de investigação utilizados bem como experimentos efetuados.
 
-Em \cite{nocite} Marcos propôs diversas métricas e avaliar os controladores cinemáticos implementados. Enquanto foi possível um excelente detalhamento da desempenho comparativa de cada um dos controladores, foi descoberto limitações na interação com a plataforma. Neste trabalho será analisado o robô enquanto sistema observando as implicações dos componentes mecânicos, software e sistemas de controle operando de forma conjunta. O objetivo é avaliar dentro do que já foi implementado os limites de desempenho permitidos pela plataforma para permitir um melhor desempenho em trabalhos futuros. 
+Em \cite{marcosps2016} Marcos propôs diversas métricas e avaliar os controladores cinemáticos implementados. Enquanto foi possível um excelente detalhamento da desempenho comparativa de cada um dos controladores, foi descoberto limitações na interação com a plataforma. Neste trabalho será analisado o robô enquanto sistema observando as implicações dos componentes mecânicos, sistemas embarcados e sistemas de controle operando de forma conjunta. O objetivo é avaliar dentro do que já foi implementado os limites de desempenho permitidos pela plataforma para permitir um melhor desempenho em trabalhos futuros.
 
 \begin{figure}[H]
     \centering
@@ -63,7 +63,7 @@ Como forma de alcançar um maior desempenho com o Meka foram avaliadas cada part
 
 \section{Avaliação Preliminar}
 
-Inicialmente foi feito um estudo a partir do código de demonstração do fabricante feito em Python para avaliar quais as possíveis forma de controlar o braço. Em que foi levantando todos os controladores implementados na biblioteca m3 e testados individualmente através da API em Python. Estão disponíveis os seguintes controladores pela biblioteca:
+Inicialmente foi feito um estudo a partir do código de demonstração do fabricante feito em Python para avaliar quais as possíveis forma de controlar o braço. Em que foi levantando todos os controladores implementados na biblioteca m3 e testados individualmente através da API em Python. Foram analisados os seguintes controladores disponíveis pelo M3:
 
 \begin{itemize}
     \item Controle de Posição
@@ -75,7 +75,7 @@ Inicialmente foi feito um estudo a partir do código de demonstração do fabric
 
 %Nesta avaliação foi notado que alguns dos controladores da m3 não estavam disponíveis nas interfaces em C++. 
 
-Para análise do comportamento em conjunto dos controladores cinemáticos foi definido o controlador de posição com compensação da gravidade, uma vez que este que é usado pela ROS.
+Para avaliar o comportamento em conjunto dos controladores cinemáticos apenas o controlador de posição com compensação da gravidade foi utilizado, uma vez que este que é usado pela ROS.
 
 \section{Estudo Controladores Cinemáticos}
 
@@ -85,7 +85,7 @@ Nos experimentos de deslocamento em linha reta foram avaliados o intervalo de te
 
 %\subsection{Avaliação tempo de amostragem}
 
-Para avaliar os tempos de atuação foi repetido o mesmo experimento para o deslocamento em linha reta na vertical. Neste experimento foi estudado o tempo necessário para o atuador começar a se mover dado um comando bem o tempo necessário para o controle convergir.
+O estudo dos tempos de atuação foi obtido repetindo o mesmo experimento para o deslocamento em linha reta na vertical em diferentes condições de velocidade e rigidez. Neste experimento foi estudado o tempo necessário para o atuador começar a se mover dado um comando bem o tempo necessário para o controle convergir.
 
 % Resultados
 
@@ -93,27 +93,26 @@ Para avaliar os tempos de atuação foi repetido o mesmo experimento para o desl
 
 \section{Layout Experimentos}
 
-Para avaliar a resposta do sistema para controle dos ângulos de junta foi proposto um teste com estímulo pelo degrau. Esta avaliação foi efetuada para interação pela API em Python e pelo ROS. Para ambos casos os dados obtidos foram registrados em arquivo utilizando a ferramenta rosbag. 
+Como forma de avaliar a resposta do sistema para controle dos ângulos de junta foi proposto um teste com o uso de um degrau de referência de entrada em malha fechada. Este experimento foi efetuado utilizando as interfaces da M3 definidas pela API em Python e pelo ROS. Para ambos casos os dados obtidos foram registrados em arquivo utilizando a ferramenta rosbag com auxílio do nó \textit{shm\_humanoid\_interface}.
 
 % Comentar sobre como a informação é publicada nos tópicos
-
 % Levantamento dos problemas
 
 % Investigação de possíveis causas
 
 \subsection{shm\_humanoid\_interface}
 
-Este é um nó do ROS disponibilizado pela Meka Robotics para a comunicação via ROS com o Meka. Representa uma das possíveis interfaces com a M3 através do acesso direto a memória compartilhada. Através deste nó são gerados dois tópicos no ros: $/humanoid\_state$ e $/humanoid\_command$. A cada interação a informação atual do tópico $/hummanoid_command$ é passada para a memória compartilhada e a leitura dos sensores é então escrita no tópico $/hummanoid_state$. Na versão atual são somente interpretados os comando de posição das juntas através dos modos de controle com e sem compensação da gravidade.
+Este é um nó do ROS disponibilizado pela Meka Robotics para a comunicação via ROS com o Meka. Representa uma das possíveis interfaces com a M3 através do acesso direto a memória compartilhada. em \ref{fig:mekaarch} são detalhados todas as possíveis interfaces. Através deste nó são gerados dois tópicos no ros: $/humanoid\_state$ e $/humanoid\_command$. A cada interação a informação atual do tópico $/hummanoid\_command$ é passada para a memória compartilhada e a leitura dos sensores é então escrita no tópico $/hummanoid\_state$. Na versão atual são somente interpretados os comando de posição das juntas através dos modos de controle com e sem compensação da gravidade.
 
-\subsection{ROS Bags}
+\subsection{Rosbags}
 
-ROS Bags é um utilitário do ROS para o registro dos eventos em cada tópico. A informação publicada nos tópicos é registrada em formato yaml e permite que que posteriormente possa ser reproduzida em tópicos tal uma simulação. Desta forma dispensa a necessidade de manter o hardware conectado para analisar o comportamento do robô ao longo do tempo bem como permitir a análise de diferentes experimentos diretamente pelas ferramentas do ROS como o \textit{ros\_plot}. Ou ainda conectar os resultados de um hardware real com uma simulação como forma de efetuar uma validação cruzada do comportamento real em comparação do comportamento simulado. Para tal basta executar o programa e indicar quais tópicos serão monitorados. Ao final da execução é registrado um arquivo com as informações com a extensão $.bag$. Internamente os dados são registrados em formato $.yaml$ o que permite a leitura direta.
+Rosbags\footnote{\url{https://wiki.ros.org/rosbag}} é um utilitário do ROS para o registro dos eventos em cada tópico. A informação publicada nos tópicos é registrada em formato \textit{yaml} e permite que que posteriormente possa ser reproduzida em tópicos tal uma simulação. Desta forma dispensa a necessidade de manter o hardware conectado para analisar o comportamento do robô ao longo do tempo bem como permitir a análise de diferentes experimentos diretamente pelas ferramentas do ROS como o \textit{ros\_plot}. Ou ainda, permite conectar os resultados de um hardware real com uma simulação como forma de efetuar uma validação cruzada do comportamento real em comparação do comportamento simulado. Para tal basta executar o programa e indicar quais tópicos serão monitorados. Ao final da execução é registrado um arquivo com as informações com a extensão $.bag$. Internamente os dados são registrados em formato $.yaml$ o que permite a leitura direta.
 
-No entanto a representação da informação é um pouco verbosa gerando um arquivo grande. Assim foi utilizado o programa $bag2csv$ para converter para o formato $.csv$ para facilitar o processamento. Em seguida o programa $sed$ para pequenos ajustes e a separação da leitura dos tópicos  $/humanoid\_state$ e $/humanoid\_command$ em diferentes arquivos. Este processo foi incorporado a um Makefile para permitir o processamento rápido de todos os arquivos $.bag$ utilizando o recurso de processamento paralelo da ferramenta \textit{GNU make}\footnote{\url{https://www.gnu.org/software/make/manual/html_node/Parallel.html}}.
+Neste trabalho todos os experimentos foram registrados usando rosbag para permitir o uso futuro por outras pessoas. No entanto, como a representação da informação é um pouco verbosa gerando um arquivo grande, foi utilizado o programa $bag2csv$ para converter para o formato $.csv$ para facilitar o processamento. Em seguida o programa $sed$ para pequenos ajustes e a separação da leitura dos tópicos  $/humanoid\_state$ e $/humanoid\_command$ em diferentes arquivos. Este processo foi incorporado a um Makefile para permitir o processamento rápido de todos os arquivos $.bag$ utilizando o recurso de processamento paralelo da ferramenta \textit{GNU make}\footnote{\url{https://www.gnu.org/software/make/manual/html_node/Parallel.html}}.
 
 \subsection{Python API}
 
-Além do controle via ROS, a M3 possui uma interface através de uma API em Python que permite uma liberdade maior de controle uma vez que possui mais recursos já implementados. Além do modos de controle por posição estão também disponíveis o controle direto por torque e por velocidade das juntas. Estão implementados um controlador para compensação do efeito da gravidade a partir da biblioteca KDL com base no momento de inércia de cada junta.
+A M3 possui uma interface através de uma API em Python que permite uma liberdade maior de controle uma vez que possui mais recursos já implementados. Além dos modos de controle por posição estão também disponíveis o controle direto por torque e por velocidade das juntas e o controle por PWM dos motores. Na M3 estão implementados um controlador para compensação da gravidade para o controle de torque e de posição a partir da biblioteca KDL com base no momento dinâmico do braço descrito no arquivo $m3ene/meka_doc/ma26/m3dynamatics\_right\_ma26.yml$. Este arquivo pode ser alterado para permitir o controle com um atuador com peso diferente, sem ter que alterar os parâmetros dos controladores.
 
 % Explicação sobre funcionamento da biblioteca
 % Diagrama: Comando/Estado -> Memória "bot" -> "proxy.step()"
