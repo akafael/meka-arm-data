@@ -209,7 +209,7 @@ Pela figura \ref{fig:jointIdentification_exp2v100v50} observa-se que a variaçã
 
 Como esperado, no terceiro experimento ao se alterar a velocidade para $70\%$ o tempo necessário para cada uma das juntas atingir a posição aumentou, tendo em vista a fase em que o controlador utiliza a velocidade máxima permitida, o erro em regime permanente para cada um permanece com pouca alteração. No entanto é percebido que a inclinação da curva durante as fase de controle entre o tempo $t=1s$ e $2s$ com a velocidade máxima muda de forma diferente para cada uma duas juntas. Estes dados encontram-se na figura \ref{fig:jointIdentification_exp3v70v100}.
 
-No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \ref{nocite} e também próximo do valor obtido na seção \ref{subsec:deadtimepython}. O que reforça a tese boa parte do atraso ocorre devido a camadas abaixo do nó de ROS. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada. Como obtido experimentalmente por Marcos.
+No 3 experimentos o atraso obtido foi próximo de $20ms$. Este valor é próximo dos valores de intervalo de tempo obtidos para os melhores resultados dos controladores implementados em \cite{marcosps2016} e também próximo do valor obtido na seção \ref{subsec:deadtimepython}. O que reforça a tese boa parte do atraso ocorre devido a camadas abaixo do nó de ROS. Notadamente, quando o controlador opera com frequências maiores, haverá o impacto do atraso da comunicação passa a ser mais significativo levando a instabilidade caso este não seja considerado no dinâmica implementada. Como obtido experimentalmente por Marcos.
 
 \begin{figure}[H]
     \centering
@@ -263,7 +263,7 @@ Tomando-se o diferença entre o valor passado de referência e o valor alcançad
 
 % Acrescentar Tempo de Resposta 
 
-\subsection{Avaliação na execução de Trajetória}
+\subsection{Avaliação na execução de Trajetória em linha reta}
 
 % Obter dt em /hummanoid_state e /hummanoid_command para cada um dos casos
 % Experimento MoveUP
@@ -290,7 +290,7 @@ No primeiro experimento, figura \ref{fig:moveUp1}, o robô executou a trajetóri
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp1stateEvalv70s10.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp1stateEvalv70s10.png}
     \caption{Experimento Trajetória na Vertical $dt=10ms$ }
     \label{fig:moveUp1}
 \end{figure}
@@ -299,7 +299,7 @@ Já quando o intervalo de tempo entre os pontos é muito abaixo de $20ms$ é per
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp3stateEvalv70s50.png}
+    \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp3stateEvalv70s50.png}
     \caption{Experimento Trajetória na Vertical $dt=2ms$ }
     \label{fig:moveUp3}
 \end{figure}
@@ -310,6 +310,7 @@ Já quando o intervalo de tempo entre os pontos é muito abaixo de $20ms$ é per
 
 Em extensão ao estudo feito na seção \ref{subsec:stepcpp}, foi analisado a resposta da velocidade fornecida pelo tópico ao longo da trajetória. Pelas figuras \ref{fig:jointIdentification_exp1v100v100}, \ref{fig:jointIdentification_exp2v100v50} e \ref{fig:jointIdentification_exp3v70v100} foi notado notado que a velocidade é aproximadamente constante ao longo dos momentos de maior deslocamento e com valores próximos de $v_{max} = 0.5 rad/s$ para todas as juntas. Para avaliar o comportamento ao longo do tempo foi comparado a resposta fornecida no tópico do ROS $/hummanoid\_state$ para os valores de \textit{position}, \textit{velocity} e \textit{effort}, respectivamente posição, velocidade e torque nas juntas, conforme mostrado nas figuras \ref{fig:jointIdentificationFullSpeed_stiff90p} e \ref{fig:jointIdentificationSpeed10p_stiff90p2}.
 
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \includegraphics[width = \linewidth]{tex/figs/jointIdentificationFullSpeed_stiff90p.png}
@@ -341,14 +342,14 @@ Ao que é percebido a origem do ruído na medida da velocidade: em momentos que 
 %       type: diff_butterworth
 %     type: df_chain
 
-Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{\filt} = 80Hz$ representa em torno $10 f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
+Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{filt} = 80Hz$ representa em torno $10 f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
 
 Avaliando o mesmo valor de rigidez para $10\%$ da velocidade máxima, nota-se um ruído maior para as velocidades apresentadas. Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = \linewidth]{tex/figs/jointIdentificationSpeed10p_stiff90p2.png}
-    \caption{Resposta Controladores Juntas - Velocidade em 10\%e 90\% de rigidez}
+    \caption{Resposta Controladores Juntas - Velocidade em 10\%e rigidez em 90\%}
     \label{fig:jointIdentificationSpeed10p_stiff90p2}
 \end{figure}
 
@@ -484,7 +485,7 @@ Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscila�
 
 % \begin{table}[H]
 %     \centering
-%     \caption{Esforço de controle por junta}
+%     \caption{Esforço de controle por junta a partir da posição}
 %     $$\begin{array}{cc|ccccccc}
 %          \hline
 %          V & S & J_0 & J_1 & J_2 & J_3 & J_4 & J_5 & J_6\\
@@ -497,7 +498,7 @@ Naturalmente são as juntas mais próximo do efetuador e portanto toda a oscila�
 
 \subsection{Controle de Rigidez}
 
-O mesmo experimento foi feito para vários valores de rigidez. Nas figuras \ref{fig:squareStiffJ10stateEval_J6v100s90}, \ref{fig:squareStiffJ6stateEval_J6v100s50} e \ref{fig:squareStiffJ7stateEval_J6v100s20} são apresentados a resposta da junta $J6$ do pulso, para rigidez igual a $90\%$,$50\%$ e $20\%$ respectivamente. Conforme a rigidez é reduzida o erro aumenta em relação ao controle. Com $20\%$ de rigidez o atuador varia pouco a posição e o maior dentre os 3 casos.
+O mesmo experimento foi feito para vários valores de rigidez. Nas figuras \ref{fig:squareStiffJ10stateEval_J6v100s90}, \ref{fig:squareStiffJ6stateEval_J6v100s50} e \ref{fig:squareStiffJ7stateEval_J6v100s20} são apresentados a resposta da junta $J6$ do pulso, para rigidez igual a $90\%$,$50\%$ e $20\%$ respectivamente. Os experimentos foram feitos para todo as juntas no entanto esta foi a que apresentou a maior variação. Onde foi observado que conforme a rigidez é reduzida o erro aumenta em relação ao controle. Com $20\%$ de rigidez o atuador varia pouco a posição e o maior dentre os 3 casos.
 
 \vspace{1cm}
 
@@ -525,3 +526,10 @@ O mesmo experimento foi feito para vários valores de rigidez. Nas figuras \ref{
     \caption{Resposta Juntas $J6$ para Velocidade em $100\%$ e Stifness = $20\%$ }
     \label{fig:squareStiffJ7stateEval_J6v100s20}
 \end{figure}
+
+\section{Conclusão}
+
+Juntando todas as análise foi percebido que o erro do pulso está tendo um peso significativo nos resultados obtidos para o erro. Pois como comentado, devido a geometria do braço, o pulso têm um papel significativo na rotação. E este efeito gera também a translação do ponto de referência do efetuador. O que mostra que a rotação está tendo um impacto significativo no movimento do braço que até então era inexplicado.
+
+Resgatando da definição de Quatérnions Duais Unitários, temos que os primeiros 4 elementos estão relacionados com a orientação e como se trata de um Quatérnion Unitário, cada deve variar entre $-1$ e $1$. De modo que a variação de 2 grau é gera um coeficiente $sen(\theta_x/2)$ =  $sen(2/2)$ = $sen(1)$ que é aproximadamente $pi/180$ = $0.017$. Como os parâmetros do robôs são representados em metros, podemos avaliar o coeficiente gerado pelo deslocamento de $2cm$ com $t_x/2$ = $0.02/2$ = $0.01$. Dado que o cálculo do erro definido pelos controladores em \cite{marcosps2016} trata todos os coeficientes do quatérnion dual com o mesmo peso, temos que o desvio de $2 graus$ gera um impacto maior que o desvio de $2cm$. O que é um pouco desproporcional se considerarmos que o lado do quadrado é de $10cm$.
+

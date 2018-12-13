@@ -52,7 +52,6 @@
 \usepackage{indentfirst}
 \usepackage{float}
 \usepackage{caption}
-\usepackage{subcaption} % permite o uso de multiplas figuras com legenda (ambiente subfigure)
 % Pacotes para adição de figuras do inkscape
 \usepackage{graphicx}
 \usepackage{lastpage}
@@ -160,13 +159,17 @@ A cada, inclusive aos muitos não citados aqui, um sincero Muito Obrigado!
 
 \resumo{resumo}{
 % Investigação Meka A2 Arm
-% - Robótica Colaborativa, Inclusão
-% - Sistemas em Tempo Real
-% - Arquitetura de controle de sistema mecatrônico
+% - Robótica Colaborativa, Inclusão e Segurança
+Robótica é uma ótima ferramenta porém, apesar de tantos avanços ainda de uso muito restrito devido as suas limitações em termos de flexibilidade na execução de tarefas e segurança. Robôs industriais tradicionais demandam um programação bastante precisa pois qualquer nível de incerteza externa pode representar um risco para o robô e pessoas nas proximidades.
 
-Robótica é uma ferramenta fantástica porém bastante complexa por envolver conhecimentos das mais diversas áreas. Boa parte das coisas que usamos no dia a dia foram feitas a partir de uma ou mais etapas de fabricação utilizando robôs. Porém ainda existe muito a ser feito para que estes possam deixar o isolamento das fábricas e possam integrar os lares em auxílio as tarefas do dia-a-dia, tal temos com os tantos eletrodomésticos baseados em motores elétricos e sistemas de controle de temperatura, que antes eram igualmente restritos a industria.
+% - Dificuldade no controle de posição
+Como forma de resolver este problema foram introduzidos atuadores série elásticos que permitem absorver um pouco do impacto em caso de colisões oferecendo maior segurança e um controle de torque mais preciso. No entanto, apesar da redução dos risco, este tipo de atuador não garante um controle preciso de posição.
 
-Este trabalho têm como objetivo o detalhamento da arquitetura do sistema de controle implementado no braço robótico complacente Meka A2. Em trabalhos anteriores feitos no Laboratório de Automação e Robótica foi observado desempenho. Desta forma foi investigado cada aspecto dos sistemas existentes em complemento ao \textit{framework} desenvolvido como forma de permitir um maior desempenho em futuros trabalhos.
+% - Dificuldade no controle do meka e Estudo da arquitetura
+Neste trabalho é investigado a arquitetura do Meka A2, um manipulador robótico antropomórfico composto por sete juntas complacentes. Em trabalhos anteriores foi observado uma dificuldade no controle de posição através de controladores cinemáticos. Desta forma foi feito um estudo de toda a arquitetura do robô para identificar quais aspectos contribuem para um desempenho ruim. 
+
+% - Conclusão
+Concluiu-se que apesar da complacência, aos maiores limitações estão na estrutura dos controladores de baixo nível implementados para controle das juntas. E por tanto é sugerido a modelagem completa do robô para a implementação de controladores melhores que permitam explorar melhor a capacidade dos atuadores e sensores disponíveis para trabalhos futuros.
 
 \medskip{}
 
@@ -175,9 +178,8 @@ Palavras Chave: Robôs Colaborativos, Atuadores Série-Elásticos, Sistemas em T
 }\vspace*{2cm}
 
 \resumo{Abstract}{
-Robotics is an amazing tool but complex due to the knowledge requiriment from several different fields. Most of the dayly based itens are made using at least one robotic aided process. But, there is a lot to be done to spread the robotics outside from the factories to the people's home in their dayle lives.
+Robotics is an great tool although with narrow use due to its dexterity and safety despite ... Industrial robotics require very precise programming since any uncertainty level could represent a risk for the robot or people nearby. Series Elastic Actuators were developed addressing this concern. They reduce the risk due to the energy absorption capacity at one collision and provided better torque control. But, the safety improvement add the trade off of worse position control. This work aim to provide a better robot Meka A2 arm architecture acknowledgement regards the kinematics control problems reported. It's a robotics manipulator with seven complaint joints available at the Robotics and Automation Laboratory at UnB. That the major limitation are the low level joint controlers from despite the joint compliance is the conclusion. And, it is suggested the complete complete robot model development that enable better control system implementation to fulfill the hardware potential.
 
-This project aims the analysis of the control system architecture from the corobot Meka A2 arm.
 
 \medskip{}
 

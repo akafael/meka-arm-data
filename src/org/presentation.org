@@ -1,0 +1,29 @@
+#+TITLE: Presentation
+
+* Title
+* Sumary
+
+* Motivação 
+ * Segurança em Sistemas Rígidos
+
+* Robótica Colaborativa
+ * 
+
+* Descrição do Problema
+ * Baixo desempenho do meka
+ * Ausência de Documentação
+ * Sistema Complacente 
+
+* Investigação
+ * Trabalhos Anteriores
+
+* Metodologia
+ * 
+
+* Estudo Documentação e Código
+
+* Simulações controle
+
+* Experimentos Meka
+
+* Resultados

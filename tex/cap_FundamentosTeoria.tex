@@ -9,9 +9,12 @@
 
 % Definição manipulador, resumo capítulo
 
-\section{Manipuladores Robóticos} 
+\vspace{0.5cm}
+Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Serão colocados na seguinte ordem: modelagem, sistemas mecânicos, embarcados e por fim o sistemas de controle.
 
-Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Segundo a ISO8373:2012, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado \cite{nobody}. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro \cite{nobody}.
+\section{Manipuladores Robóticos}
+
+Segundo a ISO8373:2012\footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:8373:ed-2:v1:en}}, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro.
 
 Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
 
@@ -39,10 +42,29 @@ Na representação dinâmica, em oposição a cinemática, analisa as causa e ef
 \section{Quatérnions Duais}
 
 % Representação da Posição e Orientação
-Quatérnions Duais são números duais em que as partes primárias e secundárias são quatérnios.  \cite{nobody}.
+Quatérnions Duais são números duais em que as partes primárias e secundárias são quatérnios. São utilizados neste trabalho para as representações cinemáticas das posições e velocidades das juntas e do efetuador do braço.
 
 \subsection{Quatérnions}
 % Hamilton
+Quatérnios foram introduzidos em 1848 por Hamilton \cite{hamilton1848xi} como forma de permitir representar as rotações no espaço da mesma maneira que é feito com números complexos para rotações no plano através da multiplicação por uma potência do número imaginário $\mathbf{i}$. São definidos da seguinte forma:
+
+\begin{equation}
+    H = w + x\mathbf{{i}} + y\mathbf{{j}} + z\mathbf{{k}}
+\end{equation}
+
+Em que $w$,$x$,$y$ e $z$ são os quatro coeficientes do Quatérnion compostos por números Reais. e $\mathbf{{i}}$, $\mathbf{{j}}$ e $\mathbf{{k}}$ são unidades imaginarias para as quais são válidas as seguintes operações
+
+\begin{equation}
+    \mathbf{{i}}^2 = \mathbf{{j}}^2 = \mathbf{{k}}^2 = -1
+\end{equation}
+\begin{equation}
+    \mathbf{i}\mathbf{j} = \mathbf{k},\ \mathbf{j}\mathbf{k} = \mathbf{i},\ \mathbf{k}\mathbf{i} = \mathbf{j}
+\end{equation}
+\begin{equation}
+    \mathbf{j}\mathbf{i} = \mathbf{k},\ \mathbf{k}\mathbf{j} = \mathbf{i},\ \mathbf{i}\mathbf{k} = \mathbf{j}
+\end{equation}
+
+Cada um dos coeficiente representa uma rotação em torno de um dos 3 eixos cartesianos. Observe que o produto não é comutativo, o que também é uma propriedade de rotações.
 
 \subsection{Números Duais}
 
@@ -57,26 +79,25 @@ O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que
 % Propriedades
 
 % Autodiferenciação
-Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{nobody} por permitirem o cálculo de forma mais eficiente com menos distorções. Uma das aplicações é operação de auto-diferenciação de polinômios que permite um melhor aproximação para o cálculo da derivada em computadores.
+Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{kavan2006dual} por permitirem o cálculo de forma mais eficiente com menos distorções. Uma das aplicações é operação de auto-diferenciação de polinômios que permite um menor erro para o cálculo da derivada em computadores.
 
 \subsection{Quatérnions Duais}
 
-Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os chamados Quatérnions Duais definidos como
+Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os chamados Quatérnions Duais. Supondo dois quatérnions $Q_r$ e $Q_d$, um quatérnio dual pode ser definidos
 
 \begin{equation}
-    Q = p + \eta r
+    H = Q_r + \eta Q_d
 \end{equation}
+Onde
 \begin{equation}
-    Q = (p_1 + p_2\mathbf{{i}} + p_3\mathbf{{j}} + p_4\mathbf{{k}}) + \eta ((r_1 + r_2\mathbf{{i}} + r_3\mathbf{{j}} + r_4\mathbf{{k}}))
+    H = (q_{r_1} + q_{r_2}\mathbf{{i}} + q_{r_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}) + \eta ((q_{d_1} + q_{d_2}\mathbf{{i}} + q_{d_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}))
 \end{equation}
 
-\subsection{Representação por Quatérnions Duais}
+%E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion unitário $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
 
-E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
+A representação em quatérnions duais traz as seguintes vantagens em relação a outras representações usadas na robótica: eliminar as singularidades e a inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
 
-A representação em quatérnions duais traz como vantagens com relação a outras representações usadas na robótica: eliminar as singularidades e a inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogênias. % Citar paper IROS Bruno Adorno
-
-\subsection{DQ Robotics}
+\subsubsection{DQ Robotics}
 
 Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas é feita com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
 
@@ -145,15 +166,22 @@ Cada uma das juntas do Meka A2 utiliza um atuador série elástico composto por 
 
 Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos.
 
-Introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{tex/figs/sea_ulrich.png}
+    \caption{Modelos Atuador Rígido (esquerda) e Série Elástico (direita) \cite{Konigorski2012ModelSea}}
+    \label{fig:sea}
+\end{figure}
+
+Introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas. Na figura \ref{fig:seapratt} temos um atuador série elástico implementado.
 
 Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($\tau = -k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{tex/figs/sea_ulrich.png}
-    \caption{Modelo Atuador Rígido e Série Elástico \cite{Konigorski2012ModelSea}}
-    \label{fig:sea}
+    \includegraphics[width=0.6\linewidth]{tex/figs/sea_pratt.png}
+    \caption{Atuador Série Elástico Implementado por Pratt \cite{pratt1997stiffness}}
+    \label{fig:seapratt}
 \end{figure}
 
 E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo \cite{pratt1997stiffness}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por placas DSP embarcadas dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software \cite{abeyrathna2013simulation}.
@@ -217,7 +245,7 @@ Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em u
 \subsection{Motores Brushless}
 % Descrição
 % Comparativo com ServoMotores
-Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor Brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. \cite{nobody} Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka.
+Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor Brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka.
 
 \begin{figure}[H]
     \centering
@@ -254,8 +282,8 @@ Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fi
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.6\linewidth]{tex/figs/armdroid_diff_wrist.jpg}
-    \caption{Pulso diferenecial do robô Armdroid (Fonte: https://www.flickr.com/photos/chris_malcolm)}
+    \includegraphics[width = 0.4\linewidth,angle=90,trim={1cm 0cm 0 0}]{tex/figs/armdroid_diff_wrist.jpg}
+    \caption{Pulso diferenecial do robô Armdroid (Fonte: https://www.flickr.com/photos/chris\_malcolm)}
     \label{fig:armdroid-wrist}
 \end{figure}
 
@@ -310,19 +338,6 @@ M3 é o sistema de controle em tempo real para os robô desenvolvidos pela Meka 
 \subsection{Arquivos de Configuração}
 
 Todas as configurações do Meka são guardadas através de arquivos $.yml$, localizados dentro da pasta $config$ de cada diretório. Em particular, dentro da pasta $m3ene$ estão tudo que é particular de configuração, drivers e ajuste para o funcionamento do robô do LARA. Esta pasta é baseada na $m3ens$ da Ensta Paris. Nela consta tudo para que o hardware completo disponível do robô e respectivos controladores funcionem, incluindo informações sobre sensor de força, atuadores, garra e parâmetros do modelo dinâmico do robô e da garra.
-
-\subsection{ROS}
-
-Robotics Operating System (ROS) é um \textit{middleware} desenvolvido para a robótica. Desenvolver um robô é uma tarefa muito complexa para uma pessoa só ou mesmo um grupo de pesquisa, de modo que o ROS atua conectando diversos \textit{frameworks}, bibliotecas permitindo o uso de uma variedade de tipos de hardware e linguagens de programação \cite{quigley2009ros}. De igual forma atua conectando toda a comunidade de robótica em uma linguagem comum. Seu desenvolvimento começou em 2007 reunindo conceitos de diversos projetos de software aberto existentes até então e com o passar dos anos se tornou um padrão dentro da comunidade, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada para a industria.
-
-Como exemplo temos o módulo \textit{MovitIt} ( figura \ref{fig:movit-baxter} ) que reúne varias aplicações para facilitar o planejamento de trajetórias bem como a definição dos parâmetros de ajuste dos controladores com auxílio de métodos heurísticos através da biblioteca OMPL \cite{openMPL}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\linewidth]{tex/figs/movit-ros-baxter.png}
-    \caption{Planejamento de Trajetória no Baxter com Auxílio do MoveIt \cite{coleman2014reducing}}
-    \label{fig:movit-baxter}
-\end{figure}
 
 \subsection{Controladores}
 

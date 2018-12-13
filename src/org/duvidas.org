@@ -5,7 +5,7 @@
 ** Será refeita
 
 * Fundamentos
-** Comenta sobre DH, Matrizes Homogênias, ...
+** Comenta sobre DH, Matrizes Homogenias, ...
 ** Comenta sobre o Pulso Diferencial nos Fundamentos
 ** Evite seções muito curtas, pelo menos meia página para detalhar sobre cada coisa.
  * É um fato relatado na documentação
