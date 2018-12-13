@@ -1,6 +1,6 @@
 # Mechatronic Undergradute Thesis
 
-My undergraduate thesis. Template used available [here](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
+My undergraduate thesis. Template used available available [here](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
 
 ## Folder Descrition
 
