@@ -100,6 +100,19 @@ Como forma de avaliar a resposta do sistema para controle dos ângulos de junta 
 
 % Investigação de possíveis causas
 
+\subsection{ROS}
+
+Robotics Operating System (ROS) é um \textit{middleware} desenvolvido para a robótica. Desenvolver um robô é uma tarefa muito complexa para uma pessoa só ou mesmo um grupo de pesquisa, de modo que o ROS atua conectando diversos \textit{frameworks}, bibliotecas permitindo o uso de uma variedade de tipos de hardware e linguagens de programação \cite{quigley2009ros}. De igual forma atua conectando toda a comunidade de robótica em uma linguagem comum. Seu desenvolvimento começou em 2007 reunindo conceitos de diversos projetos de software aberto existentes até então e com o passar dos anos se tornou um padrão dentro da comunidade, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada para a industria.
+
+Como exemplo temos o módulo \textit{MovitIt} ( figura \ref{fig:movit-baxter} ) que reúne varias aplicações para facilitar o planejamento de trajetórias bem como a definição dos parâmetros de ajuste dos controladores com auxílio de métodos heurísticos através da biblioteca OMPL \cite{openMPL}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{tex/figs/movit-ros-baxter.png}
+    \caption{Planejamento de Trajetória no Baxter com Auxílio do MoveIt \cite{coleman2014reducing}}
+    \label{fig:movit-baxter}
+\end{figure}
+
 \subsection{shm\_humanoid\_interface}
 
 Este é um nó do ROS disponibilizado pela Meka Robotics para a comunicação via ROS com o Meka. Representa uma das possíveis interfaces com a M3 através do acesso direto a memória compartilhada. em \ref{fig:mekaarch} são detalhados todas as possíveis interfaces. Através deste nó são gerados dois tópicos no ros: $/humanoid\_state$ e $/humanoid\_command$. A cada interação a informação atual do tópico $/hummanoid\_command$ é passada para a memória compartilhada e a leitura dos sensores é então escrita no tópico $/hummanoid\_state$. Na versão atual são somente interpretados os comando de posição das juntas através dos modos de controle com e sem compensação da gravidade.
