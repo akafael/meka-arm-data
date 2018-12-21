@@ -1,0 +1,14 @@
+##
+# .gitatribute
+# @author Rafael Lima
+##
+
+# Matlab Specs - Prevent auto line feed, diff and merge
+*.slx -crlf -diff -merge
+*.mdl -crlf -diff -merge
+*.mat -crlf -diff -merge
+*.mlx -crlf -diff -merge
+
+# Git lfs - large files suport
+*.bag filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
