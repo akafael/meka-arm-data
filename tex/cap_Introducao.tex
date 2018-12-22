@@ -24,6 +24,9 @@ Embora seja uma tecnologia bastante interessante na automação de processos que
 Ao que integra a categoria de robôs cooperativos, definidos pela norma  norma ISO/TS 15066:2016(en) \footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:ts:15066:ed-1:v1:en}}, como sistemas desenvolvidos para serem intrinsecamente seguros no uso em atividade em colaboração com pessoas. Sendo desenhados para que seja oferecido o menor risco possível. Primeiro, este robôs deve oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão ou no por uma intenção diferente de movimento por parte da pessoas que a energia transmitida possa causar algum dano. Segundo deve permitir operação em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada.
 
 Muito embora sempre exista a visão da tecnologia como vilã no roubo de empregos ao permitir ao uso de menos energia na execução de uma tarefa a redução do custo gera novas oportunidade por aumenta a capacidade de carga. Ainda que junto exista a necessidade de ressignificar o papel das pessoas no desenvolvimento de alguma atividade, deslocando o papel de total responsabilidade pela execução para incorporar papeis de planejamento pelo auxílio da automação, a incorporação de novas tecnologias traz um maior alcance dos produtos gerados.
+
+% TODO Citar Referências do impacto do desenvolvimento tecnológico (ATM?)
+
 % Garantir flexibilidade e precisão: Tenho que ensinar kung fu ao robô...
 
 % Robótica Cooperativa
@@ -45,7 +48,7 @@ Muito embora sempre exista a visão da tecnologia como vilã no roubo de emprego
 %Seguindo uma filosofia diferente surgiu COG ( figura \ref{fig:domorobot} ), um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de várias tecnologias existentes na época para a interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. De igual forma, ao ser introduzido um componente passivo permite reduzir a necessidade de um extenso planejamento na execução da tarefa como ocorre com braços rígidos.
 
 % Domo e uso de Atuador Série Elástico
-Baseado em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e Jeff Weber o robô Domo, mostrado na figura \ref{fig:domorobot}. Em seu projeto foram incorporadas diversas características visando permitir segurança através do uso de juntas complacentes com percepção de força. Bem como características para uso contínuo do ponto de vista mecânico como o uso de atuadores série elásticos baseados em fuso de esferas, proteção de superaquecimento para os motores e modularização do design. Para o controle são utilizados DSP para cada uma das juntas do robô\cite{edsinger2004domo}.
+Baseado no humanoide COG em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e Jeff Weber o robô Domo, mostrado na figura \ref{fig:domorobot}. Em seu projeto foram incorporadas diversas características visando permitir segurança através do uso de juntas complacentes com percepção de força. Bem como características para uso contínuo do ponto de vista mecânico como o uso de atuadores série elásticos baseados em fuso de esferas, proteção de superaquecimento para os motores e modularização do design. Para o controle são utilizados DSP para cada uma das juntas do robô\cite{edsinger2004domo}.
 
 \begin{figure}[H]
     \centering
@@ -54,7 +57,7 @@ Baseado em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e 
     \label{fig:domorobot}
 \end{figure}
 
-Anos depois, os mesmos conceitos foram incorporados no robô Meka, figura \ref{fig:meka}, surgido como produto da empresa Meka Robotics fundada por Aaron e Jeff em 2006. Como pode ser notado pelas similaridades do ombro e desing do braço em relação a figura \ref{fig:domorobot}. Este robô foi adquirido pelo LARA, porém em 2013 a empresa é adquirida pela Google e toda a documentação do Meka foi retirada do ar. 
+Anos depois, os mesmos conceitos foram incorporados no robô Meka, figura \ref{fig:meka}, surgido como produto da empresa Meka Robotics fundada por Aaron e Jeff em 2006. Como pode ser notado pelas similaridades do ombro e design do braço em relação a figura \ref{fig:domorobot}. Este robô foi adquirido pelo LARA, porém em 2013 a empresa é adquirida pela Google e toda a documentação do Meka foi retirada do ar. 
 
 % Citar OceanOne (Stanford)?
 
@@ -86,7 +89,7 @@ A compensação da gravidade é resolvido de forma diferente em cada uma das pla
 
 \section{Definição do problema}
 
-No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Daqui em diante será denominado apenas Meka. O Meka é um braço complacente antropomórfico composto por 7 juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender sua implicação no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando em conta as características próprias do sistema.
+No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponível o braço robótico Meka A2 fornecido pela Meka Robotics. Daqui em diante será denominado apenas Meka. O Meka é um braço complacente antropomórfico composto por sete juntas e uma garra desenvolvido para pesquisas na área de interação com pessoas. Em trabalhos anteriores foi observado um desempenho ineficiente nos controles cinemáticos implementados em contraste ao resultado observado em outras plataformas robóticas e em simulação. Tal arquitetura não encontra-se devidamente documentada e detalhada. Desta forma, neste trabalho, propõe-se realizar uma caracterização mais detalhada desta arquitetura de controle para compreender sua implicação no desempenho dos controles cinemáticos testados e propor melhorias que resultem em trajetórias mais precisas levando em conta as características próprias do sistema.
 
 % Foto Meka
 \begin{figure}[H]
@@ -98,12 +101,8 @@ No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponíve
 
 \section{Metodologia}
 
-% Rever completamente
-Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir da métodos científicos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros braços robóticos avaliados pelos trabalhos de Murilo \cite{murlow2014} e Marcos \cite{marcosps2016}.
-
-\subsection{Estudo controle de manipuladores}
-
-Inicialmente foi feito um estudo sobre a teoria clássica do controle cinemático e dinâmico de manipuladores incluindo a representação por cadeia cinemática usando matrizes homogenias e a simplificação através da notação de Denavit-Hatemberg.
+% Rever completamente N
+Este trabalho foi desenvolvido em três etapas: estudo sobre teoria clássica de controle de manipuladores, revisão e acompanhamento de trabalhos anteriores feitos no LARA utilizando o Meka e por fim a investigação e experimentação usando a plataforma. Esta investigação foi feita a partir dos métodos de análise e síntese do processo. Por meio da análise foram estudados cada um dos componentes utilizados tanto de hardware como software em seu detalhes. E contraponto foi alguns dos fenômenos foram sintetizados por meio de simulações visando ampliar a compreensão de quais fatores ocasionam ao Meka um desempenho inferior outros a braços robóticos avaliados pelos trabalhos de Murilo \cite{murlow2014} e Marcos \cite{marcosps2016}.
 
 \subsection{Revisão trabalhos anteriores}
 
