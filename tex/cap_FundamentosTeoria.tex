@@ -79,7 +79,7 @@ O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que
 % Propriedades
 
 % Autodiferenciação
-Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{kavan2006dual} por permitirem o cálculo de forma mais eficiente com menos distorções. Uma das aplicações é operação de auto-diferenciação de polinômios que permite um menor erro para o cálculo da derivada em computadores.
+Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{kavan2006dual} por permitirem o cálculo de forma mais eficiente com menos distorções.
 
 \subsection{Quatérnions Duais}
 
@@ -95,7 +95,7 @@ Onde
 
 %E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion unitário $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
 
-A representação em quatérnions duais traz as seguintes vantagens em relação a outras representações usadas na robótica: eliminar as singularidades e a inexistência de ambiguidade de representação. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
+A representação em quatérnions duais traz as seguintes vantagens em relação a outras representações usadas na robótica: eliminar as singularidades. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
 
 \subsubsection{DQ Robotics}
 
@@ -280,12 +280,12 @@ Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fi
     \label{fig:meka-wrist}
 \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width = 0.4\linewidth,angle=90,trim={1cm 0cm 0 0}]{tex/figs/armdroid_diff_wrist.jpg}
-    \caption{Pulso diferenecial do robô Armdroid (Fonte: https://www.flickr.com/photos/chris\_malcolm)}
-    \label{fig:armdroid-wrist}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width = 0.4\linewidth,angle=90,trim={1cm 0cm 0 0}]{tex/figs/armdroid_diff_wrist.jpg}
+%     \caption{Pulso diferenecial do robô Armdroid (Fonte: https://www.flickr.com/photos/chris\_malcolm)}
+%     \label{fig:armdroid-wrist}
+% \end{figure}
 
 \section{Sistema Embarcado}
 
@@ -360,7 +360,7 @@ No Meka estes estão implementados a partir de uma série de controladores em ca
     \label{fig:controlarch}
 \end{figure}
 
-A compensação da gravidade é feita a partir do calculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$ \cite{mekaguide}.
+A compensação da gravidade é feita a partir do cálculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$ \cite{mekaguide}.
 
 %\subsection{Servo Controladores}
 % Entrada como torque ou velocidade e saída posição

@@ -28,14 +28,15 @@ Inicialmente foi avaliado as limitações de atuação e sensoriamento através 
 
 \subsubsection{Atuadores}
 
-A partir da antiga documentação disponibilizada no site original da Meka Robotics\footnote{\url{http://mekabot.com/wiki/doku.php?id=user_guides:arm_a2r4}} temos os seguintes parâmetros da especificação do robô, registrados na tabela \ref{tab:a2armActuationDoc}. Nesta tabela são indicando os limites permitidos pela plataforma segundo especificação de projeto, obviamente com o desgaste e o tempo estes valores podem sofrer alterações.
+ A documentação oficial disponibilizada no site original da Meka Robotics encontra-se atualmente disponível apenas no PC uma vez que o site está fora do ar desde a compra da empresa pela Google em 2013. A partir da antiga documentação temos os seguintes parâmetros da especificação do robô, registrados na tabela \ref{tab:a2armActuationDoc}. Nesta tabela são indicando os limites permitidos pela plataforma segundo especificação de projeto, obviamente com o desgaste e o tempo estes valores podem sofrer alterações.
 
 \begin{table}[H]
     \centering
     \caption{Especificação Preliminar dos Atuadores, adaptado de \cite{mekaguide}}
     \begin{tabular}{c|ccccccc}
          \hline
-         A2.R4 Spec & $\theta_0$ & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_4$ & $\theta_5$ & $\theta_6$\\
+         & \multicolumn{2}{c}{Ombro} & Braço & $J_3$ & $J_4$ & \multicolumn{2}{c}{Pulso}\\
+         A2.R4 Spec & $J_0$ & $J_1$ & $J_2$ & $J_3$ & $J_4$ & $J_5$ & $J_6$\\
          \hline
          \input{tex/tables/a2armActuationDoc.tex}
          \hline
@@ -43,7 +44,10 @@ A partir da antiga documentação disponibilizada no site original da Meka Robot
     \label{tab:a2armActuationDoc}
 \end{table}
 
-Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais. Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ($J0$, $J1$ e $J2$) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
+% Comentar cada parâmetro apresentado na tabela
+Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais.
+
+Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ($J0$, $J1$ e $J2$) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
 
 % Pulso Diferencial
 
@@ -69,11 +73,11 @@ Com base na documentação temos que não existe nenhuma forma de medida da velo
 
 Como em um atuador série elástico a medida do torque é feita de maneira indireta, relacionando a rigidez da junta e a medida de deslocamento nota-se o uso do encoder como sensor de força. A sensibilidade a uma força externa vai variar conforme a rigidez da junta, uma vez que todas utilizam o mesmo sensor tipo de sensor. Tendo que as juntas relacionadas ao movimento do pulso $J4$,$J5$,$J6$ são de menor rigidez e serão também mais sensíveis as pertubações. Além disto o pulso utiliza um mecanismo diferencial de modo que movimentação pura nas direção $Pitch$ e $Roll$ são obtidas através de um controlador.
 
-\subsection{Sistema Embarcado}
+\subsection{Sistema de Controle}
 
 % Arquitetura comunicação
 
-O código opera a partir de uma estrutura em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca m3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
+O código opera a partir de uma estrutura de controle em cascata com um parte embarcada diretamente no manipulador operando em alta frequência para o controle do torque, uma camada operando em tempo real ( 1Khz ) no PC em comunicação com o robô a partir da biblioteca M3 e por fim uma camada em soft real time operando a partir da interface com o ROS ou com a API em Python. Na figura \ref{fig:shm_arch} é detalhado alguns aspectos da arquitetura observados.
 
 \begin{figure}[H]
     \centering
@@ -118,7 +122,7 @@ Como a maior parte do código da M3 está implementada em Python, para avaliar o
     \item PWM
 \end{itemize}
 
-Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da M3 e obtido de forma recursiva pela biblioteca Orocos KDL\footnote{\url{http://www.orocos.org/KDL}}.
+Os modos de controle de posição estão ainda disponíveis com e sem controle de compensação da gravidade a partir do modelo dinâmico inverso da M3 e obtido pelo algoritmo de dinâmica inversa de cadeia cinemática da biblioteca Orocos KDL\footnote{\url{http://www.orocos.org/KDL}}.
 
 \subsubsection{Avaliação do Atraso de Comunicação}\label{subsec:deadtimepython}
 
@@ -297,6 +301,8 @@ No primeiro experimento, figura \ref{fig:moveUp1}, o robô executou a trajetóri
 
 Já quando o intervalo de tempo entre os pontos é muito abaixo de $20ms$ é percebido saltos periódicos com intervalo aproximado de $5s$ devido ao acumulo do erro nas juntas. Nota-se que as juntas movem em velocidade constante por um tempo e em seguida rola o salto. Dá para notar que as juntas $J5$ e $J6$ são as que possuem a maior variação no esforço ao longo da trajetória.
 
+\vspace{1cm}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth,trim={2cm 1cm 2cm 2cm}]{tex/figs/moveUp3stateEvalv70s50.png}
@@ -344,7 +350,7 @@ Ao que é percebido a origem do ruído na medida da velocidade: em momentos que 
 
 Dado que a velocidade máxima da junta mais rápida é de $4.6 rad/s$ a variação máxima esperada é de $f_0 = 1/(2pi/4.6 rad/s) = 0.732 Hz$, A frequência de corte $f_{filt} = 80Hz$ representa em torno $10 f_0$. Como este tipo de filtro não leva em consideração o modelo físico do processo, apenas a resposta em frequência, outros tipos de filtro podem ser implementados, visando melhorar a qualidade da estimativa.
 
-Avaliando o mesmo valor de rigidez para $10\%$ da velocidade máxima, nota-se um ruído maior para as velocidades apresentadas. Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
+Para avaliar a situação em que a velocidade máxima é abaixo do necessário para permitir o controlador convergir foi refeito o experimento com o mesmo valor de rigidez e $10\%$ da velocidade máxima (Figura \ref{fig:jointIdentificationSpeed10p_stiff90p2}). Nesta situação nota-se uma variação maior para as velocidades apresentadas para as juntas de menor velocidade $J4$, $J5$ e $J6$. A junta do cotovelo $J4$ em particular foi a que apresentou o maior  Também não foi possível atingir o ponto de referência no intervalo dado. Em lugar temos uma resposta em formato triangular indicando a saturação da velocidade na subida e na decida. O que também é possível para notar no gráfico da velocidade.
 
 \begin{figure}[H]
     \centering
@@ -398,7 +404,9 @@ As consequências deste fenômeno foram atenuadas pelos primeiro trabalhos com o
 
 \subsection{Análise individual dos Controladores de Junta}
 
-Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{marcosps2016}, enquanto os parâmetros dos controladores de baixo nível foram mantidos.
+Para avaliar a variação da resposta dos controladores cinemáticos implementado primeiramente foi tomado como referência os resultados de trabalhos passados. No qual foi refeito o experimento da trajetória de um quadrado com todos os controladores ajustados para os melhores parâmetros obtidos em \cite{marcosps2016}, enquanto os parâmetros dos controladores de baixo nível foram mantidos. Neste experimento (Figura \ref{fig:squareStiffMarcos}) foi acrescentado a resposta da velocidade e do torque obtidos a partir do tópico $/humanoid\_state$.
+
+\vspace{1cm}
 
 \begin{figure}[H]
     \centering
@@ -407,7 +415,11 @@ Para avaliar a variação da resposta dos controladores cinemáticos implementad
     \label{fig:squareStiffMarcos}
 \end{figure}
 
-Uma vez definido as condições usadas foi analisado individualmente cada junta, para avaliar quais tinha a maior contribuição no erro e como estava sendo solicitadas ao longo da trajetória. No que foi percebido que a juntas do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
+Apenas analisando a figura \ref{fig:squareStiffMarcos} podemos perceber alguns saltos na posição das juntas. Cada salto denota a transição entre um controlador e outro. No que pode ser observado que cada controlador leva um tempo diferente para cumprir a trajetória, porém a resposta é bem similar. No entanto, este gráfico permite apenas uma visão geral do comportamento. Assim foram extraídos os dados de cada junta como forma de detalhar a contribuição individual para o erro percebido e o desenvolvimento da trajetória.
+
+Os gráficos de cada junta são apresentados nas figuras \ref{fig:squareStiffJ9stateEval_J0v100s70} a \ref{fig:squareStiffJ9stateEval_J6v100s70}. Para todas é notado um salto no valor da referência. No entanto, ao observar a resposta de cada junta temos uma atenuação da variação rápida gerada pela transição entre um controlador e outro. Isto se deve a comportamento complacente do atuador série elástico que atua como um filtro passa baixa. A energia introduzida pela variação brusca é absorvida pela elasticidade do atuador e devolvida gradualmente ao sistema como observado mais claramente pelo gráfico de esforço de cada junta em que o salto na referência de posição é acompanhado de imediato por um salto no torque. 
+
+Dentre todas as juntas, a do ombro $J0$ apresentou o menor erro em relação a referência de controle, além de manter um torque aproximadamente constante ao longo de toda trajetória, figura \ref{fig:squareStiffJ9stateEval_J0v100s70}.
 
 \vspace{1cm}
 
