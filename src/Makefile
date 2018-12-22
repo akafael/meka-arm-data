@@ -27,7 +27,7 @@ clear:
 	rm -v $(PICFILES) $(CSVFILES)
 
 # Images -----------------------------------------------------------------------------------
-# Dot figures 
+# Dot figures
 $(FIGDIR)/%.png: dot/%.gv
 	dot -Tpng $^ -o $@
 

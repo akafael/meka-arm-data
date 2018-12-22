@@ -9,13 +9,13 @@ bagFileNames = strsplit( ls([location,'jointIdentification_s*.bag']) ,'\n');
 
 % Initialize Storage
 numexp = (size(bagFileNames,2)-1);
-state = cell(numexp);
-command = cell(numexp);
-stepdata = cell(numexp);
-errortable = cell(numexp);
-overshottable = cell(numexp);
-steadstatetable = cell(numexp);
-peaktable = cell(numexp);
+state = cell(1,numexp);
+command = cell(1,numexp);
+stepdata = cell(1,numexp);
+errortable = cell(1,numexp);
+overshottable = cell(1,numexp);
+steadstatetable = cell(1,numexp);
+peaktable = cell(1,numexp);
 
 % Latex Table Files
 fileerrortable = fopen('jointIdentification_errortable.tex','w');
@@ -40,16 +40,16 @@ for fileIndex = 1:numexp
     expname = ['./',... % Path
                'jointIdentification_exp',num2str(fileIndex),...        % ID Exp
                'v',num2str(command{fileIndex}.velocityControl*100),... % velocity
-               'v',num2str(command{fileIndex}.stiffnessControl*100)];  % stifness
+               's',num2str(command{fileIndex}.stiffnessControl*100)];  % stifness
     print(expname,'-dpng');
 
     % Generate latex table
-    errorline = [strjoin(arrayfun(@num2str,[data.errorP], 'Uniform', false),' & ') '\\'];
-    overshotline = [strjoin(arrayfun(@num2str, data.overshotP, 'Uniform', false),' & ') '\\'];
+    errorline = [strjoin(arrayfun(@num2str,[data.errorP*100], 'Uniform', false),' & ') '\\'];
+    overshotline = [strjoin(arrayfun(@num2str, data.overshotP*100, 'Uniform', false),' & ') '\\'];
     steadstateline = [strjoin(arrayfun(@num2str, data.steadstate.value, 'Uniform', false),' & ') '\\'];
     peakline = [strjoin(arrayfun(@num2str, data.peak.value, 'Uniform', false),' & ') '\\'];
 
-    % Print it to a file
+    % Print it to a file with Velocity and  stiffness ref
     fprintf(fileerrortable,'%.2f & %.2f & %s\n',...
         command{fileIndex}.velocityControl,...
         command{fileIndex}.stiffnessControl,errorline);

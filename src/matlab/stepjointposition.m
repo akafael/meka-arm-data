@@ -1,4 +1,6 @@
 function data = stepjointposition(state,command)
+%% stepjointposition Evaluate each joint
+
     % Get Peak Time for each joint
     peakPositionValue = max(state.position_j);
     peakTimeStamp = zeros(1,7);
