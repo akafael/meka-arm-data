@@ -6,7 +6,9 @@ My undergraduate thesis. Template used available available [here](https://www.sh
 
  * src: 
     * dot: Dot Graphs
+    * logs: Experiment Logs
     * matlab: Matlab code for data processing
+    * python: python scripts for log processing
     * org: OrgMode file for personal organization
  * tex:
     * figs: images and figures
