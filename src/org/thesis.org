@@ -35,6 +35,9 @@
 ** TODO Montar mini conclusão do capítulo
 * Conclusion [1/1]
 ** DONE Comentar sobre aspectos mecânico, eletrônicos e computacionais
+** TODO Reduzir Conclusão
+*** TODO Mover Atual versão para dentro de resultados como "Considerações Finais"
+*** TODO Resumir Conclusão em dois parágrafos ( conclusão e trabalhos futuros )
 * Reference [0/1]
 ** TODO Corrigir referências marcadas com cite nobody
 ** TODO Corrigir referências com informações faltando
