@@ -6,33 +6,59 @@
 ** DONE Acrescentar anexo com descrição do conteúdo do cd/repositório
 ** TODO Refazer Resumo
  * Está com cara de introdução e não de resumo
-* Introduction [3/3]
-** DONE History Background
-** DONE Metodology
+* Introduction [1/3]
+** TODO History Background
+*** TODO Colocar dados estatísticos e referências sobre automação
+ * Embasar melhor a questão do impacto social da automação do ponto de vista do aumento da capacidade produtiva em lugar do suposição do roubo de empregos ( ted talk? )
+** TODO Metodology
+*** TODO Comentar sobre a política de reproducibilidade e dados abertos do trabalho.
 ** DONE Thesis Structure Presentation
 * Fundamentation [1/4]
 ** TODO Dual Quaternions [/]
- * Not Started Yet
+*** TODO Apresentar Quaternions como uma algebra
+ * Ao fazer a referência como algebra retira a necessidade de provar as propriedades
 ** TODO Robotics Kinematics [/]
- * Not Started Yet
+ * Apresentar Cinemátia Direta?
 ** TODO Robotics Mechanics[/]
 *** TODO Encoder
-**** TODO Explicar o que é um encoder
+ * 
 *** TODO SEA
+**** TODO Substituir esquemático SEA
+ * Colocar algum que explicite a questão dos torques para facilitar explicar a questão do torque percebido na saída.
 **** TODO Add image from a real SEA
+ * Explicar melhor as partes do atuador implentado por Pratt
 **** TODO Explaing why complaice at joint level.
 ** DONE M3 System [/] 
 * Development [0/1]
 ** TODO Acrescentar parágrafo sobre desempenho de sistemas
 ** TODO Resolver problema de Capítulo muito pequeno. (3pg)
  * Sugestão prof. Geovany: fundir com capitulo 4
-* Results [1/3]
-** DONE Indentification C++
+* Results [0/4]
+** TODO Acrescentar Comentários da apresentação
+ * Neste trabalho houve a busca de definir novas métricas em composição as já existentes. Assim uma das estratégias usadas foi refazer cada um dos experimentos anteriores e observar o comportamento.
+ * A primeira análise foi comparar a resposta da posição das juntas com as demais informações fornecidas pelo tópico. A razão disto era extrair informações extras a respeito da velocidade e torque fornecido pelos motores.
+ * Ao longo dos resultados é comparado o comportamento com os parâmetros usado pelo trabalho do Marcos ( stiff=1,vel=0.7 ) com outros configurações.
+ * Os logs foram deixado no anexo visando facilitar futuros estudos. ( comentar sobre TDD )
+ * Velocidade estimada vs velocidade fornecidade pelo tópico.
+** TODO Indentification C++ 
+ * 
 ** DOING MoveUP
  * Acrescentar dados experimentais ( tempo para começar a se mover, error, esforço controle )
 ** TODO SquareStiff
  * Acrescentar dados experimentais ( tempo controle vs tempo sensor )
+ * Para analisar o comportamento de cada junta primeiro foi feito um experimento de referência sem alterar nenhum parâmetro. A partir do gráfico foi buscado a ocorrência dos fenomenos percebidos no experimentos anteriores ( saltos na posição, erro estático, atraso na resposta, ... )
+ * Foi feito o teste com os controladores implementados pelo marcos em sequencia. Entre cada um dele existe um salto brusco devido a passagem para a posição inicial feito por passagem direta da posição sem os controladores cinemáticos. A análise de todas as juntas no mesmo gráfico funciona apenas para visão geral. Para entender o comportamente em mais detalhe foi separado o gráfico de cada junta e acrescentado o sinal de controle.
+ * Os controladores levam tempo diferente para concluir a trajetória completa. Posso medir o tempo entre os saltos na referência, para obter este tempo e assim poder comparar cada um dos controladores.
+ * Explicar melhor os gráficos de junta ( linha tracejada como sinal de referência, linha contínua como leitura sensore de posição ). O gráfico é separado em váriaveis internas ( velocidade e esforço ) e posição, logo é importânte comentar sobre a relevância de observar as variáveis internas.
+ * Filtro passa-baixa: A rápida variação no sinal de controle é atenuada pelo comportamento elástico das juntas, isto pode ser percebido pelo gráfico comparando as regiões com picos e resposta da posição. Por outro lado a energia inserida no sistema pela variação brusca e gradualmente distribuida de volta, tal pode ser observado pelo gráfico de effort, em que após o salto existe um declive no sinal de torque. Isto pode gerar outros problemas depois.
+ * Analise das juntas do pulso, erro constante do sinal em relação a referência em um valor maior , similar ao observado no experimento preliminar de identificação. Também dá para perceber uma maior variação no sinal do torque fornecido para a junta, indicando um maior esforço de controle pelo controlador interno de torque.
+ * Junta do cotovelo: junta mais lenta. Com acumulo do erro acaba ocorrendo saltos no torque e com isto é introduzido oscilações nas demais juntas.
+** TODO Contribuição de cada junta no erro de cada um dos 8 parâmetros da DQ
+ * Cinemática Direta do Sinal de controle - Cinemática Direta do Sinal do Sensor
+ * Para isto é necessário calcular o erro do sinal. Como se trata de um sinal em degrau por conta do buffer. Terei que emular este comportamento na hora de igualar os pontos no tempo.
+ * A dinâmica do controlador será dada pela dinâmica do erro ( influênciado pela métrica usada )
 ** TODO Montar mini conclusão do capítulo
+ * O atraso na comunicação não é tão significativo
 * Conclusion [1/1]
 ** DONE Comentar sobre aspectos mecânico, eletrônicos e computacionais
 ** TODO Reduzir Conclusão
