@@ -14,9 +14,8 @@ PICFILES = $(addprefix $(FIGDIR)/,$(notdir $(GVFILES:%.gv=%.png)))
 
 # Experiment log files
 BAGFILES = $(wildcard $(LOGDIR)/*.bag)
-CSVFILES = $(BAGFILES:%.bag=%.csv) $(addpreffix $(LOGDIR)/control_,$(notdir $(BAGFILES:%.bag=control_%.csv)))
+CSVFILES = $(BAGFILES:%.bag=%.csv) $(addprefix $(LOGDIR)/control_, $(notdir $(BAGFILES:%.bag=%.csv)))
 BAGREADER = python/bag_reader.py
-
 
 # Common Rules -----------------------------------------------------------------------------
 # One rule to rule them all
@@ -24,7 +23,7 @@ all: $(PICFILES) $(CSVFILES)
 
 # Remove Generated Files
 clear:
-	rm -v $(PICFILES) $(CSVFILES)
+	rm -v $(CSVFILES)
 
 # Images -----------------------------------------------------------------------------------
 # Dot figures
@@ -43,7 +42,7 @@ $(LOGDIR)/%.csv: $(LOGDIR)/%.bag
 
 # Humanoid Command topic
 $(LOGDIR)/control_%.csv: $(LOGDIR)/%.bag
-	python $(BAG_READER) -b $< -t /humanoid_command -o $@
+	python $(BAGREADER) -b $< -t /humanoid_command -o $@
 	sed -i -e '1s/chain_idx/chain_idx_j0,chain_idx_j1,chain_idx_j2,chain_idx_j3,chain_idx_j4,chain_idx_j5,chain_idx_j6/' $@
 	sed -i -e '1s/effort/effort_j0,effort_j1,effort_j2,effort_j3,effort_j4,effort_j5,effort_j6/' $@
 	sed -i -e '1s/stiffness/stiffness_j0,stiffness_j1,stiffness_j2,stiffness_j3,stiffness_j4,stiffness_j5,stiffness_j6/' $@
