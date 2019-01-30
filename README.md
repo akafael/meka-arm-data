@@ -1,18 +1,18 @@
 # Mechatronic Undergraduate Thesis
 
-My undergraduate thesis. Template used available available [here](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
+My undergraduate thesis. Template from Prof. Geovany Borges used. It is available [here](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
 
 ## Folder Description
 
- * src: 
-    * dot: Dot Graphs
-    * logs: Experiment Logs
-    * matlab: Matlab code for data processing
-    * python: python scripts for log processing
-    * org: OrgMode file for personal organization
- * tex:
-    * figs: images and figures
-    * tables: data tables in tex format
+ * [src](src): 
+    * [dot](src/dot): Dot Graphs
+    * [logs](src/logs): Experiment Logs
+    * [matlab](src/matlab): Matlab code for data processing
+    * [python](src/python): python scripts for log processing
+    * [org](src/org): OrgMode file for personal organization
+ * [tex](tex):
+    * [figs](tex/figs): images and figures
+    * [tables](tex/tables): data tables in tex format
     
 ## License
     
