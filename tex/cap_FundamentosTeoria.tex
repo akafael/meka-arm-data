@@ -10,13 +10,13 @@
 % Definição manipulador, resumo capítulo
 
 \vspace{0.5cm}
-Neste capítulo será apresentado os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Serão colocados na seguinte ordem: modelagem, sistemas mecânicos, embarcados e por fim o sistemas de controle.
+Neste capítulo serão apresentados os aspectos teóricos e técnicos das tecnologias envolvidas no controle implementado no manipulador robótico Meka A2. Os quais estão dispostos na seguinte ordem: modelagem, sistemas mecânicos, embarcados e por fim sistemas de controle.
 
 \section{Manipuladores Robóticos}
 
 Segundo a ISO8373:2012\footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:8373:ed-2:v1:en}}, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro.
 
-Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. O Meka É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
 
 % Modelagem Matemática
 Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
@@ -150,7 +150,7 @@ Para este trabalho a representação do robô usando quatérnions duais e opera�
 \section{Braço Robótico Meka A2}
 
 % Descrição Meka
-Cada uma das juntas do Meka A2 utiliza um atuador série elástico composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive}. O controle é feito por placas DSP desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
+Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref{sec:sea}) composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive} (Seção \ref{subsec:harmonic-drive}). O controle é feito por placas desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
 
 % Foto Meka
 \begin{figure}[H]
@@ -160,11 +160,11 @@ Cada uma das juntas do Meka A2 utiliza um atuador série elástico composto por 
     \label{fig:meka-inside}
 \end{figure}
 
-\section{Atuadores Série Elásticos}
+\section{Atuadores Série Elásticos \label{sec:sea}}
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
 
-Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos.
+Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura.
 
 \begin{figure}[H]
     \centering
@@ -202,7 +202,7 @@ Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e perm
 % Posição discreta e estimativa da Velocidade
 % Torque obtido a partir da posição
 
-Para cada junta são utilizados encoders para a medidas das grandezas a posição e o torque aplicado. Um enconder é tradicionalmente um sensor de posição. No entanto por conta da estrutura do atuador série elástico é possível avaliar também a torque aplicado na junta levando a em conta a dinâmica da mola, ou componente elástico do atuador. Desta forma o torque avaliado será a diferença da medida de posição da saída do motor e da junta vezes a rigidez da junta. 
+Para cada junta são utilizados encoders para a medidas das grandezas a posição e o torque aplicado. Um enconder é tradicionalmente um sensor de posição. No entanto por conta da estrutura do atuador série elástico é possível avaliar também o torque aplicado na junta levando em conta a dinâmica da mola, ou componente elástico do atuador. Desta forma, seguindo a lei de Hooke, o torque avaliado será a diferença da medida de posição da saída do motor e da junta vezes a rigidez da junta. 
 
 \begin{figure}[H]
     \centering
@@ -211,17 +211,17 @@ Para cada junta são utilizados encoders para a medidas das grandezas a posiçã
     \label{fig:encoder}
 \end{figure}
 
-\subsection{Harmonic Drive}
+\subsection{Harmonic Drive \label{subsec:harmonic-drive}}
 % Descrição
 % Modelo 
 
-Harmonic Drive, também denominado "Engrenamento por ondas de deformação", é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. Na figura \ref{fig:harmonic_drive} temos detalhados os 3 componentes principais: as duas partes rígidas denotadas na figura como \textit{Circular Spline} e \textit{Wave Generator} e parte flexível \textit{Flex Spline}. Com a rotação do gerador de ondas a membrana flexível vai deslizando e movendo ao longo do engrenamento da parte mais externa gerando uma rotação em uma velocidade reduzida em relação ao velocidade de entrada.
+Harmonic Drive, também denominado ``Engrenamento por ondas de deformação'', é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. Na figura \ref{fig:harmonic_drive} temos detalhados os 3 componentes principais: as duas partes rígidas denotadas na figura como \textit{Circular Spline} e \textit{Wave Generator} e parte flexível \textit{Flex Spline}. Com a rotação do gerador de ondas a membrana flexível vai deslizando e movendo ao longo do engrenamento da parte mais externa gerando uma rotação em uma velocidade reduzida em relação ao velocidade de entrada. Na figura \ref{fig:encoder} é apresentado o encoder utilizado em cada uma das juntas do robô.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{tex/figs/harmonic-gear-structure.jpg}
     \caption{Harmonic Drive (Fonte: https://https://www.orientalmotor.com)}
-    \label{fig:harmonic_drive}
+    \label{fig:encoder}
 \end{figure}
 
 Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em um tamanho compacto é um tipo de transmissão bastante comum na área de robótica. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, desde que rigidez possa ser modelada.
@@ -271,7 +271,7 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 
 \subsection{Pulso Diferencial}
 
-Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fig:meka-wrist} e \ref{fig:armdroid-wrist}), baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} é acionado os dois motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
+Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fig:meka-wrist}), baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} são acionados ambos motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
 
 \begin{figure}[H]
     \centering
@@ -287,18 +287,18 @@ Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fi
 %     \label{fig:armdroid-wrist}
 % \end{figure}
 
-\section{Sistema Embarcado}
+\section{Plataforma de Controle}
 
 O Meka é controlado pelo conjunto de dois sistema: um embarcado diretamente no braço para o controle da juntas e um externo sendo executado em PC com Ubuntu 12.04 com Kernel RTOS Xenomai em conjunto do sistema M3 da Meka Robotics e do framework ROS. No sistema embarcado são feita todas as interfaces com os sensores e atuadores. Enquanto no PC é feito o controle de cada uma das juntas e demais tarefas. A comunicação entre estes dois se dá por uma porta Ethernet e opera no protocolo proprietário EtherCAT. Desta forma é sistema pode ser facilmente expandido com o acréscimo de novos dispositivos e sensores.
 
 \subsection{DSP Control Boards}
 % Controle de torque
-O controle de cada junta a partir do acionamento dos motores e da leitura dos sensores é feito pela placa DSP desenvolvida pela Meka Robotics. Nela estão implementados o controle de posição, velocidade, torque e rigidez de cada atuador. Cada uma das placas possui uma interface de comunicação EtherCAT ligada a um concentrador dentro do tronco do robô. Sendo este ligado através da porta Ethernet a um computador embarcado externo responsável pelo comando de cada uma das partes do robô.
+O controle de cada junta a partir do acionamento dos motores e da leitura dos sensores é feito pela placa DSP desenvolvida pela Meka Robotics. Nela estão implementados o controle de posição, velocidade, torque e rigidez de cada atuador. Cada uma das placas possui uma interface de comunicação EtherCAT ligada a um concentrador dentro do tronco do robô. Sendo este ligado através da porta Ethernet a um computador para comando de cada uma das partes do robô.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.8\linewidth]{figs/dsp-control-wrist}
-    \caption{Destaque Placas de controle dentro do braço}
+    \caption{Destaque Placas de controle entre as juntas do pulso e o cotovelo do braço}
     \label{fig:dsp-control-wrist}
 \end{figure}
 
@@ -308,7 +308,7 @@ O uso de DSP e um barramento de comunicação de auto desempenho no lugar facili
 
 \subsection{Meka PC}
 
-Toda a parte de controle é feita no PC. Para iniciar a comunicação com o robô é executado um script que dispara os processos relacionados a comunicação com a robô via Socket pelo protocolo EtherCAT e a interface para Python. Um vez que o script está em execução o robô pode ser controlado por uma das interface da M3 entre elas a API em Python ou pelo ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:mekaarch}.
+Toda a parte de controle é feita no PC. Para iniciar a comunicação do PC com o robô é executado um script que dispara os processos relacionados a comunicação com a robô via Socket pelo protocolo EtherCAT e a interface para Python. Um vez que o script está em execução o robô pode ser controlado por uma das interface da M3 entre elas a API em Python ou pelo ROS, conforme ilustrado no diagrama apresentado na figura \ref{fig:mekaarch}.
 
 \begin{figure}[H]
     \centering
@@ -351,7 +351,7 @@ O controle do Meka é feito em estrutura de cascata por uma série de controlado
     \item Controlador de Trajetória
 \end{enumerate}
 
-No Meka estes estão implementados a partir de uma série de controladores em cascata descritos da figura \ref{fig:controlarch}.
+No Meka estes estão implementados a partir de uma série de controladores em cascata executados no PC descritos da figura \ref{fig:controlarch}.
 
 \begin{figure}[H]
     \centering

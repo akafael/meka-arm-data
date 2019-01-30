@@ -7,7 +7,7 @@
 Universo é, de alguma forma, afetado por todos os outros pedaços de
 matéria do Universo, é teoricamente possível extrapolar a totalidade da
 criação – cada sol, cada planeta, suas órbitas, sua composição e sua
-história econômica e social a partir de, digamos, um pedaço de pão-de-ló.''(Guia do Mochileiro da Galáxia, Douglas Adams}
+história econômica e social a partir de, digamos, um pedaço de pão-de-ló.''(Guia do Mochileiro da Galáxia, Douglas Adams)}
 
 % Resumo informações da arquitetura relevantes do ponto de vista de controle
 
@@ -20,11 +20,11 @@ história econômica e social a partir de, digamos, um pedaço de pão-de-ló.''
 
 \section{Estudo Arquitetura}
 
-A primeira etapa foi de estudo do código e documentação em busca de identificar tecnologias e algoritmos envolvidos no controle do Meka. O intuito era identificar possíveis referências que ajudasse a guiar os experimentos a serem realizados e eventuais pontos críticos para o desempenho. Como a documentação oficial do Meka foi tirada fora do ar e apenas estão disponíveis as documentações geradas pela comunidade, foi feito um estudo para retirar possíveis pistas através do conhecimento deixado no código dentro do robô. Tal foi somente possível, pois por se tratar de uma plataforma voltada para pesquisa todo o código fonte e documentação estava disponível dentro do PC auxiliar.
+Inicialmente foi feito o estudo do código e documentação em busca de identificar tecnologias e algoritmos envolvidos no controle do Meka tendo como intuito identificar possíveis referências que ajudasse a guiar os experimentos a serem realizados e eventuais pontos críticos para o desempenho. Como a documentação oficial do Meka foi tirada fora do ar e apenas estão disponíveis as documentações geradas pela comunidade, foi feito um estudo para retirar possíveis pistas através do conhecimento deixado no código dentro do robô. Tal foi somente possível, pois por se tratar de uma plataforma voltada para pesquisa todo o código fonte e documentação estava disponível dentro do PC auxiliar.
 
 \subsection{Sistema Mecânico}
 
-Inicialmente foi avaliado as limitações de atuação e sensoriamento através das especificações fornecidas na documentação. Estes valores, embora possam não corresponder a situação atual do sistema servem como um primeiro parâmetro para orientar as análises feitas posteriormente pelo outros métodos. A documentação original do Meka foi obtida através de arquivos de backup armazenados no PC de desenvolvimento, uma vez que o site oficial está indisponível.
+Foram avaliados as limitações de atuação e sensoriamento através das especificações fornecidas na documentação. Estes valores, embora possam não corresponder a situação atual do sistema servem como um primeiro parâmetro para orientar as análises feitas posteriormente pelo outros métodos. A documentação original do Meka foi obtida através de arquivos de backup armazenados no PC de desenvolvimento, uma vez que o site oficial está indisponível.
 
 \subsubsection{Atuadores}
 
@@ -35,7 +35,7 @@ Inicialmente foi avaliado as limitações de atuação e sensoriamento através 
     \caption{Especificação Preliminar dos Atuadores, adaptado de \cite{mekaguide}}
     \begin{tabular}{c|ccccccc}
          \hline
-         & \multicolumn{2}{c}{Ombro} & Braço & $J_3$ & $J_4$ & \multicolumn{2}{c}{Pulso}\\
+         & \multicolumn{2}{c}{Ombro} & Braço & \multicolumn{2}{c}{Antebraço} & \multicolumn{2}{c}{Pulso}\\
          A2.R4 Spec & $J_0$ & $J_1$ & $J_2$ & $J_3$ & $J_4$ & $J_5$ & $J_6$\\
          \hline
          \input{tex/tables/a2armActuationDoc.tex}
@@ -45,7 +45,7 @@ Inicialmente foi avaliado as limitações de atuação e sensoriamento através 
 \end{table}
 
 % Comentar cada parâmetro apresentado na tabela
-Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais.
+Da tabela \ref{tab:a2armActuationDoc} podemos perceber que os motores de cada junta possuem diferentes limites de velocidade e atuação de modo que um mesmo comando de velocidade pode levar um motor de uma junta a saturação enquanto outro ainda possui uma boa faixa de operação. Notadamente a maior diferença está entre a junta do pulso ($J4$) em relação as demais.
 
 Por ser um braço antropomórfico, o grupos de juntas do pulso ($J4$, $J5$ e $J6$) e do ombro ($J0$, $J1$ e $J2$) acabam atuando em composição como uma junta esférica respondendo pela orientação do ponto de referência no centro das juntas. Para uma tarefa de translação de um ponto de referência localizado no pulso estas não atuam. Enquanto para o caso do deslocamento de um efetuador acoplado ao pulso não há necessidade de velocidades grandes como forma de garantir a tarefa de posicionamento no espaço, uma vez que o a relação erro/deslocamento é pequeno em comparação as juntas do ombro.
 
