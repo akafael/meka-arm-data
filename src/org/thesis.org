@@ -6,6 +6,7 @@
 ** DONE Acrescentar anexo com descrição do conteúdo do cd/repositório
 ** TODO Refazer Resumo
  * Está com cara de introdução e não de resumo
+** TODO Ajustar ano para 2018
 * Introduction [1/3]
 ** TODO History Background
 *** TODO Colocar dados estatísticos e referências sobre automação
@@ -15,7 +16,7 @@
 ** DONE Thesis Structure Presentation
 * Fundamentation [1/4]
 ** TODO Dual Quaternions [/]
-*** TODO Apresentar Quaternions como uma algebra
+*** TODO Apresentar Quatérnions como uma algebra
  * Ao fazer a referência como algebra retira a necessidade de provar as propriedades
 ** TODO Robotics Kinematics [/]
  * Apresentar Cinemátia Direta?
@@ -47,10 +48,10 @@
 ** TODO SquareStiff
  * Acrescentar dados experimentais ( tempo controle vs tempo sensor )
  * Para analisar o comportamento de cada junta primeiro foi feito um experimento de referência sem alterar nenhum parâmetro. A partir do gráfico foi buscado a ocorrência dos fenomenos percebidos no experimentos anteriores ( saltos na posição, erro estático, atraso na resposta, ... )
- * Foi feito o teste com os controladores implementados pelo marcos em sequencia. Entre cada um dele existe um salto brusco devido a passagem para a posição inicial feito por passagem direta da posição sem os controladores cinemáticos. A análise de todas as juntas no mesmo gráfico funciona apenas para visão geral. Para entender o comportamente em mais detalhe foi separado o gráfico de cada junta e acrescentado o sinal de controle.
+ * Foi feito o teste com os controladores implementados pelo marcos em sequencia. Entre cada um dele existe um salto brusco devido a passagem para a posição inicial feito por passagem direta da posição sem os controladores cinemáticos. A análise de todas as juntas no mesmo gráfico funciona apenas para visão geral. Para entender o comportamento em mais detalhe foi separado o gráfico de cada junta e acrescentado o sinal de controle.
  * Os controladores levam tempo diferente para concluir a trajetória completa. Posso medir o tempo entre os saltos na referência, para obter este tempo e assim poder comparar cada um dos controladores.
- * Explicar melhor os gráficos de junta ( linha tracejada como sinal de referência, linha contínua como leitura sensore de posição ). O gráfico é separado em váriaveis internas ( velocidade e esforço ) e posição, logo é importânte comentar sobre a relevância de observar as variáveis internas.
- * Filtro passa-baixa: A rápida variação no sinal de controle é atenuada pelo comportamento elástico das juntas, isto pode ser percebido pelo gráfico comparando as regiões com picos e resposta da posição. Por outro lado a energia inserida no sistema pela variação brusca e gradualmente distribuida de volta, tal pode ser observado pelo gráfico de effort, em que após o salto existe um declive no sinal de torque. Isto pode gerar outros problemas depois.
+ * Explicar melhor os gráficos de junta ( linha tracejada como sinal de referência, linha contínua como leitura sensor de posição ). O gráfico é separado em váriaveis internas ( velocidade e esforço ) e posição, logo é importânte comentar sobre a relevância de observar as variáveis internas.
+ * Filtro passa-baixa: A rápida variação no sinal de controle é atenuada pelo comportamento elástico das juntas, isto pode ser percebido pelo gráfico comparando as regiões com picos e resposta da posição. Por outro lado a energia inserida no sistema pela variação brusca e gradualmente distríbuida de volta, tal pode ser observado pelo gráfico de effort, em que após o salto existe um declive no sinal de torque. Isto pode gerar outros problemas depois.
  * Analise das juntas do pulso, erro constante do sinal em relação a referência em um valor maior , similar ao observado no experimento preliminar de identificação. Também dá para perceber uma maior variação no sinal do torque fornecido para a junta, indicando um maior esforço de controle pelo controlador interno de torque.
  * Junta do cotovelo: junta mais lenta. Com acumulo do erro acaba ocorrendo saltos no torque e com isto é introduzido oscilações nas demais juntas.
 ** TODO Contribuição de cada junta no erro de cada um dos 8 parâmetros da DQ

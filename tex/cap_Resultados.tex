@@ -312,7 +312,7 @@ Já quando o intervalo de tempo entre os pontos é muito abaixo de $20ms$ é per
 
 % Saltos a cada 300 ms
 
-\section{Estudo velocidade atuador}
+\section{Estudo de saturação da velocidade dos atuadores}
 
 Em extensão ao estudo feito na seção \ref{subsec:stepcpp}, foi analisado a resposta da velocidade fornecida pelo tópico ao longo da trajetória. Pelas figuras \ref{fig:jointIdentification_exp1v100v100}, \ref{fig:jointIdentification_exp2v100v50} e \ref{fig:jointIdentification_exp3v70v100} foi notado notado que a velocidade é aproximadamente constante ao longo dos momentos de maior deslocamento e com valores próximos de $v_{max} = 0.5 rad/s$ para todas as juntas. Para avaliar o comportamento ao longo do tempo foi comparado a resposta fornecida no tópico do ROS $/hummanoid\_state$ para os valores de \textit{position}, \textit{velocity} e \textit{effort}, respectivamente posição, velocidade e torque nas juntas, conforme mostrado nas figuras \ref{fig:jointIdentificationFullSpeed_stiff90p} e \ref{fig:jointIdentificationSpeed10p_stiff90p2}.
 
