@@ -2,11 +2,11 @@
 #+AUTHOR: Rafael Lima
 #+TODO: TODO DOING | DONE
 
-* Document [1/1]
+* Document [2/3]
 ** DONE Acrescentar anexo com descrição do conteúdo do cd/repositório
 ** TODO Refazer Resumo
  * Está com cara de introdução e não de resumo
-** TODO Ajustar ano para 2018
+** DONE Ajustar ano para 2018
 * Introduction [1/3]
 ** TODO History Background
 *** TODO Colocar dados estatísticos e referências sobre automação
@@ -15,15 +15,14 @@
 *** TODO Comentar sobre a política de reproducibilidade e dados abertos do trabalho.
 ** DONE Thesis Structure Presentation
 * Fundamentation [1/4]
-** TODO Dual Quaternions [/]
+** TODO Dual Quaternions [0/1]
 *** TODO Apresentar Quatérnions como uma algebra
  * Ao fazer a referência como algebra retira a necessidade de provar as propriedades
-** TODO Robotics Kinematics [/]
- * Apresentar Cinemátia Direta?
+** TODO Robotics Kinematics
+ * Apresentar Cinemátia Direta? Sim
 ** TODO Robotics Mechanics[/]
 *** TODO Encoder
- * 
-*** TODO SEA
+*** TODO SEA [0/3]
 **** TODO Substituir esquemático SEA
  * Colocar algum que explicite a questão dos torques para facilitar explicar a questão do torque percebido na saída.
 **** TODO Add image from a real SEA

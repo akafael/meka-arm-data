@@ -626,3 +626,7 @@ Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção
 * <2019-04-16 Tue> LOG Atividades
 ** ESTUDO Integração Contínua
  * Consegui montar um repositório básico com um pacote do ROS e a biblioteca DQ. No entanto estou enfrentando dificuldades para compilar a dqrobotics usando o travis-cl
+* <2019-05-13 Mon> LOG Atividades
+** ESTUDO ROS Remoto
+ * Consegui instalar tudo no computador do zero e compilar o pacote de testes. Travis-cl funcionando redondo!
+ * A comunicação via ros remote ainda não está funcionando, mostra os tópicos mas não permite publicar os dados.
