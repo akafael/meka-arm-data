@@ -630,3 +630,8 @@ Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção
 ** ESTUDO ROS Remoto
  * Consegui instalar tudo no computador do zero e compilar o pacote de testes. Travis-cl funcionando redondo!
  * A comunicação via ros remote ainda não está funcionando, mostra os tópicos mas não permite publicar os dados.
+* <2019-05-14 Tue> LOG Atividades
+** ESTUDO ROS Remote
+ * Consegui configurar o acesso remoto do ros. Para tal foi necessário acrescentar o IP e alias do computador do robô dentro de /etc/hosts
+ * Configuração inicial do computador parcialmente descrita em um playbook para ansible
+ * O repositório antigo não está compilando no computador atual.
