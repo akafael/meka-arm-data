@@ -2,8 +2,7 @@
 #+AUTHOR: Rafael Lima
 #+TODO: TODO DOING | DONE
 
-* Document [1/1]
-** DONE Acrescentar anexo com descrição do conteúdo do cd/repositório
+* Document [0/1]
 ** TODO Refazer Resumo
  * Está com cara de introdução e não de resumo
 ** TODO Ajustar ano para 2018
