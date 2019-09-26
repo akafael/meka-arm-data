@@ -615,3 +615,23 @@ Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção
 *** Open Source Thesis
  * Assim que terminar devo deixar o repositório completo da escrita do TG aberto. Certamente alguma parte (.big, figuras, tabelas, logs, ...) podem vir a ser utéis para trabalhos futuros
  * Modifiquei o repositório no overleaf integrar com o github e poder usar as ferramentas locais no PC para gerar partes do relatório
+* <2019-04-03 Wed> LOG Atividades
+** ESTUDO Preparação dos repositórios
+ * O custo inicial de começar a trabalhar no Meka ainda é alto. Para facilitar isto sugiro criar um repositório contendo somente o necessário para começar direto no Meka.
+ * Para comandar o meka por comando de juntas basta apenas usar um publisher e um subscriber básico e compilar o pacote das mensagens. No caso dos controladores, basta baixar as bibliotecas eigen e a dq-robotics. Sendo que a dq está atualmente disponível via github (https://github.com/dqrobotics).
+
+** ESTUDO Integração Contínua para Robótica
+ * https://www.jeffgeerling.com/blog/testing-ansible-roles-travis-ci-github
+ * Testes Automáticos: https://vimeo.com/68862135
+* <2019-04-16 Tue> LOG Atividades
+** ESTUDO Integração Contínua
+ * Consegui montar um repositório básico com um pacote do ROS e a biblioteca DQ. No entanto estou enfrentando dificuldades para compilar a dqrobotics usando o travis-cl
+* <2019-05-13 Mon> LOG Atividades
+** ESTUDO ROS Remoto
+ * Consegui instalar tudo no computador do zero e compilar o pacote de testes. Travis-cl funcionando redondo!
+ * A comunicação via ros remote ainda não está funcionando, mostra os tópicos mas não permite publicar os dados.
+* <2019-05-14 Tue> LOG Atividades
+** ESTUDO ROS Remote
+ * Consegui configurar o acesso remoto do ros. Para tal foi necessário acrescentar o IP e alias do computador do robô dentro de /etc/hosts
+ * Configuração inicial do computador parcialmente descrita em um playbook para ansible
+ * O repositório antigo não está compilando no computador atual.
