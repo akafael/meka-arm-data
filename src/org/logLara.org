@@ -631,7 +631,8 @@ Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção
  * Consegui instalar tudo no computador do zero e compilar o pacote de testes. Travis-cl funcionando redondo!
  * A comunicação via ros remote ainda não está funcionando, mostra os tópicos mas não permite publicar os dados.
 * <2019-05-14 Tue> LOG Atividades
-** ESTUDO ROS Remote
+** ESTUDO Novas configurações
  * Consegui configurar o acesso remoto do ros. Para tal foi necessário acrescentar o IP e alias do computador do robô dentro de /etc/hosts
  * Configuração inicial do computador parcialmente descrita em um playbook para ansible
  * O repositório antigo não está compilando no computador atual.
+ * Para matar o processo do shm_hummanoid remotamente pode usar ctrl+z para colocar em background, listar os processos usando `ps | grep shm_humanoid` e matar usando kill e depois usar `fg` para retornar ao processo e finalizar.

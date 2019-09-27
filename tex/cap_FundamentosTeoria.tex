@@ -52,7 +52,7 @@ Quatérnios foram introduzidos em 1848 por Hamilton \cite{hamilton1848xi} como f
     H = w + x\mathbf{{i}} + y\mathbf{{j}} + z\mathbf{{k}}
 \end{equation}
 
-Em que $w$,$x$,$y$ e $z$ são os quatro coeficientes do Quatérnion compostos por números Reais. e $\mathbf{{i}}$, $\mathbf{{j}}$ e $\mathbf{{k}}$ são unidades imaginarias para as quais são válidas as seguintes operações
+Em que $w$,$x$,$y$ e $z$ são os quatro coeficientes do Quatérnion compostos por números Reais. e $\mathbf{{i}}$, $\mathbf{{j}}$ e $\mathbf{{k}}$ são unidades imaginarias para os quais são definidas as seguintes propriedades:
 
 \begin{equation}
     \mathbf{{i}}^2 = \mathbf{{j}}^2 = \mathbf{{k}}^2 = -1
@@ -64,13 +64,13 @@ Em que $w$,$x$,$y$ e $z$ são os quatro coeficientes do Quatérnion compostos po
     \mathbf{j}\mathbf{i} = \mathbf{k},\ \mathbf{k}\mathbf{j} = \mathbf{i},\ \mathbf{i}\mathbf{k} = \mathbf{j}
 \end{equation}
 
-Cada um dos coeficiente representa uma rotação em torno de um dos 3 eixos cartesianos. Observe que o produto não é comutativo, o que também é uma propriedade de rotações.
+Cada um dos coeficiente representa uma rotação em torno de um dos 3 eixos cartesianos. Observe que o produto não é comutativo, o que também é uma propriedade de rotações. O conjunto dos Quartérnions representa uma álgebra, constituinod um espaço vetorial com operação binária de multiplicação de vetores, propriedade distributiva e associativa sobre a soma de vetores. 
 
 \subsection{Números Duais}
 
 Quatérnions tais os números complexos representam bem a magnitude e orientação no espaço, no entanto não permitem a representação de uma posição em particular \cite{Clifford1871DQ}, algo que é uma necessidade para algumas aplicações como o movimento de corpos rígidos. Para resolver este problema Clifford introduziu os números duais em 1871.
 
-O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que amplia as propriedades do números reais através da adição do elemento nilpotente $\eta^2 = 0$ em que $\eta \neq 0$. São representados de forma similar as números complexos
+O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que amplia as propriedades do números reais através da adição do elemento nilpotente $\eta^2 = 0$ em que $\eta \neq 0$. São representados de forma similar as números complexos:
 
 \begin{equation}
     Z = a + \eta b
@@ -95,11 +95,11 @@ Onde
 
 %E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion unitário $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
 
-A representação em quatérnions duais traz as seguintes vantagens em relação a outras representações usadas na robótica: eliminar as singularidades. Além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
+A representação em quatérnions duais traz a vantagens em relação a outras representações usadas na robótica de eliminar as singularidades além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
 
 \subsubsection{DQ Robotics}
 
-Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas é feita com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
+Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas são feitas com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
 
 % \section{Cinemática de Manipuladores}
 
@@ -150,7 +150,7 @@ Para este trabalho a representação do robô usando quatérnions duais e opera�
 \section{Braço Robótico Meka A2}
 
 % Descrição Meka
-Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref{sec:sea}) composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive} (Seção \ref{subsec:harmonic-drive}). O controle é feito por placas desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle.
+Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref{sec:sea}) composto por um motor Brushless em conjunto com uma redução baseada em engrenamento por onda de deformação, comercialmente denominado \textit{Harmonic Drive} (Seção \ref{subsec:harmonic-drive}). O controle é feito por placas desenvolvidas pelo fabricante comandadas por sua vez por um computador embarcado conectado via Ethernet. Como forma de entender melhor o comportamento do robô, cada um destes componentes foi analisado de forma separada quanto as suas características de resposta no controle da posição em cada junta.
 
 % Foto Meka
 \begin{figure}[H]
@@ -164,29 +164,29 @@ Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
 
-Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. De igual maneira a alta inércia representa um risco na execução de tarefas em conjunto com pessoa, pois um impacto nesta situação pode causar grande danos. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura.
+Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Esta resistência a mudança no movimento por interferência externa representa um risco na execução de tarefas em conjunto com pessoas. Tendo em vista que um impacto nesta situação pode causar grande danos. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura.
 
-\begin{figure}[H]
+\\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{tex/figs/sea_ulrich.png}
-    \caption{Modelos Atuador Rígido (esquerda) e Série Elástico (direita) \cite{Konigorski2012ModelSea}}
+    \includegraphics[width=0.8\linewidth]{tex/figs/sea_topology.png}
+    \caption{Topologia Atuador Rígido \cite{wyeth206}}
     \label{fig:sea}
 \end{figure}
 
-Introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Esta estrutura de atuador também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas. Na figura \ref{fig:seapratt} temos um atuador série elástico implementado.
+Por esta razão, introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Em particular, os uso de atuadores complacentes também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas. Na figura \ref{fig:seapratt} temos um atuador série elástico implementado por Pratt. Esta versão utiliza como redução engrenagems planetárias, uma mola plana e um motor dc, sinalizados na figura por por a, b e c respectivamente.
 
 Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($\tau = -k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{tex/figs/sea_pratt.png}
+    \includegraphics[width=0.6\linewidth]{tex/figs/sea_pratt_desc.png}
     \caption{Atuador Série Elástico Implementado por Pratt \cite{pratt1997stiffness}}
     \label{fig:seapratt}
 \end{figure}
 
 E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo \cite{pratt1997stiffness}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por placas DSP embarcadas dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software \cite{abeyrathna2013simulation}.
 
-Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas.
+Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas. Um diferencial do Meka em seu lançamento é o uso de sistemas complacentes em todas as juntas ao invés de apenas em relação ao efetuador, conferindo mais segurança no contato com superfícies rígidas como em operação na proximidade de pessoas.
 
 %% Diagrama Atuadores Elásticos
 
