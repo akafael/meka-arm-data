@@ -98,7 +98,7 @@ O sistema de controle M3 fornece diversos controladores e incorporados a platafo
 
 São disponibilizados alguns códigos de exemplo em Python e C++, espalhados ao longo do código fonte da M3. Para estudo sobre controlar o robô a partir do código em Python foi tomado como referência o estudo dos códigos de demonstração e a documentação disponibilizada no site ReadTheDocs\footnote{\url{https://meka-docs.readthedocs.io/en/latest/}}. Neste processo foi adicionada mais uma pose no código de demonstração com o nome de referência \textit{Kojiref} com os valores usados para a posição inicial pelo Rafael Koji em \cite{koji2017}.
 
-Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines \cite{nobody}. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
+Para referência do uso dos controladores foi tomado como parâmetro inicial o código de demonstração sobre o controle de rigidez disponibilizado pelo fabricante, cuja interface gráfica é mostrada na figura \ref{fig:m3demo}. Na interface estão disponíveis algumas poses para mostrar o robô em posição estática, uma trajetória montada por uma sequência de poses e uma trajetória de um circulo elaborada a partir de splines. É possível ajustar a velocidade máxima e a rigidez do controlador de forma dinâmica, permitindo a avaliar o impacto na resposta do robô.
 
 \begin{figure}[H]
     \centering
@@ -113,7 +113,7 @@ A partir da execução do código de demonstração foi possível perceber que a
 
 \subsection{API Python}
 
-Como a maior parte do código da M3 está implementada em Python, para avaliar os controladores de junta de baixo nível foi utilizado a API para Python por ser a opção mais completa em termos de recursos. Sendo utilizada para todos os testes iniciais. No entanto, para registrar os valores do sensor foram registrados via \textit{rosbag} a partir das leitura do tópico $/hummanoid\_state$. Foi escolhido usar o programa rosbag em conjunto com o nó de ros \textit{shm_humanoid_interface} no lugar do registro direto em arquivo para facilitar a reproducibilidade dos experimentos e análises feitas. Através interface da API em Python para a M3 estão estão disponíveis os seguintes controladores, ordenados do de mais alto nível para o de mais baixo nível:
+Como a maior parte do código da M3 está implementada em Python, para avaliar os controladores de junta de baixo nível foi utilizado a API para Python por ser a opção mais completa em termos de recursos. Sendo utilizada para todos os testes iniciais. No entanto, para registrar os valores do sensor foram registrados via \textit{rosbag} a partir das leitura do tópico $/hummanoid\_state$. Foi escolhido usar o programa rosbag em conjunto com o nó de ros $shm\_humanoid\_interface$ no lugar do registro direto em arquivo para facilitar a reproduzibilidade dos experimentos e análises feitas. Através interface da API em Python para a M3 estão estão disponíveis os seguintes controladores, ordenados do de mais alto nível para o de mais baixo nível:
 
 \begin{itemize}
     \item Posição
