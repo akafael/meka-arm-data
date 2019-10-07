@@ -636,3 +636,13 @@ Cap.4 do livro do Spong - parte de cinemática diferencial inversa, construção
  * Configuração inicial do computador parcialmente descrita em um playbook para ansible
  * O repositório antigo não está compilando no computador atual.
  * Para matar o processo do shm_hummanoid remotamente pode usar ctrl+z para colocar em background, listar os processos usando `ps | grep shm_humanoid` e matar usando kill e depois usar `fg` para retornar ao processo e finalizar.
+* <2019-10-07 Seg> LOG Atividades
+** EXPERIMENTO Alteração Unidade de Distância DH Meka
+ * Ao alterar as unidades de distância de metro para dm e cm os controladores não convergiram para os parâmetros utilizados e o robô não saiu da posição inicial de referência.
+ * Uma possível nova abordagem é começar tentar preparar um código do zero com um controle proporcional para permitir nova avaliação.
+
+** EXPERIMENTO Avaliação qualitativa de resposta a Pertubação na Translação e na Orientação
+ * Foi aplicado uma leve torção no pulso do robô e como efeito o robô respondeu rapidamente compensando a orientação com uma movimentação das juntas do ombro.
+ * De forma similar foi aplicado um leve empurrão na garra e no entanto a resposta percebida foi bem mais lenta e o robô não retornou a posição original de imediato. O que reforça a tese de que orientação e translação estão sendo avaliados com pesos distintos.
+** ESTUDO Instalação RTAI
+ * Em minha primeira tentativa não consegui instalar a RTAI na versão atual do computador.
