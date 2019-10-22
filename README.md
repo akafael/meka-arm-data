@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/142446759.svg)](https://zenodo.org/badge/latestdoi/142446759)
+
 # Mechatronic Undergraduate Thesis
 
 My undergraduate thesis. Template from [Prof. Geovany Borges](https://github.com/geovanyb). It is available at [sharelatex](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
