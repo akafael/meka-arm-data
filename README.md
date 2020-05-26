@@ -2,7 +2,7 @@
 
 # Mechatronic Undergraduate Thesis
 
-My undergraduate thesis. Template from [Prof. Geovany Borges](https://github.com/geovanyb). It is available at [sharelatex](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
+My undergraduate thesis data. Template from [Prof. Geovany Borges](https://github.com/geovanyb). It is available at [sharelatex](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
 
 ## Folder Description
 
