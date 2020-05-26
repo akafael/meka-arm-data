@@ -24,7 +24,7 @@ My undergraduate thesis data. Template from [Prof. Geovany Borges](https://githu
 
 If you use this work in an academic context, please cite the following publications:
 
-* R. LIMA: **ESTUDO E CARACATERIZAÇÂO DE ARQUITETURA DE CONTROLE DE BRAÇO ROBÓTICO COMPLACENTE**. Universidade de Brasilia, 2018. ([PDF](https://github.com/akafael/undergrad-thesis/releases/download/TG2/TG.pdf))
+* R. LIMA: **Estudo e Caracterização de Arquitetura de Controle de Braço Robótico Complacente**. Universidade de Brasilia, 2018. ([PDF](https://github.com/akafael/undergrad-thesis/releases/download/TG2/TG.pdf))
 * Silva Pereira, Marcos: **Trajectory control of anthropomorfic compliant manipulator with Dual Quaternion Based Kinematic Controllers**. Universidade de Brasilia, 2016. ([PDF](https://github.com/lara-unb/TGs/blob/master/2016_02/TG_Marcos_Pereira.pdf))
 * L. F. C. Figueredo and B. V. Adorno and J. Y. Ishihara and G. A. Borges: **Robust kinematic control of manipulator robots using dual quaternion representation**. IEEE International Conference on Robotics and Automation, 2013. ([PDF](http://adorno.eng.ufmg.br/publications/icra13_2060_fi.pdf))
 
