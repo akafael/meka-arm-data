@@ -10,7 +10,7 @@ My undergraduate thesis. Template from [Prof. Geovany Borges](https://github.com
     * [dot](src/dot): Dot Graphs
     * [logs](src/logs): Experiment Logs
     * [matlab](src/matlab): Matlab code for data processing
-    * [python](src/python): python scripts for log processing
+    * [python](src/python): Python scripts for log processing
     * [org](src/org): OrgMode file for personal organization
  * [tex](tex): report files
     * [figs](tex/figs): images and figures
@@ -25,6 +25,9 @@ My undergraduate thesis. Template from [Prof. Geovany Borges](https://github.com
 If you use this work in an academic context, please cite the following publications:
 
 * R. LIMA: **ESTUDO E CARACATERIZAÇÂO DE ARQUITETURA DE CONTROLE DE BRAÇO ROBÓTICO COMPLACENTE**. Universidade de Brasilia, 2018. ([PDF](https://github.com/akafael/undergrad-thesis/releases/download/TG2/TG.pdf))
+* Silva Pereira, Marcos: **Trajectory control of anthropomorfic compliant manipulator with Dual Quaternion Based Kinematic Controllers**. Universidade de Brasilia, 2016
+* L. F. C. Figueredo and B. V. Adorno and J. Y. Ishihara and G. A. Borges: **Robust kinematic control of manipulator robots using dual quaternion representation**. IEEE International Conference on Robotics and Automation, 2013 
+
 
         @book{RafaelLima2018,
             author = {Lima, Rafael},
