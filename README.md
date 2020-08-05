@@ -4,7 +4,7 @@
 
 My undergraduate thesis data. Template from [Prof. Geovany Borges](https://github.com/geovanyb). It is available at [sharelatex](https://www.sharelatex.com/templates/59afea1a951af79f0775037e) and [here](https://github.com/arthurbeggs/unb-template-tg-mecatronica).
 
-![Meka Robot Inside](https://github.com/akafael/undergrad-thesis/raw/master/tex/figs/meka-inside.png)
+<img alt="Meka Robot Inside" style="border-width:0" src="https://github.com/akafael/undergrad-thesis/raw/master/tex/figs/meka-inside.png" />
 
 ## Folder Description
 
