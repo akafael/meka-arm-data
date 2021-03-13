@@ -16,10 +16,10 @@ Neste capítulo serão apresentados os aspectos teóricos e técnicos das tecnol
 
 Segundo a ISO8373:2012\footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:8373:ed-2:v1:en}}, robôs são mecanismos de atuação programáveis em dois ou mais eixos com algum grau de autonomia, capazes de mover-se no ambiente em ordem de executar alguma tarefas. São dotados de sistemas de controle como forma de garantir a percepção e os acionamentos conforme solicitado. Manipuladores, por sua vez, são uma classe de robôs formados por uma série de segmentos conectados através de juntas ou com deslizamento entre si, com o propósito de pegar ou mover objetos de um lugar a outro.
 
-Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. O Meka É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata das posições de junta já implementado.
+Para o desenvolvimento deste trabalho foi utilizado o manipulador robótico Meka A2. Sendo composto por sete juntas com atuadores série elásticos. O Meka É um braço desenvolvido para pesquisa em tarefas em interação com pessoas de maneira segura em razão do baixo peso e da capacidade de ceder em contato com forças externas e por isto denominado complacente. O controle cinemático foi feito através de Quatérnions Duais, acrescentando mais uma camada ao controle em cascata com o internos para controle das posições de juntas implementado pelo fabricante.
 
 % Modelagem Matemática
-Para controlar qualquer coisa é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento no espaço como forma de permitir a execução da tarefa. Usualmente são adotadas duas abordagens denominadas cinemática e dinâmica.
+Para o desenvolvimento de qualquer projeto de engenharia e por sua vez para o controle da posição do efetuador é preciso definir um modelo matemático, que permita relacionar as características físicas às ações desejadas, permitindo assim que este seja comandado de alguma forma a partir das relações lógicas expressas no modelo usado. Em manipuladores robóticos o objeto de interesse para controle é o movimento das partes do robô no espaço como forma de permitir a execução da tarefa. Para tal, usualmente são adotadas duas abordagens denominadas modelagem cinemática e dinâmica.
 
 % Modelagem Cinemática
 Na cinemática estamos interessado apenas na geometria do movimento de pontos e objetos rígidos a partir da posição de cada ponto de referência e a variações no tempo, expressas como a velocidade e aceleração. Não são levados em conta as causas do movimento, isto é as forças e torques envolvidos.
@@ -64,7 +64,7 @@ Em que $w$,$x$,$y$ e $z$ são os quatro coeficientes do Quatérnion compostos po
     \mathbf{j}\mathbf{i} = \mathbf{k},\ \mathbf{k}\mathbf{j} = \mathbf{i},\ \mathbf{i}\mathbf{k} = \mathbf{j}
 \end{equation}
 
-Cada um dos coeficiente representa uma rotação em torno de um dos 3 eixos cartesianos. Observe que o produto não é comutativo, o que também é uma propriedade de rotações. O conjunto dos Quartérnions representa uma álgebra, constituinod um espaço vetorial com operação binária de multiplicação de vetores, propriedade distributiva e associativa sobre a soma de vetores. 
+Cada um dos coeficiente representa uma rotação em torno de um dos 3 eixos cartesianos. Observe que o produto não é comutativo, o que também é uma propriedade de rotações. O conjunto dos Quartérnions representa uma álgebra, constituindo um espaço vetorial com operação binária de multiplicação de vetores, propriedade distributiva e associativa sobre a soma de vetores. 
 
 \subsection{Números Duais}
 
@@ -79,11 +79,11 @@ O conjunto dos números duais é definido como um conjunto em $\mathbf{R}^2$ que
 % Propriedades
 
 % Autodiferenciação
-Em razão de suas propriedades é uma forma de representação que vêm ganhando espaço em várias áreas com a robótica \cite{Adorno2011} e na computação gráfica para renderização \cite{kavan2006dual} por permitirem o cálculo de forma mais eficiente com menos distorções.
+Em razão de suas propriedades, a representação a partir de números duais que vêm ganhando espaço em várias áreas como a robótica \cite{Adorno2011} e a computação gráfica para renderização \cite{kavan2006dual} por permitirem o cálculo de forma mais eficiente com menos distorções. % cite?
 
 \subsection{Quatérnions Duais}
 
-Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os chamados Quatérnions Duais. Supondo dois quatérnions $Q_r$ e $Q_d$, um quatérnio dual pode ser definidos
+Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os chamados Quatérnions Duais. Supondo dois quatérnions $Q_r$ e $Q_d$, um quatérnio dual pode ser definido por
 
 \begin{equation}
     H = Q_r + \eta Q_d
@@ -164,7 +164,7 @@ Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref
 % Controle de Torque e Complascência
 % Modelo Proposto por Pratt
 
-Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de uma mola colocada em série entre um atuador e o ponto de saída e visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Esta resistência a mudança no movimento por interferência externa representa um risco na execução de tarefas em conjunto com pessoas. Tendo em vista que um impacto nesta situação pode causar grande danos. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura.
+O atuador presente em cada uma juntas do Meka é um Sistema Série Elástico. Estes são uma implementação de atuador complacente descrito por Pratt e Williamson \cite{pratt1995series}. São basicamente constituídos de um elemento elástico, como uma mola, em série entre um atuador e o ponto de saída. Visam permitir uma maior segurança na operação com objetos rígidos, bem como na interação com outros robôs e pessoas. Em atuadores rígidos, o uso de redução permite que uma alta velocidade do motor seja traduzida em um alto torque gerando uma grande inércia. Esta resistência a mudança no movimento por interferência externa representa um risco na execução de tarefas em conjunto com pessoas. Tendo em vista que um impacto nesta situação pode causar grande danos. Assim, quando ocorre uma colisão, muita energia é transmitida ao objeto de contato bem como ao dente da engrenagem de saída, resultando internamente em um fratura no mecanismo da junta do robô. Ao se colocar um elemento elástico como uma mola, parte desta energia é absorvida e distribuída gradualmente reduzindo assim a possibilidade de fratura bem como amortecendo o impacto direto com alguma pessoa.
 
 \begin{figure}[H]
     \centering
@@ -173,9 +173,9 @@ Cada uma juntas do Meka é um Atuador Série Elástico. Estes são uma implement
     \label{fig:sea}
 \end{figure}
 
-Por esta razão, introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Em particular, os uso de atuadores complacentes também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas. Na figura \ref{fig:seapratt} temos um atuador série elástico implementado por Pratt. Esta versão utiliza como redução engrenagems planetárias, uma mola plana e um motor dc, sinalizados na figura por por a, b e c respectivamente.
+Por esta razão, introduzir alguma forma de complacência é, pelas normas ISO 10218-1:2011 e ISO/TS 15066:2016 um requisito de segurança para robô colaborativos ( co-bots ). Em particular, os uso de atuadores complacentes também facilita a interação entre manipuladores robóticos objetos rígidos, uma vez que a força percebida pelo atuador é reduzida pela contração interna da mola. O que por sua vez diminui a necessidade de alta precisão na operação como garantia de reduzir o esforço percebido pelo robô no contato com superfícies rígidas. Na figura \ref{fig:seapratt} temos um atuador série elástico implementado por Pratt. Esta versão utiliza como redução engrenagens planetárias, uma mola plana e um motor de corrente contínua, sinalizados na figura por por a, b e c respectivamente.
 
-Tendo que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a força aplicada pelo motor na saída. O torque fornecido pode ser então obtido pela lei de Hooke ($\tau = -k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
+Uma vez que a mola está em série entre o atuador e a carga, a contração da mola corresponde diretamente a diferença da força aplicada pelo motor na saída e a reação do sistema externo. O torque fornecido pode ser então obtido pela lei de Hooke ($\tau = -k\cdot \Delta x$). Bastando que seja feita a medida da posição no atuador e na junta.
 
 \begin{figure}[H]
     \centering
@@ -184,7 +184,7 @@ Tendo que a mola está em série entre o atuador e a carga, a contração da mol
     \label{fig:seapratt}
 \end{figure}
 
-E desta forma a partir de medida de posição da motor e da junta após a mola o torque de saída pode ser medido e permite a implementação de um controle de torque preciso e de baixo custo \cite{pratt1997stiffness}. Em particular no Meka esta forma de atuação é implementado usando um motor Brushless em conjunto com um Harmonic drive e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do Harmonic Drive e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por placas DSP embarcadas dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma a complacência e a rigidez pode ser ajustada dinamicamente por software \cite{abeyrathna2013simulation}.
+E desta forma a partir das medidas de posição do eixo motor e da junta após a mola o torque de saída pode ser medido. O que permite a implementação de um controle de torque preciso e de baixo custo \cite{pratt1997stiffness}. Em particular no Meka esta forma de atuação é implementado usando um motor \textit{Brushless} em conjunto com um \textit{Harmonic Drive} e uma placa de controle DSP para controle do torque. O comportamento elástico é adicionado pela soma da elasticidade do \textit{Harmonic Drive} e demais componentes na transmissão de cada junta e modulado pelo controlador de torque implementado por placas DSP embarcadas dentro do braço. Desta forma a rigidez do atuador poder ser controlada via software como uma mola virtual. Em que a rigidez da mola é toda emulada por um sistema de controle a partir da referência do controle de posição e do controle de torque. Em resumo, quando a posição varia em relação a referência o controlador de baixo nível aumenta o torque de maneira proporcional ao erro da posição emulando o comportamento de uma mola, porém com rigidez totalmente ajustada pelo controlador. Desta forma, tanto a complacência e como a rigidez pode ser ajustada dinamicamente por software \cite{abeyrathna2013simulation}.
 
 Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e permite um excelente controle de torque, traz o custo de uma menor precisão no controle de posição e algumas caraterísticas dinâmicas não desejadas como oscilações e respostas mais lentas. Um diferencial do Meka em seu lançamento é o uso de sistemas complacentes em todas as juntas ao invés de apenas em relação ao efetuador, conferindo mais segurança no contato com superfícies rígidas como em operação na proximidade de pessoas.
 
@@ -202,7 +202,7 @@ Da mesma forma que o acréscimo de uma mola introduz uma maior segurança e perm
 % Posição discreta e estimativa da Velocidade
 % Torque obtido a partir da posição
 
-Para cada junta são utilizados encoders para a medidas das grandezas a posição e o torque aplicado. Um enconder é tradicionalmente um sensor de posição. No entanto por conta da estrutura do atuador série elástico é possível avaliar também o torque aplicado na junta levando em conta a dinâmica da mola, ou componente elástico do atuador. Desta forma, seguindo a lei de Hooke, o torque avaliado será a diferença da medida de posição da saída do motor e da junta vezes a rigidez da junta. 
+Para cada junta são utilizados encoders para a medidas das grandezas de posição e do torque aplicado. Um enconder é tradicionalmente um sensor de posição. No entanto por conta da estrutura do atuador série elástico é possível avaliar também o torque aplicado na junta levando em conta a dinâmica da mola, ou componente elástico do atuador. Desta forma, seguindo a lei de Hooke, o torque avaliado será a diferença da medida de posição da saída do motor e da junta vezes a rigidez da junta. 
 
 \begin{figure}[H]
     \centering
@@ -215,7 +215,7 @@ Para cada junta são utilizados encoders para a medidas das grandezas a posiçã
 % Descrição
 % Modelo 
 
-Harmonic Drive, também denominado ``Engrenamento por ondas de deformação'', é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. Na figura \ref{fig:harmonic_drive} temos detalhados os 3 componentes principais: as duas partes rígidas denotadas na figura como \textit{Circular Spline} e \textit{Wave Generator} e parte flexível \textit{Flex Spline}. Com a rotação do gerador de ondas a membrana flexível vai deslizando e movendo ao longo do engrenamento da parte mais externa gerando uma rotação em uma velocidade reduzida em relação ao velocidade de entrada. Na figura \ref{fig:encoder} é apresentado o encoder utilizado em cada uma das juntas do robô.
+Harmonic Drive, também denominado ``Engrenamento por ondas de deformação'', é um sistema mecânico para redução de velocidade baseado no deslizamento de uma membrana flexível em torno de um engrenamento. Permite um fator de redução maior que outros sistemas como engrenagens planetárias. Na figura \ref{fig:harmonic_drive} temos detalhados os 3 componentes principais: as duas partes rígidas denotadas na figura como \textit{Circular Spline} e \textit{Wave Generator} e parte flexível \textit{Flex Spline}. Com a rotação do gerador de ondas a membrana flexível vai deslizando e movendo ao longo do engrenamento da parte mais externa gerando uma rotação em uma velocidade reduzida em relação ao velocidade de entrada. Na figura \ref{fig:encoder} é apresentado o encoder utilizado em cada uma das juntas do robô.
 
 \begin{figure}[H]
     \centering
@@ -224,7 +224,7 @@ Harmonic Drive, também denominado ``Engrenamento por ondas de deformação'', �
     \label{fig:encoder}
 \end{figure}
 
-Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em um tamanho compacto é um tipo de transmissão bastante comum na área de robótica. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, desde que rigidez possa ser modelada.
+Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em um tamanho compacto é um tipo de transmissão bastante comum na área de robótica. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, desde que rigidez possa ser modelada. % cite?
 
 % \begin{figure}[H]
 %     \centering
@@ -245,7 +245,7 @@ Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em u
 \subsection{Motores Brushless}
 % Descrição
 % Comparativo com ServoMotores
-Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor Brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka.
+Motores de corrente continua sem escovas ( comumente motores Brushless ) são motores síncronos controlados via corrente contínua. Oferecem baixa manutenção e alta performance pela redução do atrito entre as partes internas em relação a motores DC tradicionais. Tipicamente motores síncronos são controlados via corrente alternada e rotação é sincronizada com a frequência da tensão aplicada. Em um motor Brushless é utilizado um inversor ou uma fonte chaveada para converter o sinal elétrico de corrente contínua em um sinal de corrente alternada com uma frequência definida. Desta forma, em conjunto com um circuito de controle interno em malha fechada, a velocidade pode ser ajustada e mantida com precisão. Nas figuras \ref{fig:maxon-servo} e \ref{fig:maxon-flat-servo} são mostrados dois dos motores utilizados no Meka. % cite ?
 
 \begin{figure}[H]
     \centering
@@ -262,7 +262,7 @@ Motores de corrente continua sem escovas ( comumente motores Brushless ) são mo
 \end{figure}
 
 % Comparativo com Motores DC
-Em razão dos componentes eletrônicos usados para controle interno, motores Brushless são mais caros que motores magnéticos permanentes. No entanto, apresentam um custo de manutenção inferior uma vez que as partes internas estão sujeitas a um menor desgaste por atrito. Permitem um controle de velocidade preciso através do sensores de corrente por efeito Hall. Tendo ganhado espaço por garantirem um controle de velocidade melhor por um custo menor em comparação com servo-motores além de serem menores.
+Em razão dos componentes eletrônicos usados para controle interno, motores Brushless são mais caros que motores magnéticos permanentes. No entanto, apresentam um custo de manutenção inferior uma vez que as partes internas estão sujeitas a um menor desgaste por atrito e permitem um controle de velocidade preciso através do sensores de corrente por efeito Hall. Tendo ganhado espaço por garantirem um controle de velocidade melhor por um custo menor em comparação com servo-motores além de serem menores. % ref?
 
 % Comparativo com Servo Motor
 %% -> Servo Motor: controle de posição, torque e velocidade baseado em encoder
@@ -271,7 +271,7 @@ Em razão dos componentes eletrônicos usados para controle interno, motores Bru
 
 \subsection{Pulso Diferencial}
 
-Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fig:meka-wrist}), baseado em dois atuadores de forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre acoplados. Para se mover em \textit{Pitch} são acionados ambos motores na mesma direção e para $Yaw$ estes são acionados em direções opostas. Um controlador no PC é utilizado para separar os movimentos dentro antes do envio ao DSP.
+Para o movimento do pulso é utilizado um mecanismo diferencial (figuras \ref{fig:meka-wrist}) baseado em dois atuadores, Desta forma que os movimento de \textit{Pitch} e \textit{Yaw} do efetuador estão sempre mecanicamente acoplados. Para se mover em \textit{Pitch} são acionados ambos motores na mesma direção e para $Yaw$ cada motor é acionados em uma direção oposta ao outro. Um controlador no PC é utilizado para separar os movimentos de cada junta antes do envio ao DSP.
 
 \begin{figure}[H]
     \centering
@@ -302,7 +302,7 @@ O controle de cada junta a partir do acionamento dos motores e da leitura dos se
     \label{fig:dsp-control-wrist}
 \end{figure}
 
-O uso de DSP e um barramento de comunicação de auto desempenho no lugar facilita o controle em tempo real em relação a controles baseados em PC, além de oferecer modularidade e velocidade de inicialização\cite{edsinger2004domo}. Desta forma o os controles implementados no PC podem operar em frequências menores.
+O uso de DSP e um barramento de comunicação de auto desempenho no lugar facilita o controle em tempo real em relação a controles baseados em PC, além de oferecer modularidade e velocidade de inicialização\cite{edsinger2004domo}. Com isto os controles implementados no PC podem operar em frequências menores sem que isto proporcione a perda do desempenho.
 
 % Foto Portas Atrás
 
@@ -341,7 +341,7 @@ Todas as configurações do Meka são guardadas através de arquivos $.yml$, loc
 
 \subsection{Controladores}
 
-O controle do Meka é feito em estrutura de cascata por uma série de controladores interagindo entre si. Cada nível opera na execução de uma tarefa possibilitando ao nível superior uma maior abstração do sistema e do objetivo a ser cumprido. Para garantir a estabilidade é preciso a dinâmica de cada controlador seja mais rápida. São estes, ordenados da dinâmica mais rápida para a mais lenta:
+O controle do Meka é feito em estrutura de cascata por uma série de controladores interagindo entre si. Cada nível opera na execução de uma tarefa possibilitando ao nível superior uma maior abstração do sistema e do objetivo a ser cumprido. Para garantir a estabilidade é preciso a dinâmica de cada controlador em nível baixo seja mais rápida em relação ao anterior. Dentro do Meka, ordenados da dinâmica mais rápida para a mais lenta temos:
 
 % Diagrama Controle em Cascata de Manipuladores
 \begin{enumerate}

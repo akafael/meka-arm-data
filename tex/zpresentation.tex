@@ -202,14 +202,14 @@ A diferença de força entre a carga e o motor pode ser expresso pela Lei de Hoo
 \begin{frame}{Mecânica: Atuadores Série Elásticos}
 % Processo Cientifico
 \begin{itemize}
-    \item Uso de Sensores de Posição para medir o torque
+    \item Medida indireta do torque através de sensores de posição
     \item Controle de Torque com Precisão
     \item Controle de Complacência
 \end{itemize}
 \begin{figure}
     \centering
-    \includegraphics[width = 0.6\linewidth]{tex/figs/sea_pratt.png}
-    \caption{Atuador Série Elástico feito por Pratt}
+    \includegraphics[width = 0.6\linewidth]{tex/figs/sea_pratt_desc.png}
+    \caption{Atuador Série Elástico feito por Pratt \newline (a: motor, b: mola, c: encoder)}
     \label{fig:mekainside}
 \end{figure}
 \end{frame}
@@ -219,14 +219,14 @@ A diferença de força entre a carga e o motor pode ser expresso pela Lei de Hoo
 \begin{column}{0.6\textwidth}
 \begin{figure}
     \centering
-    \includegraphics[width = 0.6\linewidth]{tex/figs/meka_wrist.png}
+    \includegraphics[width = 0.8\linewidth]{tex/figs/meka_wrist.png}
     \caption{Pulso Diferencial}
     \label{fig:m3arch}
 \end{figure}
 \end{column}
 \begin{column}{0.4\textwidth}  %%<--- here
 \begin{itemize}
-    \item Uso de dois motores para movimentação do pulso
+    \item Uso de dois motores atuando em conjunto para movimentação do pulso
 \end{itemize}
 \end{column}
 \end{columns}
@@ -315,7 +315,7 @@ Desafios:
 \begin{column}{0.5\textwidth}  %%<--- here
 \begin{figure}
     \centering
-    \includegraphics[height = 0.7\linewidth, angle=270]{tex/figs/dsp-control-wrist.jpg}
+    \includegraphics[width = 0.6\linewidth,height = 1.1 \linewidth]{tex/figs/dsp-control-wrist.jpg}
     \label{fig:mekawristinside}
 \end{figure}
 \end{column}
@@ -513,7 +513,7 @@ Resposta Junta do Cotovelo
 \begin{column}{0.5\textwidth}
 \begin{itemize}
     \item Orientação distribuída entre o Pulso e o Ombro
-    \item Erro maior na orientação
+    \item \textbf{Erro maior na orientação por conta da escala usada}
     \item Limitações nos Controladores de Baixo Nível
     \item Limitações nos Atuadores Elásticos
 \end{itemize}
@@ -549,6 +549,7 @@ Resposta Junta do Cotovelo
 \begin{frame}{Trabalhos Futuros}
 % Modelagem Matemática
 \begin{itemize}
+    \item \textbf{\item Facilitar a reprodutibilidade de trabalhos anteriores}
     \item Modelagem do robô e dos fenômenos observados
     \item Controle de Compensação da Gravidade
     \item Filtragem do Sensores
