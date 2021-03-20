@@ -4,7 +4,7 @@
 
 \section{Desempenho de Sistemas Mecatrônicos}
 
-Em trabalhos anteriores foram propostos e implementados vários controladores cinemáticos como forma de corrigir o efeito das pertubações devido a interação com uma agente externo e da ação da gravidade. No entanto o desempenho foi abaixo do apresentado pela código de demonstração do fabricante para o robô e pelos mesmos controladores no uso em outra plataforma explicitando a necessidade de um maior estudo da arquitetura do manipulador robótico Meka A2. Com base nisto foi feito uma análise do componentes do braço e a implementação dos sistemas de controle das juntas em software e hardware. Neste capítulo será descrito os métodos de investigação utilizados bem como experimentos efetuados.
+Em trabalhos anteriores foram propostos e implementados vários controladores cinemáticos como forma de corrigir o efeito das pertubações devido a interação com uma agente externo e da ação da gravidade. No entanto o desempenho foi abaixo do apresentado pelo código de demonstração do fabricante para o robô e pelos mesmos controladores no uso em outra plataforma explicitando a necessidade de um maior estudo da arquitetura do manipulador robótico Meka A2. Com base nisto foi feito uma análise do componentes do braço e a implementação dos sistemas de controle das juntas em software e hardware. Neste capítulo será descrito os métodos de investigação utilizados bem como experimentos efetuados.
 
 Em \cite{marcosps2016} Marcos propôs diversas métricas e avaliar os controladores cinemáticos implementados. Enquanto foi possível um excelente detalhamento da desempenho de cada um dos controladores, foi descoberto limitações na interação com a plataforma. Neste trabalho será analisado o robô enquanto sistema observando as implicações dos componentes mecânicos, sistemas embarcados e sistemas de controle operando de forma conjunta. O objetivo é avaliar dentro do que já foi implementado os limites de desempenho permitidos pela plataforma para permitir um melhor desempenho em trabalhos futuros.
 
@@ -15,22 +15,22 @@ Em \cite{marcosps2016} Marcos propôs diversas métricas e avaliar os controlado
     \label{fig:system_perfomance}
 \end{figure}
 
-Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistema Mecânico, Sistema Embarcado e os Algorítimos de Controle conforme ilustrado na figura \ref{fig:system_perfomance} proposta por N. A. Paine em \cite{paine2014high} para o desenvolvimento de um sistema série elástico de alta performance. Para o Meka estas camadas estão implementados na seguinte forma:
+Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistemas Mecânicos,  Embarcado e de Controle conforme ilustrado na figura \ref{fig:system_perfomance} proposta por N. A. Paine em \cite{paine2014high} para o desenvolvimento de um sistema série elástico de alta performance. Para o Meka estas camadas estão implementados na seguinte forma:
 
 \begin{itemize}
-    \item Sistema Mecânico ( Atuadores Série Elásticos )
+    \item Sistema Mecânicos ( Atuadores Série Elásticos )
     \begin{itemize}
         \item Motores Brushless
         \item Harmonic Drive
     \end{itemize}
-    \item Sistema Embarcado ( Atuadores Série Elásticos )
+    \item Sistema Embarcados ( Atuadores Série Elásticos )
     \begin{itemize}
         \item Placa DSP para controle dos motores
         \item Hub EtherCAT
         \item Interface EtherCAT para o computador
         \item PC com Linux Ubuntu 12.04 e Kernel RTOS Xenomai
     \end{itemize}
-    \item Algoritmos de Controle
+    \item Sistemas de Controle
     \begin{itemize}
         \item Controle de Torque (DSP)
         \item Controle de Posição com Compensação da Gravidade (PC)
@@ -40,7 +40,7 @@ Por se tratar de um sistema mecatrônico, naturalmente existem 3 camadas: Sistem
     \end{itemize}
 \end{itemize}
 
-Como forma de alcançar um maior desempenho com o Meka foram avaliadas cada parte quanto a possíveis limitações e assim orientar trabalhos futuros no controle do robô.
+Como forma de alcançar um maior desempenho com o Meka foram avaliadas cada uma das partes quanto a possíveis limitações e assim orientar trabalhos futuros no controle do robô.
 
 % Comentar sobre desempenho de sistemas
 % - Como alcançar o maior desempenho do sistema ( Custo exponencial 99.9 )
@@ -63,7 +63,7 @@ Como forma de alcançar um maior desempenho com o Meka foram avaliadas cada part
 
 \section{Avaliação Preliminar}
 
-Inicialmente foi feito um estudo a partir do código de demonstração do fabricante feito em Python para avaliar quais as possíveis forma de controlar o braço. Em que foi levantando todos os controladores implementados na biblioteca m3 e testados individualmente através da API em Python. Foram analisados os seguintes controladores disponíveis pelo M3:
+Inicialmente foi feito um estudo a partir do código de demonstração do fabricante feito em Python para avaliar quais as possíveis forma de controlar o braço. Este estudo teve como objetivo definir um ponto de referência para o desempenho do robô a partir das configurações fornecidas pelo fabricante. Assim, foi levantando todos os controladores implementados na biblioteca m3 e testados individualmente através da API em Python. Tendo sido analisados os seguintes controladores disponíveis pelo M3:
 
 \begin{itemize}
     \item Controle de Posição
@@ -75,11 +75,11 @@ Inicialmente foi feito um estudo a partir do código de demonstração do fabric
 
 %Nesta avaliação foi notado que alguns dos controladores da m3 não estavam disponíveis nas interfaces em C++. 
 
-Para avaliar o comportamento em conjunto dos controladores cinemáticos apenas o controlador de posição com compensação da gravidade foi utilizado, uma vez que este que é usado pelo ROS.
+Para avaliar o comportamento em conjunto dos controladores cinemáticos apenas o controlador de posição com compensação da gravidade foi utilizado, uma vez que este que é usado pelo ROS e também em trabalhos anteriores dentro do laboratório.
 
 \section{Estudo Controladores Cinemáticos}
 
-Para definir um ponto de referência para os ensaios e testes foram avaliados os controladores implementados por Marcos Pereira. A partir da melhor configuração para cada um dos controladores foram feitos experimentos ajustando os parâmetros da velocidade de atuação e nível rigidez para avaliar a influência nos resultados. Os experimentos foram executados foram feitos com base em duas trajetórias pré-definidas: deslocamento em linha reta na vertical e o desenho de um quadrado a partir de dois deslocamentos na vertical e dois na horizontal.
+Para definir um ponto de referência para os ensaios e testes foram avaliados os controladores implementados por Marcos Pereira. A partir da melhor configuração para cada um dos controladores foram feitos experimentos ajustando os parâmetros da velocidade de atuação e nível rigidez para avaliar a influência nos resultados. Os experimentos foram executados foram feitos com base em duas trajetórias pré-definidas: deslocamento em linha reta na vertical e o desenho de um quadrado a partir de dois deslocamentos na vertical e dois na horizontal. Ambas trajetórias foram avaliadas tomando como ponto de partida a posição mostrada na figura \ref{fig:meka_arm}.
 
 Nos experimentos de deslocamento em linha reta foram avaliados o intervalo de tempo até robô começar a responder e o controle estabilizar para diferentes taxas de amostragem da trajetória. Enquanto nos experimentos com a trajetória de quadrado foram avaliadas a resposta do robô para diferentes valores de ajuste dos controladores de junta quanto aos parâmetros de velocidade e rigidez.
 
@@ -102,13 +102,13 @@ Como forma de avaliar a resposta do sistema para controle dos ângulos de junta 
 
 \subsection{ROS}
 
-Robotics Operating System (ROS) é um \textit{middleware} desenvolvido para a robótica. Desenvolver um robô é uma tarefa muito complexa para uma pessoa só ou mesmo um grupo de pesquisa, de modo que o ROS atua conectando diversos \textit{frameworks}, bibliotecas permitindo o uso de uma variedade de tipos de hardware e linguagens de programação \cite{quigley2009ros}. De igual forma atua conectando toda a comunidade de robótica em uma linguagem comum. Seu desenvolvimento começou em 2007 reunindo conceitos de diversos projetos de software aberto existentes até então e com o passar dos anos se tornou um padrão dentro da comunidade, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada para a industria.
+Robotics Operating System (ROS) é um \textit{middleware} desenvolvido para a robótica. Desenvolver um robô é uma tarefa muito complexa para uma pessoa só ou mesmo um grupo de pesquisa, de modo que o ROS atua conectando diversos \textit{frameworks} e bibliotecas permitindo o uso de uma variedade de tipos de hardware e linguagens de programação \cite{quigley2009ros}. De igual forma atua conectando toda a comunidade de robótica em uma linguagem comum. Seu desenvolvimento começou em 2007 reunindo conceitos de diversos projetos de software aberto existentes até então e com o passar dos anos se tornou um padrão dentro da comunidade, contando com implementação para diversos robôs comerciais e inclusive uma versão completa voltada para a industria.
 
 Como exemplo temos o módulo \textit{MovitIt} ( figura \ref{fig:movit-baxter} ) que reúne varias aplicações para facilitar o planejamento de trajetórias bem como a definição dos parâmetros de ajuste dos controladores com auxílio de métodos heurísticos através da biblioteca OMPL \cite{openMPL}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{tex/figs/movit-ros-baxter.png}
+    \includegraphics[width=0.6\linewidth]{tex/figs/movit-ros-baxter.png}
     \caption{Planejamento de Trajetória no Baxter com Auxílio do MoveIt \cite{coleman2014reducing}}
     \label{fig:movit-baxter}
 \end{figure}

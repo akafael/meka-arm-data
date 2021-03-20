@@ -21,7 +21,7 @@ Robôs industriais, ou manipuladores robóticos, como também são chamados, se 
 
 Mesmo sendo uma tecnologia bastante interessante na automação de processos que envolvam a manipulação de objetos, o uso de braços robóticos pode oferecer diversos riscos. Para garantir a segurança em ambiente industrial, diversas soluções são utilizadas como grades de isolamento, botões de parada e sistemas de detecção de pessoas. Atuando em geral na desativação do robô como forma de mitigar o risco.  No entanto para algumas atividade existe a necessidade da atuação conjunta de pessoas e máquinas. Para resolver este problema novos tipos de braços têm sido desenvolvidos incorporando características para segurança em cada aspecto do design, entre elas emprego de estruturas mais leves, operação em velocidades reduzidas, protocolos para interrupção em caso de acidentes e complacência.% \cite{nobody}
 
-Ao que integra a categoria de robôs cooperativos, definidos pela norma  norma ISO/TS 15066:2016 \footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:ts:15066:ed-1:v1:en}}, como sistemas desenvolvidos para serem intrinsecamente seguros no uso em atividade em colaboração com pessoas. Por definição, são projetados para que seja oferecido o menor risco possível. Primeiro, estes robôs devem oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão ou no por uma intenção diferente de movimento por parte de pessoas próximas evitando que a energia transmitida possa causar algum dano. Segundo, devem permitir operação em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada. % Falta referência
+Ao que integra a categoria de robôs cooperativos, definidos pela norma ISO/TS 15066:2016 \footnote{\url{https://www.iso.org/obp/ui/#iso:std:iso:ts:15066:ed-1:v1:en}}, como sistemas desenvolvidos para serem intrinsecamente seguros no uso em atividade em colaboração com pessoas. Por definição, são projetados para que seja oferecido o menor risco possível. Primeiro, estes robôs devem oferecer alguma forma de complacência, isto é deve ceder em caso de uma eventual colisão ou no por uma intenção diferente de movimento por parte de pessoas próximas evitando que a energia transmitida possa causar algum dano. Segundo, devem permitir operação em velocidades menores para reduzir o stress das pessoas na presença do robô. E com isto ainda ser capaz de executar a tarefa desejada. % Falta referência
 
 Muito embora sempre exista a visão da tecnologia como vilã no roubo de empregos ao permitir ao uso de menos energia na execução de uma tarefa a redução do custo gera novas oportunidade por aumenta a capacidade de carga. Ainda que junto exista a necessidade de ressignificar o papel das pessoas no desenvolvimento de alguma atividade, deslocando o papel de total responsabilidade pela execução para incorporar papeis de planejamento pelo auxílio da automação, a incorporação de novas tecnologias traz um maior alcance dos produtos gerados. A partir do uso da tecnologia e da automação as pessoas migram do papel de agentes transformadores da matéria para agentes transformadores do processo permitindo que novos conhecimentos possam ser sempre incorporados.
 
@@ -39,7 +39,7 @@ Muito embora sempre exista a visão da tecnologia como vilã no roubo de emprego
 \subsection{Breve histórico}
 
 % Comentar sobre a história dos Cobots
-%Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa de elevar um carga na vertical para facilitar o transporte e posicionamento de peças na fabricação de carros. Trata-se de uma tarefa repetitiva, que envolve o transporte de peças pesadas mas que não é possível de ser feita utilizando robôs por envolver o posicionamento de duas partes rígidas com enorme variabilidade de posição entre si.
+Uma primeiras implementações de robôs colaborativos foi no auxílio na tarefa de elevar um carga na vertical para facilitar o transporte e posicionamento de peças na fabricação de carros. Trata-se de uma tarefa repetitiva, que envolve o transporte de peças pesadas mas que não é possível de ser feita utilizando robôs por envolver o posicionamento de duas partes rígidas com enorme variabilidade de posição entre si.
 
 %% Foto Lifter 
 
@@ -48,15 +48,22 @@ Muito embora sempre exista a visão da tecnologia como vilã no roubo de emprego
 %Posteriormente
 
 % COG
-%Seguindo uma filosofia diferente surgiu COG ( figura \ref{fig:domorobot} ), um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{nobody}. Seu projeto foi concebido para avaliar o comportamento conjunto de várias tecnologias existentes na época para a interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. De igual forma, ao ser introduzido um componente passivo permite reduzir a necessidade de um extenso planejamento na execução da tarefa como ocorre com braços rígidos.
+Seguindo uma filosofia diferente surgiu COG ( figura \ref{fig:cogrobot} ), um robô humanoide desenvolvido pelo MIT para interação com pessoas\cite{cog1995}. Seu projeto foi concebido para avaliar o comportamento conjunto de várias tecnologias existentes na época para a interação com pessoas. Dentre estes sistemas estava o uso de Atuadores Série Elásticos propostos por Pratt \cite{pratt1995series} como uma forma de permitir complacência ao atuador em conjunto de controle de torque preciso. De igual forma, ao ser introduzido um componente passivo permite reduzir a necessidade de um extenso planejamento na execução da tarefa como ocorre com braços rígidos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{tex/figs/cog-mit.jpg}
+    \caption{Foto Robô Domo (Fonte: https://robots.ieee.org/robots/cog/)}
+    \label{fig:cogrobot}
+\end{figure}
 
 % Domo e uso de Atuador Série Elástico
-Baseado no humanoide COG em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e Jeff Weber o robô Domo, mostrado na figura \ref{fig:domorobot}. Em seu projeto foram incorporadas diversas características visando permitir segurança através do uso de juntas complacentes com percepção de força. Bem como características para uso contínuo do ponto de vista mecânico como o uso de atuadores série elásticos baseados em fuso de esferas, proteção de superaquecimento para os motores e modularização do design. Para o controle são utilizados DSP para cada uma das juntas do robô\cite{edsinger2004domo}.
+Baseado no humanoide COG e em humanoides anteriores, em 2004 foi desenvolvido por Aaron Edsinger e Jeff Weber o robô Domo, mostrado na figura \ref{fig:domorobot}. Em seu projeto foram incorporadas diversas características visando permitir segurança através do uso de juntas complacentes com percepção de força. Bem como características para uso contínuo do ponto de vista mecânico como o uso de atuadores série elásticos baseados em fuso de esferas, proteção de superaquecimento para os motores e modularização do design. Para o controle são utilizados DSP para cada uma das juntas do robô\cite{edsinger2004domo}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{tex/figs/domo-foto.jpg}
-    \caption{Foto Robô Domo (Fonte: http://www.robotsvoice.com)}
+    \caption{Foto Robô Domo (Fonte: https://www.robotsvoice.com)}
     \label{fig:domorobot}
 \end{figure}
 
@@ -99,7 +106,7 @@ No Laboratório de Automação e Robótica ( LARA - UnB ) encontra-se disponíve
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{figs/meka}
-    \caption{Braço Robótico Meka A2 disponível no Lara \cite{marcosps2016}}
+    \caption{Braço Robótico Meka A2 utilizado \cite{marcosps2016}}
     \label{fig:meka_arm}
 \end{figure}
 

@@ -88,18 +88,18 @@ Combinando os Quatérnions de Hamilton e os números duais de Clifford temos os 
 \begin{equation}
     H = Q_r + \eta Q_d
 \end{equation}
-Onde
-\begin{equation}
-    H = (q_{r_1} + q_{r_2}\mathbf{{i}} + q_{r_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}) + \eta ((q_{d_1} + q_{d_2}\mathbf{{i}} + q_{d_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}))
-\end{equation}
+% Onde
+% \begin{equation}
+%     H = (q_{r_1} + q_{r_2}\mathbf{{i}} + q_{r_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}) + \eta ((q_{d_1} + q_{d_2}\mathbf{{i}} + q_{d_3}\mathbf{{j}} + q_{r_4}\mathbf{{k}}))
+% \end{equation}
 
 %E desta forma permitem a representação da posição através da magnitude e orientação do quatérnion $p$ em conjunto da orientação no espaço através do quatérnion unitário $r$. Assim todo o movimento de um corpo rígido pode ser descrito a partir de quatérnion dual.
 
-A representação em quatérnions duais traz a vantagens em relação a outras representações usadas na robótica de eliminar as singularidades além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias.\cite{Adorno2011} % Citar paper IROS Bruno Adorno
+A representação em quatérnions duais traz a vantagens em relação a outras representações usadas na robótica de eliminar as singularidades além de trazer uma representação mais compacta e portanto computacionalmente mais eficiente, uma vez que são utilizados 8 parâmetros ao invés de 12 em comparação com Matrizes Homogenias\cite{Adorno2011}. % Citar paper IROS Bruno Adorno
 
 \subsubsection{DQ Robotics}
 
-Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas são feitas com auxílio da biblioteca DQ Robotics. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
+Para este trabalho a representação do robô usando quatérnions duais e operações matemáticas relacionadas são feitas com auxílio da biblioteca DQ Robotics\cite{dqrobotics2020}. Nela estão implementados as principais operações algébricas com Quatérnions Duais bem como alguns controladores nas linguagens Matlab, Python e C++.
 
 % \section{Cinemática de Manipuladores}
 
@@ -156,7 +156,7 @@ Cada uma das juntas do Meka A2 utiliza um atuador série elástico (Seção \ref
 \begin{figure}[H]
     \centering
     \includegraphics[width = 0.6\linewidth]{tex/figs/meka-inside.png}
-    \caption{Robô Meka - Vista interna (Fonte:  http://machinedesign.com)}
+    \caption{Robô Meka - Vista interna (Fonte: http://machinedesign.com)}
     \label{fig:meka-inside}
 \end{figure}
 
@@ -169,7 +169,7 @@ O atuador presente em cada uma juntas do Meka é um Sistema Série Elástico. Es
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{tex/figs/sea_topology.png}
-    \caption{Topologia Atuador Rígido \cite{wyeth206}}
+    \caption{Topologia Atuador Rígido \cite{wyeth2016}}
     \label{fig:sea}
 \end{figure}
 
@@ -221,7 +221,7 @@ Harmonic Drive, também denominado ``Engrenamento por ondas de deformação'', �
     \centering
     \includegraphics[width=0.6\linewidth]{tex/figs/harmonic-gear-structure.jpg}
     \caption{Harmonic Drive (Fonte: https://https://www.orientalmotor.com)}
-    \label{fig:encoder}
+    \label{fig:harmonic_drive}
 \end{figure}
 
 Por ter baixo deslizamento e folga junto a uma alta capacidade de redução em um tamanho compacto é um tipo de transmissão bastante comum na área de robótica. No entanto acrescenta atrito e flexibilidade às juntas. Esta característica de flexibilidade permite uma implementação extremamente compacta de um atuador série elástico, desde que rigidez possa ser modelada. % cite?
@@ -297,7 +297,7 @@ O controle de cada junta a partir do acionamento dos motores e da leitura dos se
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width = 0.8\linewidth]{figs/dsp-control-wrist}
+    \includegraphics[angle=90,width=0.9\linewidth,height=0.5\linewidth]{figs/dsp-control-wrist}
     \caption{Destaque Placas de controle entre as juntas do pulso e o cotovelo do braço}
     \label{fig:dsp-control-wrist}
 \end{figure}
@@ -313,7 +313,7 @@ Toda a parte de controle é feita no PC. Para iniciar a comunicação do PC com 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figs/m3_arch.pdf}
-    \caption{Diagrama da arquitetura do robô \cite{hoarau_2015}}
+    \caption{Diagrama da arquitetura do robô \cite{hoarau2015}}
     \label{fig:mekaarch}
 \end{figure}
 
@@ -360,7 +360,7 @@ No Meka estes estão implementados a partir de uma série de controladores em ca
     \label{fig:controlarch}
 \end{figure}
 
-A compensação da gravidade é feita a partir do cálculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle em $feedforwad$ para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$ \cite{mekaguide}.
+A compensação da gravidade é feita a partir do cálculo do modelo dinâmico pela $M3Dynamatics$ e em seguida passada como uma ação de controle para o torque das juntas em $M3Joint$ para ser por fim executado em $M3ActuatorEc$ \cite{mekaguide}.
 
 %\subsection{Servo Controladores}
 % Entrada como torque ou velocidade e saída posição
