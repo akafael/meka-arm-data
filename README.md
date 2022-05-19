@@ -18,6 +18,10 @@ My undergraduate thesis data. Template from [Prof. Geovany Borges](https://githu
     * [figs](tex/figs): images and figures
     * [tables](tex/tables): data tables in tex format
 
+## Reference
+
+ * https://github.com/ahoarau/mekabot 
+
 ## License
     
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons Licence" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
@@ -25,6 +29,7 @@ My undergraduate thesis data. Template from [Prof. Geovany Borges](https://githu
 ### Videos
 
  * [Interview - UnB TV (pt)](https://www.youtube.com/watch?v=OdcH7c8XfEY)
+ * [Trajectory Control For Manipulators With Dual Quaternion Based Kinematic Controllers - Marcos Pereira](https://www.youtube.com/watch?v=6uH855RMO7w)
 
 ### Publications
 
